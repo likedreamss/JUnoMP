@@ -1,0 +1,90 @@
+[gd_scene format=3 uid="uid://jgs2pmhxc3wt"]
+
+[ext_resource type="Script" uid="uid://dlt7imfsqbgxm" path="res://LSQ/scripts2/CardManager.gd" id="1_462ap"]
+[ext_resource type="Script" uid="uid://dot726ck425vm" path="res://LSQ/scripts2/CardDatabase.gd" id="1_cp3ip"]
+[ext_resource type="PackedScene" uid="uid://c3mf0xccyyem6" path="res://LSQ/scene2/cardslot.tscn" id="2_5qbti"]
+[ext_resource type="Script" uid="uid://d02j6o3k5x5vr" path="res://LSQ/scripts2/cardslot.gd" id="3_gvr3l"]
+[ext_resource type="Script" uid="uid://djh0fc7blddu8" path="res://LSQ/scripts2/player_hand.gd" id="4_k01lb"]
+[ext_resource type="Script" uid="uid://df2efu40gr8pa" path="res://LSQ/scripts2/deck.gd" id="5_cb6ix"]
+[ext_resource type="Texture2D" uid="uid://bbale8r18rs03" path="res://LSQ/sucai/111.png" id="6_462ap"]
+[ext_resource type="Script" uid="uid://ulijk80kph1a" path="res://LSQ/scripts2/imput_manager.gd" id="7_5qbti"]
+[ext_resource type="Texture2D" uid="uid://bwjskee7sx33a" path="res://QYK/Assest1/icon.svg" id="8_1xbjl"]
+[ext_resource type="Texture2D" uid="uid://cus0o0atteea7" path="res://QYK/Assest1/sky1.png" id="10_888p8"]
+[ext_resource type="Script" uid="uid://el3nivnh6j5p" path="res://LSQ/scene2/ph_1.gd" id="11_dlnqm"]
+[ext_resource type="Script" uid="uid://bwbdgfemn7ca7" path="res://LSQ/scene2/ph_2.gd" id="12_grafp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0hol4"]
+size = Vector2(178.75, 184.875)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dlnqm"]
+size = Vector2(205, 166)
+
+[node name="CARDMAIN" type="Node2D" unique_id=1343021425]
+
+[node name="carddatabase" type="Node2D" parent="." unique_id=1831588509]
+script = ExtResource("1_cp3ip")
+
+[node name="cardmanager" type="Node2D" parent="." unique_id=1906560126]
+script = ExtResource("1_462ap")
+
+[node name="Cardslot" parent="." unique_id=1033478225 instance=ExtResource("2_5qbti")]
+position = Vector2(2233, 884)
+script = ExtResource("3_gvr3l")
+
+[node name="PlayerHand" type="Node2D" parent="." unique_id=1554823933]
+script = ExtResource("4_k01lb")
+
+[node name="Deck" type="Node2D" parent="." unique_id=1742569025]
+z_index = 3
+position = Vector2(210, 1220)
+scale = Vector2(0.43, 0.43)
+script = ExtResource("5_cb6ix")
+
+[node name="Sprite2D" type="Sprite2D" parent="Deck" unique_id=2055076910]
+z_index = -2
+position = Vector2(1.0000043, 3.000001)
+scale = Vector2(0.93869734, 1.0326594)
+texture = ExtResource("6_462ap")
+
+[node name="第五期10，50" type="RichTextLabel" parent="Deck" unique_id=426383616]
+offset_right = 40.0
+offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
+
+[node name="ImputManager" type="Node2D" parent="." unique_id=1278391345]
+script = ExtResource("7_5qbti")
+
+[node name="OK" type="Node2D" parent="." unique_id=1735629034]
+
+[node name="Sprite2D" type="Sprite2D" parent="OK" unique_id=1127706684]
+position = Vector2(214.99997, 934)
+scale = Vector2(1.453125, 1.5)
+texture = ExtResource("8_1xbjl")
+
+[node name="Area2D" type="Area2D" parent="OK" unique_id=210459619]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OK/Area2D" unique_id=27875560]
+position = Vector2(214, 937)
+shape = SubResource("RectangleShape2D_0hol4")
+
+[node name="PASS" type="Node2D" parent="." unique_id=601078322]
+
+[node name="Sprite2D" type="Sprite2D" parent="PASS" unique_id=1518589657]
+position = Vector2(218, 743.5)
+scale = Vector2(0.38202247, 0.54333335)
+texture = ExtResource("10_888p8")
+
+[node name="Area2D" type="Area2D" parent="PASS" unique_id=1830283041]
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PASS/Area2D" unique_id=759781212]
+position = Vector2(218.5, 743.5)
+shape = SubResource("RectangleShape2D_dlnqm")
+
+[node name="PH2online" type="Node2D" parent="." unique_id=562440023]
+script = ExtResource("12_grafp")
+
+[node name="PH1online" type="Node2D" parent="." unique_id=553914805]
+script = ExtResource("11_dlnqm")

@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://chab07w2u0bfg"]
+
+[ext_resource type="Texture2D" uid="uid://cus0o0atteea7" path="res://QYK/Assest1/sky1.png" id="1_g45l1"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ngw06"]
+texture = ExtResource("1_g45l1")
+
+[node name="Playscene" type="Control" unique_id=1795614828]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="." unique_id=1467137478]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_ngw06")

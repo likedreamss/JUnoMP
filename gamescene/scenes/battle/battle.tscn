@@ -1,0 +1,222 @@
+[gd_scene format=4 uid="uid://u755m34bg4s0"]
+
+[ext_resource type="Script" uid="uid://dcb8e2ivqgnl" path="res://gamescene/scenes/battle/battle.gd" id="1_ffvsa"]
+[ext_resource type="PackedScene" uid="uid://cl1rqhldy3bif" path="res://gamescene/scenes/highlight_line/highlight_selector/highlight_selector.tscn" id="2_0yh6x"]
+[ext_resource type="PackedScene" uid="uid://b7c24onwqwidj" path="res://gamescene/unit/unit.tscn" id="2_fh7rg"]
+[ext_resource type="PackedScene" uid="uid://bqcpx1y84teq7" path="res://gamescene/scenes/highlight_line/highlight_line.tscn" id="3_py4tk"]
+[ext_resource type="Script" uid="uid://dyk0v76ax7p4x" path="res://gamescene/scripts/game_area.gd" id="4_h0kxc"]
+[ext_resource type="Script" uid="uid://dwc6ehwiblobc" path="res://gamescene/scripts/game_grid.gd" id="5_h0kxc"]
+[ext_resource type="TileSet" uid="uid://dicodrcg7lox3" path="res://gamescene/assets/2battle_tile_set.tres" id="7_oiw7q"]
+[ext_resource type="Texture2D" uid="uid://b7q6ptk63rfqq" path="res://gamescene/assets/pixel chess/extras/mouse.png" id="7_pll4o"]
+
+[sub_resource type="TileSet" id="TileSet_pll4o"]
+
+[sub_resource type="Animation" id="Animation_py4tk"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_agsc7"]
+resource_name = "idle"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 6.2831855]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_oiw7q"]
+_data = {
+&"RESET": SubResource("Animation_py4tk"),
+&"idle": SubResource("Animation_agsc7")
+}
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_voib1"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yhm5p"]
+bg_color = Color(0.9957523, 0.40938175, 0.26244617, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gxwjy"]
+bg_color = Color(0.43967435, 0.2250889, 0.07647782, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_07jib"]
+bg_color = Color(0.6945499, 0.3676199, 0.08007423, 1)
+
+[node name="Battle" type="Node2D" unique_id=2081042660 node_paths=PackedStringArray("game_area")]
+y_sort_enabled = true
+script = ExtResource("1_ffvsa")
+game_area = NodePath("GameArea")
+unit_scene = ExtResource("2_fh7rg")
+highlight_scene = ExtResource("3_py4tk")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1230022833]
+
+[node name="HighlightSelector" parent="." unique_id=547910877 node_paths=PackedStringArray("game_area") instance=ExtResource("2_0yh6x")]
+z_index = 10
+position = Vector2(16, 7)
+width = 2.0
+game_area = NodePath("../GameArea")
+
+[node name="GameArea" type="TileMapLayer" parent="." unique_id=375983126 node_paths=PackedStringArray("game_grid")]
+y_sort_enabled = true
+tile_set = ExtResource("7_oiw7q")
+script = ExtResource("4_h0kxc")
+game_grid = NodePath("GameGrid")
+
+[node name="MainTileMap" type="TileMapLayer" parent="GameArea" unique_id=886960213]
+y_sort_enabled = true
+tile_map_data = PackedByteArray("AAD///7/AAAAAAYAAAAAAP7/AAAAAAYAAAABAP7/AAAAAAYAAAAAAP3/AAAAAAYAAAABAP3/AAAAAAYAAAACAP3/AAAAAAYAAAACAP7/AAAAAAYAAAADAP3/AAAAAAYAAAADAP7/AAAAAAYAAAAEAP3/AAAAAAYAAAAEAP7/AAAAAAYAAAD///z/AAAAAAgAAAAAAPz/AAAAAAgAAAABAPz/AAAAAAgAAAACAPz/AAAAAAgAAAD///3/AAAAAAoAAAD+//3/AAAAAAoAAAD+//7/AAAAAAoAAAAAAPv/AAAAAAgAAAABAPv/AAAAAAgAAAACAPv/AAAAAAgAAAD+//v/AAAAAAgAAAD+//z/AAAAAAgAAAD///v/AAAAAAgAAAABAP//AAAAAAQAAAACAP//AAAAAAQAAAADAP//AAAAAAQAAAAEAP//AAAAAAQAAAAAAP//AAAAAAQAAAD/////AAAAAAQAAAD+////AAAAAAQAAAAEAAAAAAAAAAQAAAAFAP//AAAAAAQAAAAFAP7/AAAAAAQAAAADAAAAAAAAAAQAAAACAAAAAAAAAAQAAAAFAP3/AAAAAAAAAAAFAPz/AAAAAAAAAAAEAPz/AAAAAAAAAAADAPz/AAAAAAAAAAAEAPv/AAAAAAAAAAAFAPv/AAAAAAAAAAAGAPz/AAAAAAAAAAD+/wEAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAD//wEAAAAAAAAAAAD//wAAAAAAAAAAAAD+/wAAAAAAAAAAAAD9/wAAAAAAAAAAAAD9/wEAAAAAAAAAAAD9////AAAAAAAAAAD8/wAAAAAAAAAAAAD8/wEAAAAAAAAAAAD//wIAAAAAAAwAAAAAAAIAAAAAAAwAAAABAAEAAAAAAAwAAAACAAEAAAAAAAwAAAABAAIAAAAAAAwAAAACAAIAAAAAAAwAAAADAAEAAAAAAAwAAAADAAIAAAAAAAwAAAAEAAEAAAAAAAwAAAAFAAEAAAAAAAwAAAAFAAAAAAAAAAwAAAAEAAIAAAAAAAwAAAA=")
+tile_set = ExtResource("7_oiw7q")
+
+[node name="ObstacleTileMap" type="TileMapLayer" parent="GameArea" unique_id=536566271]
+z_index = 2
+y_sort_enabled = true
+position = Vector2(0, -6)
+tile_map_data = PackedByteArray("AAABAAEAAgAAAAIAAAADAAEAAQAAAAIAAAAFAAEAAQAAAAIAAAADAP7/AQAAAAIAAAAEAP3/AQAAAAIAAAAFAP3/AQAAAAIAAAAEAAIAAQAAAAIAAAAEAAAAAQAAAAIAAAAAAP7/AQAAAAIAAAA=")
+tile_set = ExtResource("7_oiw7q")
+
+[node name="GameGrid" type="Node" parent="GameArea" unique_id=1087008312 node_paths=PackedStringArray("main_tile_map", "obstacle_tile_map")]
+script = ExtResource("5_h0kxc")
+main_tile_map = NodePath("../MainTileMap")
+obstacle_tile_map = NodePath("../ObstacleTileMap")
+
+[node name="HighlightLayer" type="TileMapLayer" parent="GameArea" unique_id=584333247]
+tile_set = SubResource("TileSet_pll4o")
+
+[node name="TargetEffect" type="Sprite2D" parent="." unique_id=1336809574]
+modulate = Color(1, 1, 0.09411765, 0.9372549)
+z_index = 1
+y_sort_enabled = true
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("7_pll4o")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="TargetEffect" unique_id=330445992]
+libraries/ = SubResource("AnimationLibrary_oiw7q")
+autoplay = &"idle"
+
+[node name="提示" type="Node2D" parent="." unique_id=563884699]
+
+[node name="只能移动到相邻的格子" type="RichTextLabel" parent="提示" unique_id=682062578]
+modulate = Color(0.47312844, 0.086429425, 0.07957011, 1)
+z_index = 1
+offset_left = 206.0
+offset_top = -257.0
+offset_right = 294.0
+offset_bottom = -233.0
+size_flags_vertical = 4
+text = "只能移动到相邻的格子"
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel" type="Panel" parent="提示" unique_id=1299093464]
+z_index = 5
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -214.625
+offset_top = -121.0
+offset_right = 214.625
+offset_bottom = 121.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_voib1")
+
+[node name="Label" type="Label" parent="提示/Panel" unique_id=1586748074]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 39.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 27
+text = "                     游戏结束 "
+
+[node name="winner_label" type="Label" parent="提示/Panel" unique_id=344488803]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 148.5
+offset_top = 69.0
+offset_right = -147.5
+offset_bottom = 105.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.7572726, 0.3391436, 0.0763802, 1)
+theme_override_font_sizes/font_size = 18
+text = "🏆 玩家1获得胜利 !🎉"
+
+[node name="time_label" type="Label" parent="提示/Panel" unique_id=578836934]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -60.0
+offset_top = 1.0
+offset_right = 68.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 22
+text = "游戏耗时  10：23"
+
+[node name="step_label" type="Label" parent="提示/Panel" unique_id=603590527]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -58.0
+offset_top = 38.0
+offset_right = 23.0
+offset_bottom = 69.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 22
+text = "移动步数  25"
+
+[node name="Button" type="Button" parent="提示/Panel" unique_id=436081512]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -53.0
+offset_top = -41.0
+offset_right = 55.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_yhm5p")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gxwjy")
+theme_override_styles/hover = SubResource("StyleBoxFlat_07jib")
+text = "返回主菜单"
+
+[connection signal="pressed" from="提示/Panel/Button" to="." method="_on_button_pressed"]
