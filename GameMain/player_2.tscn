@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://o4bax4uxefxj"]
+
+[ext_resource type="PackedScene" uid="uid://jgs2pmhxc3wt" path="res://LSQ/scene2/node_2d.tscn" id="1_vvaa7"]
+[ext_resource type="PackedScene" uid="uid://u755m34bg4s0" path="res://gamescene/scenes/battle/battle.tscn" id="2_036t1"]
+
+[node name="Player2" type="Control" unique_id=1490253141]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=447534877]
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="CanvasLayer" unique_id=1316940111]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -1206.0
+offset_right = 21.0
+offset_bottom = -1007.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+mouse_target = true
+
+[node name="SubViewport" type="SubViewport" parent="CanvasLayer/SubViewportContainer" unique_id=351121876]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(2573, 1799)
+render_target_update_mode = 4
+
+[node name="Area2D" type="Area2D" parent="CanvasLayer/SubViewportContainer/SubViewport" unique_id=646106644]
+position = Vector2(-6, -5)
+
+[node name="CARDMAIN" parent="CanvasLayer/SubViewportContainer/SubViewport/Area2D" unique_id=1343021425 instance=ExtResource("1_vvaa7")]
+position = Vector2(6, 355)
+
+[node name="Boardcontainer" type="Control" parent="." unique_id=488341467]
+anchors_preset = 0
+offset_left = 6.0
+offset_top = 5.0
+offset_right = 1436.0
+offset_bottom = 535.0
+
+[node name="Battle" parent="Boardcontainer" unique_id=2081042660 instance=ExtResource("2_036t1")]

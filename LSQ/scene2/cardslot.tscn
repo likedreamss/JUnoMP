@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://c3mf0xccyyem6"]
+
+[ext_resource type="Texture2D" uid="uid://oou8ty2ntijd" path="res://LSQ/sucai/kuang.png" id="1_lc470"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_13h7l"]
+size = Vector2(197, 294)
+
+[node name="Cardslot" type="Node2D" unique_id=1033478225]
+
+[node name="Csimage" type="Sprite2D" parent="." unique_id=37950070]
+position = Vector2(4.75, 24.5)
+scale = Vector2(1.0179584, 1.076087)
+texture = ExtResource("1_lc470")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=2074468060]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1388631495]
+position = Vector2(-7, 1)
+shape = SubResource("RectangleShape2D_13h7l")

@@ -1,0 +1,147 @@
+[gd_scene format=3 uid="uid://cvnatpe28vhud"]
+
+[ext_resource type="Script" uid="uid://c27mxbfnox6ue" path="res://meun.gd" id="1_l5vne"]
+[ext_resource type="Texture2D" uid="uid://dnbc77ls8xbp5" path="res://QYK/Assest1/屏幕截图 2026-04-20 203306.png" id="2_muopu"]
+[ext_resource type="FontFile" uid="uid://dvxppyylvh1xc" path="res://QYK/Assest1/Grow Year.ttf" id="3_x0rw0"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tryud"]
+texture = ExtResource("2_muopu")
+modulate_color = Color(0.5350234, 0.53502345, 0.53502345, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_db5v8"]
+bg_color = Color(11.214303, 10.962967, 10.921078, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_size = 5
+shadow_offset = Vector2(0, 3.41)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_muopu"]
+bg_color = Color(0.38170326, 0.38170326, 0.3817031, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x0rw0"]
+bg_color = Color(0.4817894, 0.48178953, 0.4817894, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_muopu"]
+
+[node name="Meun" type="Control" unique_id=965691626]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -6.0
+offset_top = 27.0
+offset_right = -6.0
+offset_bottom = 27.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+script = ExtResource("1_l5vne")
+
+[node name="Panel" type="Panel" parent="." unique_id=319501686]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = -27.0
+offset_right = 6.0
+offset_bottom = -27.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_tryud")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=319516846]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -388.1797
+offset_top = -25.0
+offset_right = 372.0
+offset_bottom = 385.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="Play" type="Button" parent="VBoxContainer" unique_id=1716206350]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.0093103545, 0.0093103545, 0.0093103545, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 64
+theme_override_styles/normal = SubResource("StyleBoxFlat_db5v8")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_muopu")
+theme_override_styles/hover = SubResource("StyleBoxFlat_x0rw0")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_muopu")
+text = "Play"
+
+[node name="Options" type="Button" parent="VBoxContainer" unique_id=475777556]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.0093103545, 0.0093103545, 0.0093103545, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 64
+theme_override_styles/normal = SubResource("StyleBoxFlat_db5v8")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_muopu")
+theme_override_styles/hover = SubResource("StyleBoxFlat_x0rw0")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_muopu")
+text = "Options"
+
+[node name="Exit" type="Button" parent="VBoxContainer" unique_id=1460377950]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.0093103545, 0.0093103545, 0.0093103545, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 64
+theme_override_styles/normal = SubResource("StyleBoxFlat_db5v8")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_muopu")
+theme_override_styles/hover = SubResource("StyleBoxFlat_x0rw0")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_muopu")
+text = "Exit
+"
+
+[node name="Label" type="Label" parent="." unique_id=1798074428]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -274.0
+offset_top = -559.0
+offset_right = 236.5
+offset_bottom = -299.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 1
+theme_override_constants/shadow_offset_x = 12
+theme_override_fonts/font = ExtResource("3_x0rw0")
+theme_override_font_sizes/font_size = 265
+text = "JUnoMP"
+horizontal_alignment = 1
+
+[connection signal="pressed" from="VBoxContainer/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="VBoxContainer/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="VBoxContainer/Exit" to="." method="_on_exit_pressed"]

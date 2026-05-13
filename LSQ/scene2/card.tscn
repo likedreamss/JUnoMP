@@ -1,0 +1,82 @@
+[gd_scene format=3 uid="uid://bn67dlfqcp6qf"]
+
+[ext_resource type="Script" uid="uid://d3h1r2e62glg1" path="res://LSQ/scripts2/Card.gd" id="1_rjlel"]
+[ext_resource type="Texture2D" uid="uid://b1xj68bdscr6e" path="res://LSQ/sucai/GRASS_GO_CARD.png" id="2_l5u8o"]
+[ext_resource type="FontFile" uid="uid://dvxppyylvh1xc" path="res://QYK/Assest1/Grow Year.ttf" id="3_l5u8o"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rjlel"]
+size = Vector2(188, 273)
+
+[node name="card" type="Node2D" unique_id=1983593641]
+z_index = 1
+position = Vector2(210, 1220)
+script = ExtResource("1_rjlel")
+
+[node name="CardImage" type="Sprite2D" parent="." unique_id=2121584045]
+position = Vector2(-2.4999943, -15.4999695)
+scale = Vector2(0.36523435, 0.39224145)
+texture = ExtResource("2_l5u8o")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=190672414]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1500407751]
+position = Vector2(-3, -17.5)
+shape = SubResource("RectangleShape2D_rjlel")
+
+[node name="Color" type="RichTextLabel" parent="." unique_id=1001408735]
+self_modulate = Color(1, 1, 0.31764707, 1)
+offset_left = -95.0
+offset_top = 75.0
+offset_right = -55.0
+offset_bottom = 115.0
+scale = Vector2(2, 2)
+text = "0"
+
+[node name="Function" type="RichTextLabel" parent="." unique_id=1101439108]
+modulate = Color(1, 1, 0.2901961, 1)
+offset_left = 50.0
+offset_top = 75.0
+offset_right = 90.0
+offset_bottom = 115.0
+scale = Vector2(2, 2)
+text = "0"
+
+[node name="Name" type="RichTextLabel" parent="." unique_id=513326123]
+modulate = Color(1, 0.35000002, 0.35000002, 1)
+offset_left = -89.0
+offset_top = -118.0
+offset_right = -2.0
+offset_bottom = -85.0
+scale = Vector2(2, 2)
+text = "0"
+tab_size = 2
+
+[node name="Code" type="RichTextLabel" parent="." unique_id=1256786027]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="." unique_id=467894705]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -537.0
+offset_top = -185.0
+offset_right = 544.0
+offset_bottom = 163.9956
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.85346603
+scale = Vector2(0.15, 0.15)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+theme_override_colors/font_color = Color(0.78919536, 0.11049547, 5.7756904e-07, 1)
+theme_override_colors/font_shadow_color = Color(0.9911739, 0.60179824, 7.70092e-07, 1)
+theme_override_constants/line_spacing = 1
+theme_override_constants/shadow_offset_x = 12
+theme_override_fonts/font = ExtResource("3_l5u8o")
+theme_override_font_sizes/font_size = 265
+text = "JUnoMP"
+horizontal_alignment = 1
+
+[connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]

@@ -1,0 +1,476 @@
+extends Node2D
+class_name Battle
+
+enum GameMode { MOVE, PLACE_OBSTACLE,REMOVE_OBSTACLE}
+
+# --- 导出变量 ---
+@export_group("Setup")
+@export var target_tile: Vector2i = Vector2i(0, 0) # 终点设为中心点 [cite: 6]
+@export var game_area: GameArea 
+@export var unit_scene: PackedScene 
+@export var highlight_scene: PackedScene 
+
+@onready var panel: Panel = $提示/Panel
+@onready var winner_label: Label = $提示/Panel/winner_label
+@onready var time_label: Label = $提示/Panel/time_label
+@onready var step_label: Label = $提示/Panel/step_label
+
+#控制鼠标缩放
+@export var zoom_speed: float = 0.1       # 缩放步长
+@export var min_zoom: float = 0.4          # 最小缩放（看全景）
+@export var max_zoom: float = 2.0          # 最大缩放（看细节）
+# --- 变量定义 ---
+var target_zoom: float = 1.0
+var active_highlights: Array = [] 
+var players: Array = [] 
+var current_player_index: int = 0 
+var current_mode = GameMode.MOVE
+# --- 结算页面变量 ---
+var game_start_time: float = 0
+var total_steps: int = 0
+var game_finished: bool = false
+
+var skip_flags = {
+	"turn": [],     # 存储需要跳过回合的 player_id
+	"draw": [],     # 跳过摸牌阶段
+	"play": [],     # 跳过出牌阶段
+	"discard": []   # 跳过弃牌阶段
+}
+
+
+## 初始化游戏界面（棋子，地图）---------------
+func spawn_players():
+	var grid_dict = game_area.game_grid.get_all_grid_data() 
+	var all_valid_tiles = grid_dict.keys()
+	
+	# 安全检查：防止地图未生成导致报错 
+	if all_valid_tiles.size() == 0:
+		print("❌ 错误：地图数据为空，无法生成玩家")
+		return
+
+	# 预设的边缘大致方向 [cite: 20]
+	var spawn_directions = [
+		Vector2i(-12, -6), # 左上方向 
+		Vector2i(12, -6),  # 右上方向 
+		Vector2i(0, 12)    # 下方方向
+	]
+	
+	for i in range(3):
+		var unit = unit_scene.instantiate()
+		unit.move_finished.connect(_on_unit_move_finished) 
+		add_child(unit) 
+		unit.setup(i) 
+		
+		# 寻找离预设边缘方向最近的有效瓦片，防止 Key 报错 [cite: 32, 33]
+		var target_dir = spawn_directions[i]
+		var start_tile = all_valid_tiles[0] 
+		var min_dist = 9999.0 
+		
+		for tile in all_valid_tiles:
+			var d = Vector2(tile).distance_to(Vector2(target_dir))
+			var data = grid_dict[tile] 
+			# 确保起始点没有障碍物 [cite: 40]
+			if d < min_dist and data["obstacle"] == GameGrid.Obstacle.NULL:
+				min_dist = d
+				start_tile = tile
+		
+		# 设置位置并同步数据字典 [cite: 44, 45]
+		unit.set_tile(start_tile, game_area) 
+		game_area.game_grid.grid_data[start_tile]["unit"] = unit
+		players.append(unit) 
+func _ready():
+	add_to_group("battle_manager")#方便卡牌管理器找到
+	
+	# 1. 强制确保地图数据在玩家生成前初始化完成 
+	if game_area and game_area.game_grid:
+		game_area.game_grid._initialize_grid() 
+	# 2. 生成玩家
+	spawn_players()
+	# 3. 设置终点特效
+	if has_node("TargetEffect"):
+		var effect_pos = game_area.get_global_from_tile(target_tile) 
+		$TargetEffect.position = effect_pos
+	
+	game_start_time = Time.get_ticks_msec() / 1000.0
+	$"提示/Panel".visible = false
+#回合循环/发牌/跳过
+
+##下一个玩家/发牌/跳过
+func next_turn(loop_count: int = 0):
+	# 增加 loop_count 参数，默认值为 0，用于防止无限死循环
+	# 核心防错：如果连续跳过次数超过了玩家总数，强制中断死循环
+	if loop_count >= players.size():
+		print("⚠️ 警告：所有玩家都被跳过，回合强制推进以防死循环！")
+		skip_flags["turn"].clear() 
+		loop_count = 0 
+		
+	clear_highlights()
+	current_player_index = (current_player_index + 1) % players.size()
+	var next_player = get_current_player()
+
+	# 检查是否跳过整个回合
+	if next_player.player_id in skip_flags["turn"]:
+		skip_flags["turn"].erase(next_player.player_id)
+		print("玩家 ", next_player.player_id, " 的回合被跳过")
+		next_turn(loop_count + 1) # 递归调用，并让计数器 +1
+		return
+		
+	# 检查各阶段跳过逻辑 (此处仅为示例)
+	if next_player.player_id in skip_flags["draw"]:
+		skip_flags["draw"].erase(next_player.player_id)
+		print("跳过摸牌阶段")
+	else:
+		_effect_draw_cards(2) # 正常回合摸牌
+
+	
+func get_current_player():
+	return players[current_player_index] 
+
+##出牌阶段input（卡牌待修改）
+func _input(event):
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT: 
+			_on_mouse_click() 
+	_handle_zoom_input(event)#鼠标缩放
+
+	if event is InputEventKey and event.pressed:
+		var hovered_tile = game_area.get_hovered_tile() # 获取鼠标当前指向的格子 [cite: 171, 308]
+		
+		#对现有函数进行验证
+		match event.keycode:
+			KEY_1: # 验证：单格改颜色 (变为草地)
+				execute_card_effect("change_color", {"pos": hovered_tile, "terrain": GameGrid.Terrain.GRASS})
+				print("调试：将格子 ", hovered_tile, " 修改为草地")
+
+			KEY_2: # 验证：消除障碍物
+				execute_card_effect("remove_obstacle", {"pos": hovered_tile})
+				print("调试：消除了格子 ", hovered_tile, " 的障碍物")
+
+			KEY_3: # 验证：设置障碍物
+				var random_obs = [GameGrid.Obstacle.MOUNTAIN, GameGrid.Obstacle.TREE, GameGrid.Obstacle.HOUSE].pick_random()
+				execute_card_effect("set_obstacle", {"pos": hovered_tile, "type": random_obs})
+				print("调试：在格子 ", hovered_tile, " 设置了山脉")
+
+			KEY_4: # 验证：跳过下一个人的回合
+				var next_id = (current_player_index + 1) % players.size()
+				# 统一使用 target_id 和 phase 参数名
+				execute_card_effect("skip_action", {"target_id": next_id, "phase": "turn"})
+				print("调试：跳过玩家 ", next_id, " 的回合")
+			KEY_5: execute_card_effect("jump_two") # 测试新功能1
+			KEY_6: execute_card_effect("long_teleport") # 测试新功能2
+			KEY_R: # 验证：全图重生成
+				execute_card_effect("regen_map")
+#移动控制
+func _on_mouse_click():
+	var clicked_tile = game_area.get_hovered_tile() 
+	
+	match current_mode:
+		GameMode.MOVE:
+			try_move_to_tile(get_current_player(),clicked_tile)
+		GameMode.REMOVE_OBSTACLE:
+			_try_remove_obstacle(clicked_tile)
+			
+func try_move_to_tile(unit: Unit, target: Vector2i) -> void:
+	if unit == null: return 
+	# 1. 核心修复：检查字典中是否存在该坐标
+	# 如果 grid_data 里没有 target，说明这是地图外的“黑洞”
+	if not game_area.game_grid.grid_data.has(target): 
+		print("❌ 目标不可达：此处是地图外的虚空")
+		return
+
+	var is_valid_move = false
+	for hl in active_highlights:
+		# 通过高亮物体的全局坐标还原其对应的 Tile 坐标进行比对
+		if game_area.get_tile_from_global(hl.position) == target:
+			is_valid_move = true
+			break
+	
+	if not is_valid_move:
+		print("❌ 只能移动到高亮锁定的范围内")
+		return
+	# 3. 获取数据并检查障碍物 
+	var cell_data = game_area.game_grid.get_cell_data(target) 
+	
+	if cell_data["obstacle"] != GameGrid.Obstacle.NULL: 
+		print("❌ 被障碍物阻挡")
+		return
+		
+	if cell_data["unit"] != null: 
+		print("❌ 位置已被占用")
+		return
+
+	# 执行移动
+	_execute_move(unit, target)
+func _execute_move(unit: Unit, target: Vector2i) -> void: 
+	# 更新后端数据 
+	game_area.game_grid.grid_data[unit.current_tile]["unit"] = null 
+	game_area.game_grid.grid_data[target]["unit"] = unit 
+	# 执行平滑位移
+	unit.move_to_tile(target, game_area)
+	# 检查胜负 
+	check_victory(unit)
+	
+	total_steps += 1
+
+## 核心函数：卡牌效果执行
+func execute_card_effect(effect_type: String, params: Dictionary = {}):
+	match effect_type:
+		"jump_two": # 功能1：只高亮距离为2的一圈
+			show_custom_range(2, 2)
+		"long_teleport": # 功能2：
+			show_custom_range(3, 3)
+		"无中生有":#抽两张牌
+			_effect_draw_cards(2)
+		"重铸":
+			_effect_draw_cards(1)
+		"化险为夷":#移除障碍物
+			print("选择要移除障碍物的格子")
+			current_mode=GameMode.REMOVE_OBSTACLE
+			_show_removable_obstacles()
+		"set_obstacle":#设置障碍物
+			var target_pos = params.get("pos", Vector2i(-999, -999))
+			var obs_type = params.get("type", GameGrid.Obstacle.NULL)
+			game_area.game_grid.set_tile_obstacle(target_pos, obs_type)
+		"change_color":#单格改颜色
+			var target_pos = params.get("pos", Vector2i(-999, -999))
+			var terrain_type = params.get("terrain", GameGrid.Terrain.LAND)
+			game_area.game_grid.set_tile_terrain(target_pos, terrain_type)
+		"skip_action":#跳过
+			var target_id = params.get("target_id", -1)
+			var phase = params.get("phase", "")
+			if target_id != -1 and phase != "":
+				_effect_add_skip(target_id, phase)
+		"regen_map":#重新生成地图
+			game_area.game_grid.force_regenerate_map()
+			# --- 核心改进：地图重置后的状态修复 ---
+			for unit in players:
+				if game_area.game_grid.grid_data.has(unit.current_tile):
+					# 确保玩家脚下不会刚好刷出新障碍物，导致卡死
+					game_area.game_grid.set_tile_obstacle(unit.current_tile, GameGrid.Obstacle.NULL)
+					# 将玩家数据重新写入新的 grid_data
+					game_area.game_grid.grid_data[unit.current_tile]["unit"] = unit
+			
+			# 刷新当前回合玩家的移动高亮范围
+			show_move_range()
+func _effect_recast():
+	print("执行：重铸！换取1张新牌")
+	get_tree().call_group("deck_manager","draw_card",1)
+func _effect_add_skip(player_id: int, phase: String):
+	# phase 可选: "turn", "draw", "play", "discard"
+	if skip_flags.has(phase):
+		skip_flags[phase].append(player_id)
+		print("玩家 ", player_id, " 将跳过 ", phase)
+func _effect_draw_cards(count: int):
+	print("执行：获得 ", count, " 张牌")
+	get_tree().call_group("deck_system","draw_card",count)
+	
+	
+##回合结束与结果判定
+func _on_unit_move_finished():
+	# 切换到下一个玩家的回合
+	next_turn() 
+func check_victory(unit: Unit):
+	if unit.current_tile == target_tile: 
+		print("🎉 玩家 ", unit.player_id, " 到达终点，获得胜利！") 
+		set_process_input(false) 
+		game_finished = true
+		set_process_input(false)
+		show_result_panel(unit.player_id)
+
+
+
+
+#显示可移动范围/高亮
+func _get_tiles_in_range(center: Vector2i, max_range: int) -> Dictionary:
+	var visited = {center: 0} # 格式: {坐标: 距离}
+	var queue = [center]
+	
+	while queue.size() > 0:
+		var current = queue.pop_front()
+		var current_dist = visited[current]
+		
+		if current_dist < max_range:
+			# 使用 Godot 自带的邻居获取函数，最保险
+			var neighbors = game_area.get_surrounding_cells(current)
+			for n in neighbors:
+				if not visited.has(n) and game_area.game_grid.grid_data.has(n):
+					visited[n] = current_dist + 1
+					queue.push_back(n)
+	return visited
+# 普通移动：距离为 1
+func show_move_range():
+	clear_highlights()
+	var unit = get_current_player()
+	var player_color = [Color.RED, Color.GREEN, Color.BLUE][unit.player_id]
+	
+	# 获取距离为 1 的所有格子
+	var range_data = _get_tiles_in_range(unit.current_tile, 1)
+	for tile in range_data:
+		if range_data[tile] == 0: continue # 跳过自己
+		var data = game_area.game_grid.grid_data[tile]
+		if data["obstacle"] == GameGrid.Obstacle.NULL and data["unit"] == null:
+			_spawn_highlight_at(tile, player_color)
+# 特殊移动：基于 BFS 的精确距离
+func show_custom_range(min_r: int, max_r: int):
+	clear_highlights()
+	var unit = get_current_player()
+	
+	# 1. 算出最大范围内的所有格子
+	var range_data = _get_tiles_in_range(unit.current_tile, max_r)
+	
+	# 2. 筛选出符合最小距离条件的格子
+	for tile in range_data:
+		var dist = range_data[tile]
+		if dist >= min_r and dist <= max_r:
+			var data = game_area.game_grid.grid_data[tile]
+			if data["obstacle"] == GameGrid.Obstacle.NULL and data["unit"] == null:
+				_spawn_highlight_at(tile, Color.PURPLE)
+
+func _spawn_highlight_at(tile: Vector2i, color: Color):
+	var hl = highlight_scene.instantiate()
+	add_child(hl) 
+	hl.position = game_area.get_global_from_tile(tile)
+	hl.modulate = color
+	hl.modulate.a = 0.5 
+	active_highlights.append(hl)
+
+func clear_highlights():
+	for hl in active_highlights: 
+		if is_instance_valid(hl): hl.queue_free() 
+	active_highlights.clear()
+#鼠标缩放功能
+func _handle_zoom_input(event: InputEvent):
+	if not event is InputEventMouseButton or not event.pressed:
+		return
+
+	var camera = $Camera2D # 获取相机节点
+	var zoom_changed = false
+
+	# 判定滚轮向上（放大）
+	if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+		target_zoom = min(target_zoom + zoom_speed, max_zoom)
+		zoom_changed = true
+	# 判定滚轮向下（缩小）
+	elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+		target_zoom = max(target_zoom - zoom_speed, min_zoom)
+		zoom_changed = true
+
+	# 如果缩放值发生变化，执行平滑动画
+	if zoom_changed:
+		var tween = create_tween() # 使用你惯用的 Tween 逻辑 
+		tween.tween_property(camera, "zoom", Vector2(target_zoom, target_zoom), 0.15)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+
+
+##控制棋子移动--------------------
+##新增：接收从 UI 打出的卡牌 
+func play_card_from_ui(card_data: Array):
+	var terrain_req = card_data[0] # 例如: "LAND", "UNIVERSAL", "GRASS"
+	var card_type = card_data[1]   # 例如: "GO", "TRICK"
+	var card_name = card_data[2]   # 例如: "前进2格"
+
+	# 获取当前玩家和脚下的地形
+	var unit = get_current_player()
+	var current_tile_data = game_area.game_grid.grid_data[unit.current_tile]
+	var current_terrain_str = game_area.game_grid.get_terrain_string(current_tile_data["terrain"]).to_upper()
+
+	# 【规则 1：起步地形一致性校验】
+	# 如果卡牌不是 UNIVERSAL，且玩家脚下地形与卡牌属性不一致，则禁止出牌
+	if terrain_req != "UNIVERSAL" and terrain_req != current_terrain_str:
+		print("❌ 出牌失败：你站在 [", current_terrain_str, "]，无法打出 [", terrain_req, "] 属性的卡牌！")
+		# 注意：目前你的 UI 会直接把牌删掉。后续可以在这里给 UI 返回 false 让卡牌弹回手牌
+		return 
+
+	print("✅ 出牌成功：触发卡牌 -> ", card_name)
+
+	# --- 执行卡牌逻辑 ---
+	if card_type == "GO":
+		var dist = 1
+		if "2" in card_name: dist = 2
+		elif "3" in card_name: dist = 3
+		show_move_range_for_card(dist)
+	elif card_type == "TRICK":
+		execute_card_effect(card_name)
+##受卡牌控制的高亮显示逻辑 
+func show_move_range_for_card(distance: int):
+	clear_highlights()
+	var unit = get_current_player()
+	
+	var highlight_color = [Color.RED, Color.GREEN, Color.BLUE][unit.player_id]
+	if distance > 1:
+		highlight_color = Color.PURPLE 
+
+	# 使用 BFS 获取最大范围内的所有格子
+	var range_data = _get_tiles_in_range(unit.current_tile, distance)
+
+	for tile in range_data:
+		var dist_to_tile = range_data[tile]
+		
+		# 【规则 2：跳跃逻辑】只高亮处于最边缘的圆环
+		if dist_to_tile != distance: 
+			continue 
+			
+		var data = game_area.game_grid.grid_data[tile]
+		
+		# 【规则 3：终点地形自由】
+		# 不再校验地形！只要没有障碍物且没有其他玩家占用，就可以走过去
+		if data["obstacle"] == GameGrid.Obstacle.NULL and data["unit"] == null:
+			_spawn_highlight_at(tile, highlight_color)
+
+##移除障碍物
+## --- 新增：高亮所有可以被移除的障碍物 ---
+func _show_removable_obstacles():
+	clear_highlights()
+	
+	# 遍历地图上所有的格子
+	for tile in game_area.game_grid.grid_data:
+		var data = game_area.game_grid.grid_data[tile]
+		# 如果这个格子上确实有障碍物
+		if data["obstacle"] != GameGrid.Obstacle.NULL:
+			# 用特殊的颜色高亮它（比如黄色，代表警告/可交互）
+			_spawn_highlight_at(tile, Color.YELLOW)
+
+## --- 新增：玩家点击目标后的移除逻辑 ---
+func _try_remove_obstacle(target: Vector2i):
+	# 1. 安全校验：检查点击的格子是否在高亮范围内
+	var is_valid_target = false
+	for hl in active_highlights:
+		if game_area.get_tile_from_global(hl.position) == target:
+			is_valid_target = true
+			break
+			
+	if not is_valid_target:
+		print("❌ 只能选择高亮显示的障碍物！")
+		return
+		
+	# 2. 执行移除操作：调用 GameGrid 已经写好的接口
+	game_area.game_grid.set_tile_obstacle(target, GameGrid.Obstacle.NULL)
+	print("✅ 障碍物已成功移除！")
+	# 3. 恢复游戏状态
+	clear_highlights()
+	current_mode = GameMode.MOVE # 别忘了把模式切回默认的移动模式
+
+# 显示结算面板
+func show_result_panel(winner_id):
+
+	var panel = $"提示/Panel"
+
+	panel.visible = true
+
+	$"提示/Panel/winner_label".text = "玩家 %d 胜利！" % winner_id
+
+	var total_time = Time.get_ticks_msec() / 1000.0 - game_start_time
+
+	var total_seconds = int(total_time)
+
+	var minutes = int(total_seconds / 60)
+
+	var seconds = total_seconds % 60
+
+	$"提示/Panel/time_label".text = "游戏耗时：%02d:%02d" % [minutes, seconds]
+
+	$"提示/Panel/step_label".text = "移动步数：%d" % total_steps
+# 返回菜单
+func _on_backmenu_pressed() -> void:
+	get_tree().change_scene_to_file("res://meun.tscn")

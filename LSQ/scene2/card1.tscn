@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://dn0bwp5ba7awb"]
+
+[ext_resource type="Script" uid="uid://40y62q1lxe7w" path="res://LSQ/scene2/card_1.gd" id="1_w360u"]
+[ext_resource type="Texture2D" uid="uid://bbale8r18rs03" path="res://LSQ/sucai/111.png" id="2_w360u"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rjlel"]
+size = Vector2(188, 257)
+
+[node name="card1" type="Node2D" unique_id=1983593641]
+z_index = 1
+position = Vector2(2377, 201)
+scale = Vector2(0.7, 0.7)
+script = ExtResource("1_w360u")
+
+[node name="CardImage" type="Sprite2D" parent="." unique_id=2121584045]
+position = Vector2(-1.9999943, 2.0000286)
+rotation = 4.1887903
+scale = Vector2(0.36523435, 0.39224145)
+texture = ExtResource("2_w360u")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=190672414]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1500407751]
+position = Vector2(-1, -2)
+rotation = 4.1887903
+shape = SubResource("RectangleShape2D_rjlel")
+
+[node name="Color" type="RichTextLabel" parent="." unique_id=1001408735]
+self_modulate = Color(1, 1, 0.31764707, 1)
+offset_left = -90.0
+offset_top = 173.0
+offset_right = -50.0
+offset_bottom = 213.0
+scale = Vector2(2, 2)
+text = "0"
+
+[node name="Function" type="RichTextLabel" parent="." unique_id=1101439108]
+modulate = Color(1, 1, 0.2901961, 1)
+offset_left = 80.0
+offset_top = 157.0
+offset_right = 120.0
+offset_bottom = 197.0
+scale = Vector2(2, 2)
+text = "0"
+
+[node name="Name" type="RichTextLabel" parent="." unique_id=513326123]
+modulate = Color(1, 0.35000002, 0.35000002, 1)
+offset_left = 273.0
+offset_top = 165.0
+offset_right = 360.0
+offset_bottom = 198.0
+scale = Vector2(2, 2)
+text = "0"
+tab_size = 2
+
+[node name="Code" type="RichTextLabel" parent="." unique_id=1256786027]
+offset_right = 40.0
+offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
+
+[connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]

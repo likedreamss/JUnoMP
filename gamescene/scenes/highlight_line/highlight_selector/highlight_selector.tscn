@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://cl1rqhldy3bif"]
+
+[ext_resource type="PackedScene" uid="uid://bqcpx1y84teq7" path="res://gamescene/scenes/highlight_line/highlight_line.tscn" id="1_1eukw"]
+[ext_resource type="Script" uid="uid://chxy7edoadxsf" path="res://gamescene/scenes/highlight_line/highlight_selector/highlight_selector.gd" id="2_golwv"]
+
+[node name="HighlightSelector" unique_id=547910877 instance=ExtResource("1_1eukw")]
+script = ExtResource("2_golwv")
+
+[node name="Label_1" type="Label" parent="." index="0" unique_id=956554943]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -39.0
+offset_top = 13.0
+offset_right = 41.0
+offset_bottom = 29.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+text = "(3,1)"
+
+[node name="Label_2" type="Label" parent="." index="1" unique_id=1702920793]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -33.0
+offset_top = -24.0
+offset_right = 47.0
+offset_bottom = 11.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+text = "Land
+"
+
+[node name="Label_3" type="Label" parent="." index="2" unique_id=1280400369]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -31.0
+offset_top = -42.0
+offset_right = 49.0
+offset_bottom = -26.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+text = "ROCK"

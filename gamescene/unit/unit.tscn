@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://b7c24onwqwidj"]
+
+[ext_resource type="Texture2D" uid="uid://ddm88dlreqovn" path="res://gamescene/assets/pixel chess/16x32 pieces/W_Rook.png" id="2_3k25b"]
+[ext_resource type="Script" uid="uid://b27145lgp4m1e" path="res://gamescene/unit/unit.gd" id="2_hs7ws"]
+
+[node name="Unit" type="Node2D" unique_id=1206134430]
+script = ExtResource("2_hs7ws")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=605543216]
+y_sort_enabled = true
+texture = ExtResource("2_3k25b")
+offset = Vector2(0, -5)
+region_enabled = true
+region_rect = Rect2(1.0533676, 13.585873, 12.938339, 16.41431)
