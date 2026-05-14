@@ -45,7 +45,10 @@ func raycast_at_cursor():
 		elif result_collision_mask == COLLISION_MASK_OK:
 			#牌堆点击后
 			$"../cardmanager".delate_card()
-			get_tree().call_group("card","card_rotation")
+			
 		elif result_collision_mask == COLLISION_MASK_PASS:
+			
 			get_tree().call_group("battle_manager","next_turn")
+			
+			
 			pass

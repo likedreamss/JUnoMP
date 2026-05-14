@@ -46,8 +46,12 @@ func finish_drag():
 		
 		card_is_in_slot = card_being_dragged
 		slot_has_card = card_slot_found
-		
-		player_hand_reference.remove_card_from_hand(card_being_dragged)
+		if card_being_dragged.card == 1:
+			$"../PH1online".remove_card_from_hand(card_being_dragged)
+		elif card_being_dragged.card == 2:
+			$"../PH2online".remove_card_from_hand(card_being_dragged)
+		else:
+			player_hand_reference.remove_card_from_hand(card_being_dragged)
 		card_being_dragged.position = card_slot_found.position
 		card_being_dragged.get_node("Area2D/CollisionShape2D").disabled = true
 		card_slot_found.card_in_slot = true

@@ -25,6 +25,8 @@ var active_highlights: Array = []
 var players: Array = [] 
 var current_player_index: int = 0 
 var current_mode = GameMode.MOVE
+var next_player 
+var _player_id = 0
 # --- 结算页面变量 ---
 var game_start_time: float = 0
 var total_steps: int = 0
@@ -78,6 +80,7 @@ func spawn_players():
 		unit.set_tile(start_tile, game_area) 
 		game_area.game_grid.grid_data[start_tile]["unit"] = unit
 		players.append(unit) 
+		next_player = players[current_player_index]
 func _ready():
 	add_to_group("battle_manager")#方便卡牌管理器找到
 	
@@ -106,7 +109,7 @@ func next_turn(loop_count: int = 0):
 		
 	clear_highlights()
 	current_player_index = (current_player_index + 1) % players.size()
-	var next_player = get_current_player()
+	next_player = get_current_player()
 
 	# 检查是否跳过整个回合
 	if next_player.player_id in skip_flags["turn"]:
@@ -120,7 +123,16 @@ func next_turn(loop_count: int = 0):
 		skip_flags["draw"].erase(next_player.player_id)
 		print("跳过摸牌阶段")
 	else:
-		_effect_draw_cards(2) # 正常回合摸牌
+		_player_id = next_player.player_id - 1
+		if _player_id < 0:
+			_player_id = 2
+		change_player_card(next_player.player_id)
+		get_tree().call_group("card","card_rotation")
+		_effect_draw_cardsa(next_player.player_id,2) # 正常回合摸牌
+		get_tree().call_group("card"+str(next_player.player_id),"visible",1)
+		get_tree().call_group("card"+str(_player_id),"visible",0)
+		
+
 
 	
 func get_current_player():
@@ -218,7 +230,7 @@ func execute_card_effect(effect_type: String, params: Dictionary = {}):
 		"long_teleport": # 功能2：
 			show_custom_range(3, 3)
 		"无中生有":#抽两张牌
-			_effect_draw_cards(2)
+			_effect_draw_cardsa(next_player.player_id,2)
 		"重铸":
 			_effect_draw_cards(1)
 		"化险为夷":#移除障碍物
@@ -260,8 +272,24 @@ func _effect_add_skip(player_id: int, phase: String):
 		print("玩家 ", player_id, " 将跳过 ", phase)
 func _effect_draw_cards(count: int):
 	print("执行：获得 ", count, " 张牌")
-	get_tree().call_group("deck_system","draw_card",count)
+	get_tree().call_group("deck","draw_card",count)
+
+func _effect_draw_cardsa(player_id,count):#为不同玩家发牌
+	match player_id:
+		0:
+			print("执行：玩家0获得 ", count, " 张牌")
+			get_tree().call_group("deck"+str(player_id),"draw_card",count)
+		1:
+			print("执行：玩家1获得 ", count, " 张牌")
+			get_tree().call_group("deck"+str(player_id),"draw_card",count)
+		2:
+			print("执行：玩家2获得 ", count, " 张牌")
+			get_tree().call_group("deck"+str(player_id),"draw_card",count)
 	
+	
+func change_player_card(player_id):
+	get_tree().call_group("player_hand","player_card_change",player_id)
+
 	
 ##回合结束与结果判定
 func _on_unit_move_finished():

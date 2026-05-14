@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b2u25n4k714ta"]
 
 [ext_resource type="PackedScene" uid="uid://jgs2pmhxc3wt" path="res://LSQ/scene2/node_2d.tscn" id="1_47681"]
+[ext_resource type="Script" uid="uid://38c3w3yty4av" path="res://GameMain/sub_viewport.gd" id="1_fnd5v"]
 [ext_resource type="PackedScene" uid="uid://u755m34bg4s0" path="res://gamescene/scenes/battle/battle.tscn" id="2_fnd5v"]
 
 [node name="Player1" type="Control" unique_id=1622213388]
@@ -29,8 +30,10 @@ mouse_target = true
 [node name="SubViewport" type="SubViewport" parent="CanvasLayer/SubViewportContainer" unique_id=634022286]
 transparent_bg = true
 handle_input_locally = false
-size = Vector2i(2573, 1799)
+physics_object_picking = true
+size = Vector2i(2573, 1639)
 render_target_update_mode = 4
+script = ExtResource("1_fnd5v")
 
 [node name="Area2D" type="Area2D" parent="CanvasLayer/SubViewportContainer/SubViewport" unique_id=1303978572]
 position = Vector2(-6, -5)
