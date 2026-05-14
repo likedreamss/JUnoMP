@@ -75,12 +75,10 @@ func visible(bool):
 	if bool:
 		$Label.visible = true
 		$Name.visible = true
-		if usebool:
-			$Area2D.collision_mask = 1
-			hower_bool = 1
 		$".".scale.x = 1
 		$".".scale.y = 1
 		$CardImage.texture = load("res://LSQ/sucai/"+ $Color.text + "_"+$Function.text+"_CARD.png")
+		$".".z_index = 1
 	else:
 		$Label.visible = false
 		$Name.visible = false
@@ -89,6 +87,7 @@ func visible(bool):
 		$".".scale.x = 0.7
 		$".".scale.y = 0.7
 		$CardImage.texture = load("res://LSQ/sucai/111.png")
+		$".".z_index = 1
 	
 	
 #fa song xin hao

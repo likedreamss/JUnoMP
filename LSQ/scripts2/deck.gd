@@ -26,8 +26,6 @@ func draw_card(card_count):
 	for i in range(card_count):
 		#抽牌数
 		var card_drawn_name = card_database_reference.CARDS.keys()[0]
-		#var card_drawn_name = player_deck[0]
-		#player_deck.erase(card_drawn_name)
 		var new_card = card_scene.instantiate()
 		var card_drawn_color = str(card_database_reference.CARDS[card_drawn_name][0])
 		var card_drawn_function = str(card_database_reference.CARDS[card_drawn_name][1])
