@@ -9,10 +9,12 @@ var start_rot: float = 0.0
 const TARGET_ROT: float = deg_to_rad(120)
 # 旋转速度
 const ROT_SPEED: float = 5.0
+var label_rotation_bool = 0
 var rotation_bool = 0
+var usebool = 0
 var aaa = 0
 var bbb
-var hower_bool = 1
+var hower_bool = 0
 var starting_position
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -25,12 +27,13 @@ func _ready() -> void:
 	$Function.visible =  false
 	$".".scale.x = 1
 	$".".scale.y = 1
+	$Area2D.collision_mask = 1
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 
 func _process(delta: float) -> void:
-	# Label保持一直旋转不变
-	$Label.rotation += 3 * delta
+	if label_rotation_bool:
+		$Label.rotation += 3 * delta
 	if rotation_bool:
 		# 目标节点统一转到固定偏移
 		var target = start_rot + TARGET_ROT
@@ -45,8 +48,22 @@ func _process(delta: float) -> void:
 			rotation_bool = false
 
 
-func group_cahnge():
+func group_change():
 	add_to_group("card_"+$Color.text)
+
+func use_bool(bool):
+	if bool:
+		label_rotation_bool = 1
+		hower_bool = 1
+		$Area2D.collision_mask = 1
+		usebool = 1
+	else:
+		label_rotation_bool = 0
+		hower_bool = 0
+		$Area2D.collision_mask = 16
+		usebool = 0
+		
+
 
 
 func card_rotation():
@@ -58,19 +75,20 @@ func visible(bool):
 	if bool:
 		$Label.visible = true
 		$Name.visible = true
-		$Area2D.collision_mask = 1
+		if usebool:
+			$Area2D.collision_mask = 1
+			hower_bool = 1
 		$".".scale.x = 1
 		$".".scale.y = 1
 		$CardImage.texture = load("res://LSQ/sucai/"+ $Color.text + "_"+$Function.text+"_CARD.png")
-		hower_bool = 1
 	else:
 		$Label.visible = false
 		$Name.visible = false
 		$Area2D.collision_mask = 16
+		hower_bool = 0
 		$".".scale.x = 0.7
 		$".".scale.y = 0.7
 		$CardImage.texture = load("res://LSQ/sucai/111.png")
-		hower_bool = 0
 	
 	
 #fa song xin hao

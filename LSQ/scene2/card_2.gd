@@ -11,7 +11,7 @@ const TARGET_ROT: float = deg_to_rad(120)
 # 旋转速度
 const ROT_SPEED: float = 5.0
 var usebool = 0
-var label_rotation_bool = 1
+var label_rotation_bool = 0
 var rotation_bool = 0
 var hower_bool = 0
 var starting_position
@@ -26,6 +26,7 @@ func _ready() -> void:
 	$Function.visible =  false
 	$".".scale.x = 1
 	$".".scale.y = 1
+	$Area2D.collision_mask = 1
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -59,7 +60,7 @@ func use_bool(bool):
 		usebool = 0
 		
 
-func group_cahnge():
+func group_change():
 	add_to_group("card_"+$Color.text)
 
 func card_rotation():
@@ -73,15 +74,16 @@ func visible(bool):
 		if usebool:
 			$Area2D.collision_mask = 1
 			hower_bool = 1
+		else:
+			pass
 		$".".scale.x = 1
 		$".".scale.y = 1
 		$CardImage.texture = load("res://LSQ/sucai/"+ $Color.text + "_"+$Function.text+"_CARD.png")
 	else:
 		$Label.visible = false
 		$Name.visible = false
-		if usebool:
-			$Area2D.collision_mask = 16
-			hower_bool = 0
+		$Area2D.collision_mask = 16
+		hower_bool = 0
 		$".".scale.x = 0.7
 		$".".scale.y = 0.7
 		$CardImage.texture = load("res://LSQ/sucai/111.png")
