@@ -45,6 +45,7 @@ func finish_drag():
 	if card_slot_found and not card_slot_found.card_in_slot:
 		
 		card_is_in_slot = card_being_dragged
+		$"../PASS".pass_bool(0)
 		slot_has_card = card_slot_found
 		if card_being_dragged.card == 1:
 			$"../PH1online".remove_card_from_hand(card_being_dragged)
@@ -74,6 +75,7 @@ func delate_card():
 	if slot_has_card == null:
 		pass
 	elif slot_has_card.card_in_slot:
+		$"../PASS".pass_bool(1)
 		var card_drawn_name_return = card_is_in_slot.get_node("Code").text
 		var card_drawn_value_return = [card_is_in_slot.get_node("Color").text,
 		card_is_in_slot.get_node("Function").text,

@@ -45,6 +45,9 @@ func _process(delta: float) -> void:
 			rotation_bool = false
 
 
+func group_cahnge():
+	add_to_group("card_"+$Color.text)
+
 
 func card_rotation():
 	rotation_bool = 1

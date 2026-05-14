@@ -127,11 +127,15 @@ func next_turn(loop_count: int = 0):
 		_player_id = next_player.player_id - 1
 		if _player_id < 0:
 			_player_id = 2
-		change_player_card(next_player.player_id)
-		get_tree().call_group("card","card_rotation")
+		change_player_card(next_player.player_id)#玩家位置转换动画函数
+		get_tree().call_group("card","card_rotation")#同上
 		_effect_draw_cardsa(next_player.player_id,2) # 正常回合摸牌
 		get_tree().call_group("card"+str(next_player.player_id),"visible",1)
-		get_tree().call_group("card"+str(_player_id),"visible",0)
+		get_tree().call_group("card"+str(_player_id),"visible",0)#卡牌可操控变为不可操控
+		
+		get_tree().call_group("PASS","pass_bool",0)#防止连续按跳过按钮
+		await get_tree().create_timer(1).timeout
+		get_tree().call_group("PASS","pass_bool",1)
 	
 func get_current_player():
 	return players[current_player_index] 
@@ -403,7 +407,8 @@ func play_card_from_ui(card_data: Array):
 	var unit = get_current_player()
 	var current_tile_data = game_area.game_grid.grid_data[unit.current_tile]
 	var current_terrain_str = game_area.game_grid.get_terrain_string(current_tile_data["terrain"]).to_upper()
-
+	
+	
 	# 【规则 1：起步地形一致性校验】
 	# 如果卡牌不是 UNIVERSAL，且玩家脚下地形与卡牌属性不一致，则禁止出牌
 	if terrain_req != "UNIVERSAL" and terrain_req != current_terrain_str:

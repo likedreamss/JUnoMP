@@ -47,6 +47,10 @@ func _process(delta: float) -> void:
 			
 
 
+func group_cahnge():
+	add_to_group("card_"+$Color.text)
+
+
 func card_rotation():
 	rotation_bool = 1
 	start_rot = $Area2D/CollisionShape2D.rotation
@@ -68,7 +72,6 @@ func visible(bool):
 		$".".scale.y = 0.7
 		$CardImage.texture = load("res://LSQ/sucai/111.png")
 		hower_bool = 0
-	
 	
 #fa song xin hao
 func _on_area_2d_mouse_entered() -> void:

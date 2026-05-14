@@ -44,5 +44,6 @@ func draw_card(card_count):
 		$"../cardmanager".add_child(new_card)
 		#remove_child!!!!!
 		new_card.name = "Card"
+		new_card.group_change()
 		$"../PH1online".add_card_to_hand(new_card)
 	
