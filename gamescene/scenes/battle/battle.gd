@@ -1,7 +1,7 @@
 extends Node2D
 class_name Battle
 
-enum GameMode { MOVE, PLACE_OBSTACLE,REMOVE_OBSTACLE}
+enum GameMode { MOVE, PLACE_OBSTACLE,REMOVE_OBSTACLE,CHANGE_TERRAIN}
 
 # --- 导出变量 ---
 @export_group("Setup")
@@ -27,6 +27,7 @@ var current_player_index: int = 0
 var current_mode = GameMode.MOVE
 var next_player 
 var _player_id = 0
+var pending_type = null# 用于临时存储卡牌带入的地形或障碍物类型
 # --- 结算页面变量 ---
 var game_start_time: float = 0
 var total_steps: int = 0
@@ -131,9 +132,6 @@ func next_turn(loop_count: int = 0):
 		_effect_draw_cardsa(next_player.player_id,2) # 正常回合摸牌
 		get_tree().call_group("card"+str(next_player.player_id),"visible",1)
 		get_tree().call_group("card"+str(_player_id),"visible",0)
-		
-
-
 	
 func get_current_player():
 	return players[current_player_index] 
@@ -181,6 +179,10 @@ func _on_mouse_click():
 			try_move_to_tile(get_current_player(),clicked_tile)
 		GameMode.REMOVE_OBSTACLE:
 			_try_remove_obstacle(clicked_tile)
+		GameMode.PLACE_OBSTACLE:
+			_try_place_obstacle(clicked_tile)
+		GameMode.CHANGE_TERRAIN:
+			_try_change_terrain(clicked_tile)
 			
 func try_move_to_tile(unit: Unit, target: Vector2i) -> void:
 	if unit == null: return 
@@ -224,6 +226,7 @@ func _execute_move(unit: Unit, target: Vector2i) -> void:
 
 ## 核心函数：卡牌效果执行
 func execute_card_effect(effect_type: String, params: Dictionary = {}):
+	var card_color_str = params.get("terrain_req", "UNIVERSAL") 
 	match effect_type:
 		"jump_two": # 功能1：只高亮距离为2的一圈
 			show_custom_range(2, 2)
@@ -237,31 +240,30 @@ func execute_card_effect(effect_type: String, params: Dictionary = {}):
 			print("选择要移除障碍物的格子")
 			current_mode=GameMode.REMOVE_OBSTACLE
 			_show_removable_obstacles()
-		"set_obstacle":#设置障碍物
-			var target_pos = params.get("pos", Vector2i(-999, -999))
-			var obs_type = params.get("type", GameGrid.Obstacle.NULL)
-			game_area.game_grid.set_tile_obstacle(target_pos, obs_type)
-		"change_color":#单格改颜色
-			var target_pos = params.get("pos", Vector2i(-999, -999))
-			var terrain_type = params.get("terrain", GameGrid.Terrain.LAND)
-			game_area.game_grid.set_tile_terrain(target_pos, terrain_type)
+		"障碍重重":#设置障碍物
+			current_mode = GameMode.PLACE_OBSTACLE
+			pending_type = [GameGrid.Obstacle.MOUNTAIN, GameGrid.Obstacle.TREE, GameGrid.Obstacle.HOUSE].pick_random()
+			_show_placeable_tiles()
+		"点染一格":#单格改颜色
+			current_mode = GameMode.CHANGE_TERRAIN
+			if card_color_str == "UNIVERSAL":
+				pending_type = -1 # 使用 -1 作为随机地形的标记
+			else:
+				# 映射字符串到地形枚举 
+				var t_map = {"LAND": 0, "GRASS": 1, "PINK": 2, "RIVER": 3}
+				pending_type = t_map.get(card_color_str, 0) 
+			_show_all_tiles_for_paint()
 		"skip_action":#跳过
 			var target_id = params.get("target_id", -1)
 			var phase = params.get("phase", "")
 			if target_id != -1 and phase != "":
 				_effect_add_skip(target_id, phase)
-		"regen_map":#重新生成地图
+		"乾坤重置":#重新生成地图
 			game_area.game_grid.force_regenerate_map()
-			# --- 核心改进：地图重置后的状态修复 ---
-			for unit in players:
-				if game_area.game_grid.grid_data.has(unit.current_tile):
-					# 确保玩家脚下不会刚好刷出新障碍物，导致卡死
-					game_area.game_grid.set_tile_obstacle(unit.current_tile, GameGrid.Obstacle.NULL)
-					# 将玩家数据重新写入新的 grid_data
-					game_area.game_grid.grid_data[unit.current_tile]["unit"] = unit
+			_fix_units_after_regen()
 			
-			# 刷新当前回合玩家的移动高亮范围
-			show_move_range()
+			
+			
 func _effect_recast():
 	print("执行：重铸！换取1张新牌")
 	get_tree().call_group("deck_manager","draw_card",1)
@@ -328,7 +330,6 @@ func show_move_range():
 	clear_highlights()
 	var unit = get_current_player()
 	var player_color = [Color.RED, Color.GREEN, Color.BLUE][unit.player_id]
-	
 	# 获取距离为 1 的所有格子
 	var range_data = _get_tiles_in_range(unit.current_tile, 1)
 	for tile in range_data:
@@ -417,12 +418,11 @@ func play_card_from_ui(card_data: Array):
 		elif "3" in card_name: dist = 3
 		show_move_range_for_card(dist)
 	elif card_type == "TRICK":
-		execute_card_effect(card_name)
+		execute_card_effect(card_name, {"terrain_req": terrain_req})
 ##受卡牌控制的高亮显示逻辑 
 func show_move_range_for_card(distance: int):
 	clear_highlights()
 	var unit = get_current_player()
-	
 	var highlight_color = [Color.RED, Color.GREEN, Color.BLUE][unit.player_id]
 	if distance > 1:
 		highlight_color = Color.PURPLE 
@@ -477,7 +477,56 @@ func _try_remove_obstacle(target: Vector2i):
 	clear_highlights()
 	current_mode = GameMode.MOVE # 别忘了把模式切回默认的移动模式
 
+##障碍重重逻辑
+func _show_placeable_tiles():
+	clear_highlights()
+	for tile in game_area.game_grid.grid_data:
+		var data = game_area.game_grid.grid_data[tile]
+		# 只有没有障碍物且没有玩家的地块才能放障碍
+		if data["obstacle"] == GameGrid.Obstacle.NULL and data["unit"] == null:
+			_spawn_highlight_at(tile, Color.ORANGE)
 
+func _try_place_obstacle(target: Vector2i):
+	if _is_click_on_highlight(target):
+		game_area.game_grid.set_tile_obstacle(target, pending_type)
+		_reset_after_action()
+
+##点染一格逻辑
+func _show_all_tiles_for_paint():
+	clear_highlights()
+	for tile in game_area.game_grid.grid_data:
+		# 全图除玩家脚下外基本都能染色
+		_spawn_highlight_at(tile, Color.AQUA)
+
+func _try_change_terrain(target: Vector2i):
+	if _is_click_on_highlight(target):
+		var final_terrain = pending_type
+		# 如果是万能牌效果，随机生成一个 0-3 的地形索引 
+		if final_terrain == -1:
+			final_terrain = randi() % 4 
+			print("万能点染：目标随机变为了地形索引 ", final_terrain)
+		game_area.game_grid.set_tile_terrain(target, final_terrain)
+		_reset_after_action()
+
+##乾坤重置后的辅助修复
+func _fix_units_after_regen():
+	for unit in players:
+		if game_area.game_grid.grid_data.has(unit.current_tile):
+			game_area.game_grid.set_tile_obstacle(unit.current_tile, GameGrid.Obstacle.NULL)
+			game_area.game_grid.grid_data[unit.current_tile]["unit"] = unit 
+	
+
+#通用辅助
+func _is_click_on_highlight(target: Vector2i) -> bool:
+	for hl in active_highlights:
+		if game_area.get_tile_from_global(hl.position) == target:
+			return true
+	return false
+
+func _reset_after_action():
+	clear_highlights()
+	current_mode = GameMode.MOVE
+	pending_type = null
 
 
 # 显示结算面板
