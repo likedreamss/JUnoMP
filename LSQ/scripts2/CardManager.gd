@@ -57,7 +57,15 @@ func finish_drag():
 		card_slot_found.card_in_slot = true
 		
 	else:
-		player_hand_reference.add_card_to_hand(card_being_dragged)
+		match card_being_dragged.card:
+			0:
+				player_hand_reference.add_card_to_hand(card_being_dragged)
+			1:
+				$"../PH1online".add_card_to_hand(card_being_dragged)
+			2:
+				$"../PH2online".add_card_to_hand(card_being_dragged)
+
+		
 	card_being_dragged = null
 
 

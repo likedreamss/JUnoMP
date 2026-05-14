@@ -34,6 +34,7 @@ func _ready() -> void:
 		new_card.get_node("Code").text = str(card_database_reference_a.CARDS[card_drawn_start][3])
 		card_database_reference_a.CARDS.erase(card_drawn_start)
 		$"../cardmanager".add_child(new_card)
+		new_card.visible(0)
 		new_card.name = "Card"
 		add_card_to_hand(new_card)
 	get_tree().call_group("card1","card_rotation")

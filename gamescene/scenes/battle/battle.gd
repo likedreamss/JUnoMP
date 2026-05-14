@@ -234,8 +234,10 @@ func execute_card_effect(effect_type: String, params: Dictionary = {}):
 			show_custom_range(3, 3)
 		"无中生有":#抽两张牌
 			_effect_draw_cardsa(next_player.player_id,2)
+			print(next_player.player_id)
 		"重铸":
-			_effect_draw_cards(1)
+			_effect_draw_cardsa(next_player.player_id,1)
+			print(next_player.player_id)
 		"化险为夷":#移除障碍物
 			print("选择要移除障碍物的格子")
 			current_mode=GameMode.REMOVE_OBSTACLE

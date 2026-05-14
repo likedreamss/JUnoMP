@@ -14,8 +14,8 @@ scale = Vector2(0.7, 0.7)
 script = ExtResource("1_w360u")
 
 [node name="CardImage" type="Sprite2D" parent="." unique_id=2121584045]
-position = Vector2(-1.9999943, 2.0000286)
-scale = Vector2(0.36523435, 0.39224145)
+position = Vector2(-2.2345161, -2.3757324)
+scale = Vector2(0.35, 0.39)
 texture = ExtResource("2_w360u")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=190672414]

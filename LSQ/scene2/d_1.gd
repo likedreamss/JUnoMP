@@ -40,6 +40,7 @@ func draw_card(card_count):
 		new_card.get_node("Name").text = str(card_database_reference.CARDS[card_drawn_name][2])
 		new_card.get_node("Code").text = str(card_database_reference.CARDS[card_drawn_name][3])
 		card_database_reference.CARDS.erase(card_drawn_name)
+		new_card.visible(1)
 		$"../cardmanager".add_child(new_card)
 		#remove_child!!!!!
 		new_card.name = "Card"

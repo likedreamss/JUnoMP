@@ -11,6 +11,7 @@ const TARGET_ROT: float = deg_to_rad(120)
 # 旋转速度
 const ROT_SPEED: float = 5.0
 var rotation_bool = 0
+var hower_bool = 1
 var aaa = 0
 var bbb
 var starting_position
@@ -58,6 +59,7 @@ func visible(bool):
 		$".".scale.x = 1
 		$".".scale.y = 1
 		$CardImage.texture = load("res://LSQ/sucai/"+ $Color.text + "_"+$Function.text+"_CARD.png")
+		hower_bool = 1
 	else:
 		$Label.visible = false
 		$Name.visible = false
@@ -65,12 +67,15 @@ func visible(bool):
 		$".".scale.x = 0.7
 		$".".scale.y = 0.7
 		$CardImage.texture = load("res://LSQ/sucai/111.png")
+		hower_bool = 0
 	
 	
 #fa song xin hao
 func _on_area_2d_mouse_entered() -> void:
-	emit_signal("hovered",self)
+	if hower_bool:
+		emit_signal("hovered",self)
 
 
 func _on_area_2d_mouse_exited() -> void:
-	emit_signal("hovered_off",self)
+	if hower_bool:
+		emit_signal("hovered_off",self)
