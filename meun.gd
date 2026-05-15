@@ -14,7 +14,8 @@ func _process(delta: float) -> void:
 func _on_play_pressed() -> void:
 	# 格式：res://场景路径/场景文件名.tscn
 	# 注意：路径必须以 res:// 开头，后缀是 .tscn
-	get_tree().change_scene_to_file("C:/Users/Kris/Documents/j-uno-mp游戏界面/GameMain/main_game.tscn")
+	get_tree().change_scene_to_file("res://GameMain/main_game.tscn")
+
 
 
 func _on_options_pressed() -> void:

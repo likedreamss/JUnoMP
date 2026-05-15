@@ -2,12 +2,10 @@ extends Node2D
 #初始手牌
 const HAND_COUNT = 5
 const CARD_SCENE_PATH ="res://LSQ/scene2/card1.tscn"
-const CARD_WIDTH = 50
+var CARD_WIDTH = 50
 
 #卡牌间隔
 var card_database_reference_a
-
-
 
 var HAND_Y_POSITION 
 #手牌位置高度
@@ -16,6 +14,7 @@ var center_screen_x
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	add_to_group("player_hand")
 	center_screen_x = get_viewport().size.x * 8 / 10
 	HAND_Y_POSITION = get_viewport().size.y / 10
 	card_database_reference_a = preload("res://LSQ/scripts2/CardDatabase.gd")
@@ -35,8 +34,14 @@ func _ready() -> void:
 		new_card.get_node("Code").text = str(card_database_reference_a.CARDS[card_drawn_start][3])
 		card_database_reference_a.CARDS.erase(card_drawn_start)
 		$"../cardmanager".add_child(new_card)
+		new_card.visible(0)
+		new_card.group_change()
+	
 		new_card.name = "Card"
 		add_card_to_hand(new_card)
+	get_tree().call_group("card1","card_rotation")
+	await get_tree().create_timer(0.5).timeout
+	get_tree().call_group("card1","card_rotation")
 
 
 
@@ -68,15 +73,55 @@ func animate_card_to_position(card,new_position,speed):
 
 #！！！！！！！！1 is the 入场动画速度
 
+func card_collisionmask_cahnge(bool):#改变碰撞掩码
+	if bool:
+		$Area2D.collision_mask = 1
+	else:
+		$Area2D.collision_mask = 0
+		
+		
+		
+		
+func player_card_change(player_id):
+	match player_id:
+		0:
+			CARD_WIDTH = 50
+			HAND_Y_POSITION = get_viewport().size.y / 10
+			center_screen_x = get_viewport().size.x * 8 / 10 
+
+			for i in range(player_hand.size()):
+
+				var new_position = Vector2(calculate_card_position(i),HAND_Y_POSITION)
+				var card = player_hand[i]
+				card.starting_position = new_position
+				animate_card_to_position(card,new_position,0.5)
+		1:
+			CARD_WIDTH = 150
+			HAND_Y_POSITION = 1220
+			center_screen_x = get_viewport().size.x  / 2
+
+			for i in range(player_hand.size()):
+				var new_position = Vector2(calculate_card_position(i),HAND_Y_POSITION)
+				var card = player_hand[i]
+				card.starting_position = new_position
+				animate_card_to_position(card,new_position,0.5)
+		2:
+			CARD_WIDTH = 50
+			
+			HAND_Y_POSITION = get_viewport().size.y / 10
+			center_screen_x = get_viewport().size.x * 2 / 10
+			for i in range(player_hand.size()):
+				var new_position = Vector2(calculate_card_position(i),HAND_Y_POSITION)
+				var card = player_hand[i]
+				card.starting_position = new_position
+				animate_card_to_position(card,new_position,0.5)
+	
+	
+	
 func remove_card_from_hand(card):
 	if card in player_hand:
 		player_hand.erase(card)
 		update_hand_positions()
-
-
-
-
-
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

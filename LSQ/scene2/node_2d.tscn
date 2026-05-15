@@ -10,8 +10,11 @@
 [ext_resource type="Script" uid="uid://ulijk80kph1a" path="res://LSQ/scripts2/imput_manager.gd" id="7_5qbti"]
 [ext_resource type="Texture2D" uid="uid://bwjskee7sx33a" path="res://QYK/Assest1/icon.svg" id="8_1xbjl"]
 [ext_resource type="Texture2D" uid="uid://cus0o0atteea7" path="res://QYK/Assest1/sky1.png" id="10_888p8"]
+[ext_resource type="Script" uid="uid://ci26i6b7rrp6y" path="res://LSQ/scene2/pass.gd" id="10_qvw3a"]
 [ext_resource type="Script" uid="uid://el3nivnh6j5p" path="res://LSQ/scene2/ph_1.gd" id="11_dlnqm"]
 [ext_resource type="Script" uid="uid://bwbdgfemn7ca7" path="res://LSQ/scene2/ph_2.gd" id="12_grafp"]
+[ext_resource type="Script" uid="uid://btom71i2tndh8" path="res://LSQ/scene2/d_1.gd" id="13_500ub"]
+[ext_resource type="Script" uid="uid://txnb2l6f57s" path="res://LSQ/scene2/d_2.gd" id="14_qvw3a"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0hol4"]
 size = Vector2(178.75, 184.875)
@@ -70,6 +73,7 @@ position = Vector2(214, 937)
 shape = SubResource("RectangleShape2D_0hol4")
 
 [node name="PASS" type="Node2D" parent="." unique_id=601078322]
+script = ExtResource("10_qvw3a")
 
 [node name="Sprite2D" type="Sprite2D" parent="PASS" unique_id=1518589657]
 position = Vector2(218, 743.5)
@@ -77,7 +81,8 @@ scale = Vector2(0.38202247, 0.54333335)
 texture = ExtResource("10_888p8")
 
 [node name="Area2D" type="Area2D" parent="PASS" unique_id=1830283041]
-collision_mask = 8
+collision_layer = 8
+collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PASS/Area2D" unique_id=759781212]
 position = Vector2(218.5, 743.5)
@@ -88,3 +93,9 @@ script = ExtResource("12_grafp")
 
 [node name="PH1online" type="Node2D" parent="." unique_id=553914805]
 script = ExtResource("11_dlnqm")
+
+[node name="D1" type="Node2D" parent="." unique_id=2119248237]
+script = ExtResource("13_500ub")
+
+[node name="D2" type="Node2D" parent="." unique_id=372926639]
+script = ExtResource("14_qvw3a")

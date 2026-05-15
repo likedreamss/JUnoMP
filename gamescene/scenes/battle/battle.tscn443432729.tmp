@@ -63,9 +63,13 @@ bg_color = Color(0.6945499, 0.3676199, 0.08007423, 1)
 [node name="Battle" type="Node2D" unique_id=2081042660 node_paths=PackedStringArray("game_area")]
 y_sort_enabled = true
 script = ExtResource("1_ffvsa")
-game_area = NodePath("GameArea")
+target_tile = null
 unit_scene = ExtResource("2_fh7rg")
 highlight_scene = ExtResource("3_py4tk")
+zoom_speed = null
+min_zoom = null
+max_zoom = null
+game_area = NodePath("GameArea")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1230022833]
 

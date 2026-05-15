@@ -1,7 +1,7 @@
 extends Node2D
 
 
-const CARD_SCENE_PATH ="res://LSQ/scene2/card.tscn"
+const CARD_SCENE_PATH ="res://LSQ/scene2/card2.tscn"
 
 var card_database_reference
 
@@ -10,7 +10,7 @@ var card_database_reference
 func _ready() -> void:
 	card_database_reference = preload("res://LSQ/scripts2/CardDatabase.gd")
 	
-	add_to_group("deck0")#用来解决节点不在一起的情况
+	add_to_group("deck2")#用来解决节点不在一起的情况
 	
 	
 	
@@ -26,6 +26,8 @@ func draw_card(card_count):
 	for i in range(card_count):
 		#抽牌数
 		var card_drawn_name = card_database_reference.CARDS.keys()[0]
+		#var card_drawn_name = player_deck[0]
+		#player_deck.erase(card_drawn_name)
 		var new_card = card_scene.instantiate()
 		var card_drawn_color = str(card_database_reference.CARDS[card_drawn_name][0])
 		var card_drawn_function = str(card_database_reference.CARDS[card_drawn_name][1])
@@ -38,17 +40,10 @@ func draw_card(card_count):
 		new_card.get_node("Name").text = str(card_database_reference.CARDS[card_drawn_name][2])
 		new_card.get_node("Code").text = str(card_database_reference.CARDS[card_drawn_name][3])
 		card_database_reference.CARDS.erase(card_drawn_name)
+		new_card.visible(1)
 		$"../cardmanager".add_child(new_card)
 		#remove_child!!!!!
 		new_card.name = "Card"
 		new_card.group_change()
-		new_card.visible(1)
-		$"../PlayerHand".add_card_to_hand(new_card)
+		$"../PH2online".add_card_to_hand(new_card)
 	
-
-func delate_card_return(name,value_return):
-	#player_deck.append(name)
-	if card_database_reference.CARDS.has(name):
-		return 
-	else :
-		card_database_reference.CARDS[name] = value_return

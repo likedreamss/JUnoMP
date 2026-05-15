@@ -86,3 +86,12 @@ func _ready() -> void:
 	keys.shuffle()
 	for k in keys:
 		CARDS[k] = ACARDS[k]
+func _process(delta: float) -> void:
+	if CARDS.size() < 5:
+		var keyss = ACARDS.keys()
+	# 2. 打乱key顺序
+		keyss.shuffle()
+		for k in keyss:
+			CARDS[k] = ACARDS[k]
+	
+	
