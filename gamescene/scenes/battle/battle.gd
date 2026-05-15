@@ -1,6 +1,6 @@
 extends Node2D
 class_name Battle
-
+#version1.0.0
 enum GameMode { MOVE, PLACE_OBSTACLE,REMOVE_OBSTACLE,CHANGE_TERRAIN}
 
 # --- 导出变量 ---
