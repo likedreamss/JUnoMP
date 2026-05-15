@@ -40,7 +40,6 @@ const ACARDS = {
 	"乾坤重置" : ["UNIVERSAL","TRICK","乾坤重置","乾坤重置"],
 	
 	
-	"点染一格_U" : ["UNIVERSAL","TRICK","点染一格","点染一格_U"],
 	"点染一格_L" : ["LAND","TRICK","点染一格","点染一格_L"],
 	"点染一格_G" : ["GRASS","TRICK","点染一格","点染一格_G"],
 	"点染一格_P" : ["PINK","TRICK","点染一格","点染一格_P"],
