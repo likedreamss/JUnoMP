@@ -233,10 +233,12 @@ func execute_card_effect(effect_type: String, params: Dictionary = {}):
 			print("选择要移除障碍物的格子")
 			current_mode=GameMode.REMOVE_OBSTACLE
 			_show_removable_obstacles()
+		
 		"障碍重重":#设置障碍物
 			current_mode = GameMode.PLACE_OBSTACLE
 			pending_type = [GameGrid.Obstacle.MOUNTAIN, GameGrid.Obstacle.TREE, GameGrid.Obstacle.HOUSE].pick_random()
 			_show_placeable_tiles()
+	
 		"点染一格":#单格改颜色
 			current_mode = GameMode.CHANGE_TERRAIN
 			if card_color_str == "UNIVERSAL":
@@ -246,6 +248,7 @@ func execute_card_effect(effect_type: String, params: Dictionary = {}):
 				var t_map = {"LAND": 0, "GRASS": 1, "PINK": 2, "RIVER": 3}
 				pending_type = t_map.get(card_color_str, 0) 
 			_show_all_tiles_for_paint()
+	
 		"skip_action":#跳过
 			var target_id = params.get("target_id", -1)
 			var phase = params.get("phase", "")
@@ -488,7 +491,7 @@ func _try_remove_obstacle(target: Vector2i):
 	# 3. 恢复游戏状态
 	clear_highlights()
 	current_mode = GameMode.MOVE # 别忘了把模式切回默认的移动模式
-
+	_reset_after_action()
 ##障碍重重逻辑
 func _show_placeable_tiles():
 	clear_highlights()
@@ -503,7 +506,7 @@ func _try_place_obstacle(target: Vector2i):
 		game_area.game_grid.set_tile_obstacle(target, pending_type)
 		_reset_after_action()
 
-##点染一格逻辑
+##点染一格逻
 func _show_all_tiles_for_paint():
 	clear_highlights()
 	for tile in game_area.game_grid.grid_data:
