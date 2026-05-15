@@ -41,6 +41,12 @@ corner_radius_top_right = 64
 corner_radius_bottom_right = 64
 corner_radius_bottom_left = 64
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e064l"]
+corner_radius_top_left = 48
+corner_radius_top_right = 48
+corner_radius_bottom_right = 48
+corner_radius_bottom_left = 48
+
 [node name="Player1" type="Control" unique_id=1622213388]
 layout_mode = 3
 anchors_preset = 15
@@ -209,6 +215,7 @@ offset_top = 26.0
 offset_right = 248.0
 offset_bottom = 189.0
 theme_override_font_sizes/font_size = 80
+theme_override_styles/normal = SubResource("StyleBoxFlat_e064l")
 text = "选项"
 
 [connection signal="pressed" from="Options/Options/HelpButton" to="Boardcontainer/Battle" method="_on_help_button_pressed"]
