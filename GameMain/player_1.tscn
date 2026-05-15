@@ -31,7 +31,7 @@ mouse_target = true
 transparent_bg = true
 handle_input_locally = false
 physics_object_picking = true
-size = Vector2i(2573, 1639)
+size = Vector2i(2573, 1799)
 render_target_update_mode = 4
 script = ExtResource("1_fnd5v")
 

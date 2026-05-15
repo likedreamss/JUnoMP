@@ -90,6 +90,11 @@ func _ready():
 		game_area.game_grid._initialize_grid() 
 	# 2. 生成玩家
 	spawn_players()
+	var unit = get_current_player()
+	var current_tile_data = game_area.game_grid.grid_data[unit.current_tile]
+	var current_terrain_str = game_area.game_grid.get_terrain_string(current_tile_data["terrain"]).to_upper()
+	get_tree().call_group("card0_UNIVERSAL","use_bool",1)
+	get_tree().call_group("card0_"+str(current_terrain_str),"use_bool",1)
 	# 3. 设置终点特效
 	if has_node("TargetEffect"):
 		var effect_pos = game_area.get_global_from_tile(target_tile) 
@@ -132,6 +137,13 @@ func next_turn(loop_count: int = 0):
 		_effect_draw_cardsa(next_player.player_id,2) # 正常回合摸牌
 		get_tree().call_group("card"+str(next_player.player_id),"visible",1)
 		get_tree().call_group("card"+str(_player_id),"visible",0)#卡牌可操控变为不可操控
+		
+		var unit = get_current_player()
+		var current_tile_data = game_area.game_grid.grid_data[unit.current_tile]
+		var current_terrain_str = game_area.game_grid.get_terrain_string(current_tile_data["terrain"]).to_upper()
+		get_tree().call_group("card"+str(next_player.player_id)+"_UNIVERSAL","use_bool",1)
+		get_tree().call_group("card"+str(next_player.player_id)+"_"+str(current_terrain_str),"use_bool",1)
+		
 		
 		get_tree().call_group("PASS","pass_bool",0)#防止连续按跳过按钮
 		await get_tree().create_timer(1).timeout
@@ -293,6 +305,11 @@ func _effect_draw_cardsa(player_id,count):#为不同玩家发牌
 		2:
 			print("执行：玩家2获得 ", count, " 张牌")
 			get_tree().call_group("deck"+str(player_id),"draw_card",count)
+	var unit = get_current_player()
+	var current_tile_data = game_area.game_grid.grid_data[unit.current_tile]
+	var current_terrain_str = game_area.game_grid.get_terrain_string(current_tile_data["terrain"]).to_upper()
+	get_tree().call_group("card"+str(player_id)+"_UNIVERSAL","use_bool",1)
+	get_tree().call_group("card"+str(player_id)+"_"+str(current_terrain_str),"use_bool",1)
 	
 	
 func change_player_card(player_id):

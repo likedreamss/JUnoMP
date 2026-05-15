@@ -26,7 +26,6 @@ func _ready() -> void:
 	$Function.visible =  false
 	$".".scale.x = 1
 	$".".scale.y = 1
-	$Area2D.collision_mask = 1
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -50,9 +49,11 @@ func _process(delta: float) -> void:
 func use_bool(bool):
 	if bool:
 		label_rotation_bool = 1
-		hower_bool = 1
 		$Area2D.collision_mask = 1
 		usebool = 1
+		$".".scale.x = 1
+		$".".scale.y = 1
+		$CardImage.modulate = Color(1,1,1)
 	else:
 		label_rotation_bool = 0
 		hower_bool = 0
@@ -61,7 +62,7 @@ func use_bool(bool):
 		
 
 func group_change():
-	add_to_group("card_"+$Color.text)
+	add_to_group("card2_"+$Color.text)
 
 func card_rotation():
 	rotation_bool = 1
@@ -71,11 +72,14 @@ func visible(bool):
 	if bool:
 		$Label.visible = true
 		$Name.visible = true
-
 		$".".scale.x = 1
 		$".".scale.y = 1
 		$CardImage.texture = load("res://LSQ/sucai/"+ $Color.text + "_"+$Function.text+"_CARD.png")
 		$".".z_index = 1
+		$Area2D.collision_mask = 16
+		hower_bool = 1
+
+		$CardImage.modulate = Color(0.7,0.7,0.7)
 	else:
 		$Label.visible = false
 		$Name.visible = false
@@ -85,12 +89,12 @@ func visible(bool):
 		$".".scale.y = 0.7
 		$CardImage.texture = load("res://LSQ/sucai/111.png")
 		$".".z_index = 1
-	
-	
-#fa song xin hao
+		$CardImage.modulate = Color(1,1,1)
+
 func _on_area_2d_mouse_entered() -> void:
 	if hower_bool:
 		emit_signal("hovered",self)
+
 
 func _on_area_2d_mouse_exited() -> void:
 	if hower_bool:

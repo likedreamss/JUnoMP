@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dn0bwp5ba7awb"]
 
 [ext_resource type="Script" uid="uid://40y62q1lxe7w" path="res://LSQ/scene2/card_1.gd" id="1_w360u"]
-[ext_resource type="Texture2D" uid="uid://bbale8r18rs03" path="res://LSQ/sucai/111.png" id="2_w360u"]
+[ext_resource type="Texture2D" uid="uid://b1xj68bdscr6e" path="res://LSQ/sucai/GRASS_GO_CARD.png" id="2_p7xyf"]
 [ext_resource type="FontFile" uid="uid://dvxppyylvh1xc" path="res://QYK/Assest1/Grow Year.ttf" id="3_p7xyf"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rjlel"]
@@ -16,7 +16,7 @@ script = ExtResource("1_w360u")
 [node name="CardImage" type="Sprite2D" parent="." unique_id=2121584045]
 position = Vector2(-2.2345161, -2.3757324)
 scale = Vector2(0.35, 0.39)
-texture = ExtResource("2_w360u")
+texture = ExtResource("2_p7xyf")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=190672414]
 collision_mask = 0

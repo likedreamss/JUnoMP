@@ -52,18 +52,17 @@ func _process(delta: float) -> void:
 func use_bool(bool):
 	if bool:
 		label_rotation_bool = 1
-		hower_bool = 1
 		$Area2D.collision_mask = 1
 		usebool = 1
+		$CardImage.modulate = Color(1,1,1)
 	else:
 		label_rotation_bool = 0
-		hower_bool = 0
 		$Area2D.collision_mask = 16
 		usebool = 0
 		
 
 func group_change():
-	add_to_group("card_"+$Color.text)
+	add_to_group("card0_"+$Color.text)
 
 
 func card_rotation():
@@ -76,7 +75,9 @@ func visible(bool):
 		$Name.visible = true
 		$".".scale.x = 1
 		$".".scale.y = 1
+		hower_bool = 1
 		$CardImage.texture = load("res://LSQ/sucai/"+ $Color.text + "_"+$Function.text+"_CARD.png")
+		$CardImage.modulate = Color(0.7,0.7,0.7)
 	else:
 		$Label.visible = false
 		$Name.visible = false
@@ -84,6 +85,7 @@ func visible(bool):
 		hower_bool = 0
 		$".".scale.x = 0.7
 		$".".scale.y = 0.7
+		$CardImage.modulate = Color(1,1,1)
 		
 		$CardImage.texture = load("res://LSQ/sucai/111.png")
 	

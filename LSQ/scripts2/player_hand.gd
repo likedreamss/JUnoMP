@@ -38,6 +38,7 @@ func _ready() -> void:
 		$"../cardmanager".add_child(new_card)
 		new_card.name = "Card"
 		new_card.group_change()
+		new_card.visible(1)
 		add_card_to_hand(new_card)
 
 
