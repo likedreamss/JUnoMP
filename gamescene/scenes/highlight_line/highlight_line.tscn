@@ -3,4 +3,4 @@
 [node name="HighlightLine" type="Line2D" unique_id=547910877]
 z_index = 1
 points = PackedVector2Array(0, 10.5, 16, 5.25, 16, -5.25, 0, -10.5, -16, -5.25, -16, 5.25, 0, 10.5)
-width = 1.0
+width = 2.0
