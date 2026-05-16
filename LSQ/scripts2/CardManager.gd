@@ -15,7 +15,7 @@ func _ready() -> void:
 	screen_size = get_viewport_rect().size
 	player_hand_reference = $"../PlayerHand"
 	$"../ImputManager".connect("left_mouse_button_released",on_left_click_released)
-
+	add_to_group("cardmanager")
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if card_being_dragged:
@@ -85,13 +85,38 @@ func delate_card():
 		get_tree().call_group("battle_manager","play_card_from_ui",card_drawn_value_return)
 		
 		$"../Deck".delate_card_return(card_drawn_name_return,card_drawn_value_return)
-		var new_position = Vector2(210,1220)
-		player_hand_reference.animate_card_to_position(card_is_in_slot,new_position,0.5)
-		await get_tree().create_timer(0.5).timeout
-		card_is_in_slot.queue_free()
-		slot_has_card.card_in_slot = false
+		
 	else:
 		pass
+
+func delate_card_animate():
+
+	var new_position = Vector2(210,1220)
+	player_hand_reference.animate_card_to_position(card_is_in_slot,new_position,0.5)
+	await get_tree().create_timer(0.5).timeout
+	card_is_in_slot.queue_free()
+	slot_has_card.card_in_slot = false
+
+
+func discard_card(discard_nume):#弃牌函数
+	if slot_has_card == null:
+		return discard_nume
+	elif slot_has_card.card_in_slot:
+		var card_drawn_name_return = card_is_in_slot.get_node("Code").text
+		var card_drawn_value_return = [card_is_in_slot.get_node("Color").text,
+		card_is_in_slot.get_node("Function").text,
+		card_is_in_slot.get_node("Name").text,
+		card_is_in_slot.get_node("Code").text]
+		
+		$"../Deck".delate_card_return(card_drawn_name_return,card_drawn_value_return)
+		delate_card_animate()
+		discard_nume -= 1
+		return discard_nume 
+	else:
+		return discard_nume
+	
+	
+
 
 
 func connect_card_signals(card):
