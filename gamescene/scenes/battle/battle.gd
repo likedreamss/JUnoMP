@@ -27,6 +27,7 @@ var current_player_index: int = 0
 var current_mode = GameMode.MOVE
 var next_player 
 var _player_id = 0
+var player_id_count = 0
 var pending_type = null# 用于临时存储卡牌带入的地形或障碍物类型
 # --- 结算页面变量 ---
 var game_start_time: float = 0
@@ -130,20 +131,21 @@ func next_turn(loop_count: int = 0):
 		print("跳过摸牌阶段")
 	else:
 		get_tree().call_group("PASS","pass_bool",0)
-		_player_id = next_player.player_id - 1
+		var id = (current_player_index + player_id_count) % players.size()
+		_player_id = id - 1
 		if _player_id < 0:
 			_player_id = 2
-		change_player_card(next_player.player_id)#玩家位置转换动画函数
+		change_player_card(id)#玩家位置转换动画函数
 		get_tree().call_group("card","card_rotation")#同上
-		_effect_draw_cardsa(next_player.player_id,2) # 正常回合摸牌
-		get_tree().call_group("card"+str(next_player.player_id),"visible",1)
+		_effect_draw_cardsa(id,2) # 正常回合摸牌
+		get_tree().call_group("card"+str(id),"visible",1)
 		get_tree().call_group("card"+str(_player_id),"visible",0)#卡牌可操控变为不可操控
 		
 		var unit = get_current_player()
 		var current_tile_data = game_area.game_grid.grid_data[unit.current_tile]
 		var current_terrain_str = game_area.game_grid.get_terrain_string(current_tile_data["terrain"]).to_upper()
-		get_tree().call_group("card"+str(next_player.player_id)+"_UNIVERSAL","use_bool",1)
-		get_tree().call_group("card"+str(next_player.player_id)+"_"+str(current_terrain_str),"use_bool",1)
+		get_tree().call_group("card"+str(id)+"_UNIVERSAL","use_bool",1)
+		get_tree().call_group("card"+str(id)+"_"+str(current_terrain_str),"use_bool",1)
 		
 		highlight_current_unit()
 		#防止连续按跳过按钮
@@ -221,12 +223,14 @@ func execute_card_effect(effect_type: String, params: Dictionary = {}):
 		"long_teleport": # 功能2：
 			show_custom_range(3, 3)
 		"无中生有":#抽两张牌
-			_effect_draw_cardsa(next_player.player_id,2)
-			print(next_player.player_id)
+			var id = (current_player_index + player_id_count) % players.size()
+			_effect_draw_cardsa(id,2)
+			print(id)
 			_reset_after_action()
 			
 		"重铸":
-			_effect_draw_cardsa(next_player.player_id,1)
+			var id = (current_player_index + player_id_count) % players.size()
+			_effect_draw_cardsa(id,1)
 			print(next_player.player_id)
 			_reset_after_action()
 			
@@ -255,11 +259,44 @@ func execute_card_effect(effect_type: String, params: Dictionary = {}):
 			var phase = params.get("phase", "")
 			if target_id != -1 and phase != "":
 				_effect_add_skip(target_id, phase)
+				
+				
+		"交换人生":
+			_reset_after_action()
+			get_tree().call_group("PASS","pass_bool",0)
+			
+			var id = (current_player_index + player_id_count+1) % players.size()
+			_player_id = id - 1
+			if _player_id < 0:
+				_player_id = 2
+			player_id_count += 1
+			change_player_card(id)#玩家位置转换动画函数
+			get_tree().call_group("card","card_rotation")#同上
+			get_tree().call_group("card"+str(id),"visible",1)
+			get_tree().call_group("card"+str(_player_id),"visible",0)#卡牌可操控变为不可操控
+			
+			var unit = get_current_player()
+			var current_tile_data = game_area.game_grid.grid_data[unit.current_tile]
+			var current_terrain_str = game_area.game_grid.get_terrain_string(current_tile_data["terrain"]).to_upper()
+			get_tree().call_group("card"+str(id)+"_UNIVERSAL","use_bool",1)
+			get_tree().call_group("card"+str(id)+"_"+str(current_terrain_str),"use_bool",1)
+
+			await get_tree().create_timer(1).timeout
+			get_tree().call_group("PASS","pass_bool",1)
+		
+		
 		"乾坤重置":#重新生成地图
 			game_area.game_grid.force_regenerate_map()
 			_fix_units_after_regen()
 			_reset_after_action()
-			
+			var unit = get_current_player()
+			var current_tile_data = game_area.game_grid.grid_data[unit.current_tile]
+			var current_terrain_str = game_area.game_grid.get_terrain_string(current_tile_data["terrain"]).to_upper()
+			var id = (next_player.player_id + player_id_count) % players.size()
+			get_tree().call_group("card"+str(id),"visible",0)
+			get_tree().call_group("card"+str(id),"visible",1)
+			get_tree().call_group("card"+str(id)+"_UNIVERSAL","use_bool",1)
+			get_tree().call_group("card"+str(id)+"_"+str(current_terrain_str),"use_bool",1)
 			
 			
 			
@@ -306,14 +343,15 @@ func _on_unit_move_finished():
 
 func discard_turn():#弃牌判定
 	var player = get_current_player()
-	var group_name = "player_hand" + str(player.player_id)
+	var id = (player.player_id + player_id_count) % players.size() 
+	var group_name = "player_hand" + str(id)
 	var player_hand = get_tree().get_nodes_in_group(group_name)
 	var card_nume = 0
 	if player_hand.size() >0:
 		card_nume = player_hand[0].get_playerhand_size()  # ✅ 正确：对单个节点调用
 	print(card_nume)
 	if card_nume > 5:
-		discard_start(card_nume - 5,player.player_id)
+		discard_start(card_nume - 5,id)
 	else:
 		print("无需弃牌")
 		next_turn() 
@@ -323,15 +361,18 @@ func discard_start(discard_nume,player_id):#执行弃牌
 	get_tree().call_group("PASS","pass_bool",0)
 	get_tree().call_group("card"+str(player_id),"use_bool",1)
 	while discard_nume > 0:
-		await get_tree().create_timer(0.1).timeout
+		await get_tree().create_timer(0.6).timeout
 		var least_nume = discard_nume_count(discard_nume)
 		discard_nume = least_nume
+		print("请弃牌"+str(discard_nume)+"张")
+		
 
 	print("弃牌完成")
 	await get_tree().create_timer(0.6).timeout
 	next_turn() 
 
 func discard_nume_count(nume):
+	
 	var card_manager = get_tree().get_nodes_in_group("cardmanager")
 	var least_nume = card_manager[0].discard_card(nume)
 	return least_nume

@@ -108,7 +108,6 @@ func player_card_change(player_id):
 				animate_card_to_position(card,new_position,0.5)
 		2:
 			CARD_WIDTH = 50
-
 			HAND_Y_POSITION = get_viewport().size.y / 10
 			center_screen_x = get_viewport().size.x *8/10
 			for i in range(player_hand.size()):

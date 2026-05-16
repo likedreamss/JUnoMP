@@ -36,11 +36,11 @@ func _process(delta: float) -> void:
 
 func start_drag(card):
 	card_being_dragged = card
-	card.scale = Vector2(1.1,1.1)
+	card.scale = Vector2(0.95,0.95)
 
 
 func finish_drag():
-	card_being_dragged.scale = Vector2(1,1)
+	card_being_dragged.scale = Vector2(1.1,1.1)
 	var card_slot_found = raycast_check_for_card_slot()
 	if card_slot_found and not card_slot_found.card_in_slot:
 		
@@ -90,12 +90,12 @@ func delate_card():
 		pass
 
 func delate_card_animate():
-
-	var new_position = Vector2(210,1220)
-	player_hand_reference.animate_card_to_position(card_is_in_slot,new_position,0.5)
-	await get_tree().create_timer(0.5).timeout
-	card_is_in_slot.queue_free()
-	slot_has_card.card_in_slot = false
+	if slot_has_card.card_in_slot:
+		var new_position = Vector2(210,1220)
+		player_hand_reference.animate_card_to_position(card_is_in_slot,new_position,0.5)
+		await get_tree().create_timer(0.5).timeout
+		card_is_in_slot.queue_free()
+		slot_has_card.card_in_slot = false
 
 
 func discard_card(discard_nume):#弃牌函数
