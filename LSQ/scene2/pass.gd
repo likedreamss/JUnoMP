@@ -19,3 +19,11 @@ func pass_bool(bool):
 		$Area2D.collision_mask = 8
 	else:
 		$Area2D.collision_mask = 32
+
+func animate():
+	$".".scale.x = 1.1
+	$".".scale.y = 1.1
+	await get_tree().create_timer(0.1).timeout
+	$".".scale.x = 1
+	$".".scale.y = 1
+	

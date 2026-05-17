@@ -48,8 +48,8 @@ func raycast_at_cursor():
 			$"../cardmanager".delate_card()
 			
 		elif result_collision_mask == COLLISION_MASK_PASS:
-			
-			get_tree().call_group("battle_manager","next_turn")
+			$"../PASS".animate()
+			get_tree().call_group("battle_manager","discard_turn")
 		elif result_collision_mask == COLLISION_MASK_NO_PASS:
 			
 			pass

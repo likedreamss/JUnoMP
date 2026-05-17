@@ -48,7 +48,8 @@ func draw_card(card_count):
 
 func delate_card_return(name,value_return):
 	#player_deck.append(name)
-	if card_database_reference.CARDS.has(name):
-		return 
-	else :
-		card_database_reference.CARDS[name] = value_return
+	pass
+	#if card_database_reference.CARDS.has(name):
+		#return 
+	#else :
+		#card_database_reference.CARDS[name] = value_return

@@ -15,6 +15,7 @@ var center_screen_x
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	add_to_group("player_hand")
+	add_to_group("player_hand1")
 	center_screen_x = get_viewport().size.x * 8 / 10
 	HAND_Y_POSITION = get_viewport().size.y / 10
 	card_database_reference_a = preload("res://LSQ/scripts2/CardDatabase.gd")
@@ -64,6 +65,12 @@ func calculate_card_position(index):
 	var total_width = (player_hand.size() - 1) * CARD_WIDTH
 	var x_offest = center_screen_x + index * CARD_WIDTH - total_width / 2
 	return x_offest
+
+func get_playerhand_size():#获取当前手牌数目
+	var card_nume = int(player_hand.size())
+	return card_nume
+
+
 
 
 func animate_card_to_position(card,new_position,speed):

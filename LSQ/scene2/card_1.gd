@@ -74,6 +74,7 @@ func card_rotation():
 
 func visible(bool):
 	if bool:
+		label_rotation_bool = 0
 		$Label.visible = true
 		$Name.visible = true
 		$".".scale.x = 1

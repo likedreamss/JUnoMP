@@ -13,6 +13,7 @@ var noise = FastNoiseLite.new()
 var grid_data: Dictionary = {}
 
 
+var obscale_num = 0.2 #影响障碍物数量
 
 ## 生成地形
 func _initialize_grid() -> void:
@@ -60,7 +61,7 @@ func _initialize_grid() -> void:
 					land_cells.append(pos) 
 
 				# --- 障碍物分配 ---
-				if t_type != Terrain.RIVER and randf() < 0.05: 
+				if t_type != Terrain.RIVER and randf() < obscale_num: 
 					var obs_list = [Obstacle.MOUNTAIN, Obstacle.TREE, Obstacle.HOUSE] 
 					o_type = obs_list.pick_random() 
 

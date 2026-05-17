@@ -1,6 +1,6 @@
 extends Node2D
 class_name Battle
-
+#version1.0.0
 enum GameMode { MOVE, PLACE_OBSTACLE,REMOVE_OBSTACLE,CHANGE_TERRAIN}
 
 # --- 导出变量 ---
@@ -27,19 +27,20 @@ var current_player_index: int = 0
 var current_mode = GameMode.MOVE
 var next_player 
 var _player_id = 0
+var player_id_count = 0
 var pending_type = null# 用于临时存储卡牌带入的地形或障碍物类型
 # --- 结算页面变量 ---
 var game_start_time: float = 0
 var total_steps: int = 0
 var game_finished: bool = false
-
+var waiting: bool = false #用来禁止跳过
+var has_moved_this_turn: bool = false # 记录本回合是否已执行过移动
 var skip_flags = {
 	"turn": [],     # 存储需要跳过回合的 player_id
 	"draw": [],     # 跳过摸牌阶段
 	"play": [],     # 跳过出牌阶段
 	"discard": []   # 跳过弃牌阶段
 }
-
 
 ## 初始化游戏界面（棋子，地图）---------------
 func spawn_players():
@@ -103,7 +104,7 @@ func _ready():
 	game_start_time = Time.get_ticks_msec() / 1000.0
 	$"提示/Panel".visible = false
 #回合循环/发牌/跳过
-
+	highlight_current_unit()
 ##下一个玩家/发牌/跳过
 func next_turn(loop_count: int = 0):
 	# 增加 loop_count 参数，默认值为 0，用于防止无限死循环
@@ -115,9 +116,8 @@ func next_turn(loop_count: int = 0):
 		
 	clear_highlights()
 	current_player_index = (current_player_index + 1) % players.size()
-
 	next_player = get_current_player()
-
+	has_moved_this_turn = false 
 	# 检查是否跳过整个回合
 	if next_player.player_id in skip_flags["turn"]:
 		skip_flags["turn"].erase(next_player.player_id)
@@ -130,27 +130,28 @@ func next_turn(loop_count: int = 0):
 		skip_flags["draw"].erase(next_player.player_id)
 		print("跳过摸牌阶段")
 	else:
-
-		_player_id = next_player.player_id - 1
+		get_tree().call_group("PASS","pass_bool",0)
+		var id = (current_player_index + player_id_count) % players.size()
+		_player_id = id - 1
 		if _player_id < 0:
 			_player_id = 2
-		change_player_card(next_player.player_id)#玩家位置转换动画函数
+		change_player_card(id)#玩家位置转换动画函数
 		get_tree().call_group("card","card_rotation")#同上
-		_effect_draw_cardsa(next_player.player_id,2) # 正常回合摸牌
-		get_tree().call_group("card"+str(next_player.player_id),"visible",1)
+		_effect_draw_cardsa(id,2) # 正常回合摸牌
+		get_tree().call_group("card"+str(id),"visible",1)
 		get_tree().call_group("card"+str(_player_id),"visible",0)#卡牌可操控变为不可操控
 		
 		var unit = get_current_player()
 		var current_tile_data = game_area.game_grid.grid_data[unit.current_tile]
 		var current_terrain_str = game_area.game_grid.get_terrain_string(current_tile_data["terrain"]).to_upper()
-		get_tree().call_group("card"+str(next_player.player_id)+"_UNIVERSAL","use_bool",1)
-		get_tree().call_group("card"+str(next_player.player_id)+"_"+str(current_terrain_str),"use_bool",1)
+		get_tree().call_group("card"+str(id)+"_UNIVERSAL","use_bool",1)
+		get_tree().call_group("card"+str(id)+"_"+str(current_terrain_str),"use_bool",1)
 		
-		
-		get_tree().call_group("PASS","pass_bool",0)#防止连续按跳过按钮
+		highlight_current_unit()
+		#防止连续按跳过按钮
 		await get_tree().create_timer(1).timeout
 		get_tree().call_group("PASS","pass_bool",1)
-
+	
 func get_current_player():
 	return players[current_player_index] 
 
@@ -160,34 +161,6 @@ func _input(event):
 		if event.button_index == MOUSE_BUTTON_LEFT: 
 			_on_mouse_click() 
 	_handle_zoom_input(event)#鼠标缩放
-
-	if event is InputEventKey and event.pressed:
-		var hovered_tile = game_area.get_hovered_tile() # 获取鼠标当前指向的格子 [cite: 171, 308]
-		
-		#对现有函数进行验证
-		match event.keycode:
-			KEY_1: # 验证：单格改颜色 (变为草地)
-				execute_card_effect("change_color", {"pos": hovered_tile, "terrain": GameGrid.Terrain.GRASS})
-				print("调试：将格子 ", hovered_tile, " 修改为草地")
-
-			KEY_2: # 验证：消除障碍物
-				execute_card_effect("remove_obstacle", {"pos": hovered_tile})
-				print("调试：消除了格子 ", hovered_tile, " 的障碍物")
-
-			KEY_3: # 验证：设置障碍物
-				var random_obs = [GameGrid.Obstacle.MOUNTAIN, GameGrid.Obstacle.TREE, GameGrid.Obstacle.HOUSE].pick_random()
-				execute_card_effect("set_obstacle", {"pos": hovered_tile, "type": random_obs})
-				print("调试：在格子 ", hovered_tile, " 设置了山脉")
-
-			KEY_4: # 验证：跳过下一个人的回合
-				var next_id = (current_player_index + 1) % players.size()
-				# 统一使用 target_id 和 phase 参数名
-				execute_card_effect("skip_action", {"target_id": next_id, "phase": "turn"})
-				print("调试：跳过玩家 ", next_id, " 的回合")
-			KEY_5: execute_card_effect("jump_two") # 测试新功能1
-			KEY_6: execute_card_effect("long_teleport") # 测试新功能2
-			KEY_R: # 验证：全图重生成
-				execute_card_effect("regen_map")
 #移动控制
 func _on_mouse_click():
 	var clicked_tile = game_area.get_hovered_tile() 
@@ -197,17 +170,16 @@ func _on_mouse_click():
 			try_move_to_tile(get_current_player(),clicked_tile)
 		GameMode.REMOVE_OBSTACLE:
 			_try_remove_obstacle(clicked_tile)
-
 		GameMode.PLACE_OBSTACLE:
 			_try_place_obstacle(clicked_tile)
 		GameMode.CHANGE_TERRAIN:
 			_try_change_terrain(clicked_tile)
+			
 func try_move_to_tile(unit: Unit, target: Vector2i) -> void:
 	if unit == null: return 
 	# 1. 核心修复：检查字典中是否存在该坐标
 	# 如果 grid_data 里没有 target，说明这是地图外的“黑洞”
 	if not game_area.game_grid.grid_data.has(target): 
-		print("❌ 目标不可达：此处是地图外的虚空")
 		return
 
 	var is_valid_move = false
@@ -242,34 +214,36 @@ func _execute_move(unit: Unit, target: Vector2i) -> void:
 	# 检查胜负 
 	check_victory(unit)
 
-	
-	total_steps += 1
-
+## 核心函数：卡牌效果执行
 func execute_card_effect(effect_type: String, params: Dictionary = {}):
 	var card_color_str = params.get("terrain_req", "UNIVERSAL") 
-
 	match effect_type:
 		"jump_two": # 功能1：只高亮距离为2的一圈
 			show_custom_range(2, 2)
 		"long_teleport": # 功能2：
 			show_custom_range(3, 3)
 		"无中生有":#抽两张牌
-
-			_effect_draw_cardsa(next_player.player_id,2)
-			print(next_player.player_id)
+			var id = (current_player_index + player_id_count) % players.size()
+			_effect_draw_cardsa(id,2)
+			print(id)
+			_reset_after_action()
+			
 		"重铸":
-			_effect_draw_cardsa(next_player.player_id,1)
+			var id = (current_player_index + player_id_count) % players.size()
+			_effect_draw_cardsa(id,1)
 			print(next_player.player_id)
-
+			_reset_after_action()
+			
 		"化险为夷":#移除障碍物
 			print("选择要移除障碍物的格子")
 			current_mode=GameMode.REMOVE_OBSTACLE
 			_show_removable_obstacles()
-
+		
 		"障碍重重":#设置障碍物
 			current_mode = GameMode.PLACE_OBSTACLE
 			pending_type = [GameGrid.Obstacle.MOUNTAIN, GameGrid.Obstacle.TREE, GameGrid.Obstacle.HOUSE].pick_random()
 			_show_placeable_tiles()
+	
 		"点染一格":#单格改颜色
 			current_mode = GameMode.CHANGE_TERRAIN
 			if card_color_str == "UNIVERSAL":
@@ -279,20 +253,53 @@ func execute_card_effect(effect_type: String, params: Dictionary = {}):
 				var t_map = {"LAND": 0, "GRASS": 1, "PINK": 2, "RIVER": 3}
 				pending_type = t_map.get(card_color_str, 0) 
 			_show_all_tiles_for_paint()
-
+	
 		"skip_action":#跳过
 			var target_id = params.get("target_id", -1)
 			var phase = params.get("phase", "")
 			if target_id != -1 and phase != "":
 				_effect_add_skip(target_id, phase)
+				
+				
+		"交换人生":
+			_reset_after_action()
+			get_tree().call_group("PASS","pass_bool",0)
+			
+			var id = (current_player_index + player_id_count+1) % players.size()
+			_player_id = id - 1
+			if _player_id < 0:
+				_player_id = 2
+			player_id_count += 1
+			change_player_card(id)#玩家位置转换动画函数
+			get_tree().call_group("card","card_rotation")#同上
+			get_tree().call_group("card"+str(id),"visible",1)
+			get_tree().call_group("card"+str(_player_id),"visible",0)#卡牌可操控变为不可操控
+			
+			var unit = get_current_player()
+			var current_tile_data = game_area.game_grid.grid_data[unit.current_tile]
+			var current_terrain_str = game_area.game_grid.get_terrain_string(current_tile_data["terrain"]).to_upper()
+			get_tree().call_group("card"+str(id)+"_UNIVERSAL","use_bool",1)
+			get_tree().call_group("card"+str(id)+"_"+str(current_terrain_str),"use_bool",1)
 
+			await get_tree().create_timer(1).timeout
+			get_tree().call_group("PASS","pass_bool",1)
+		
+		
 		"乾坤重置":#重新生成地图
 			game_area.game_grid.force_regenerate_map()
 			_fix_units_after_regen()
+			_reset_after_action()
+			var unit = get_current_player()
+			var current_tile_data = game_area.game_grid.grid_data[unit.current_tile]
+			var current_terrain_str = game_area.game_grid.get_terrain_string(current_tile_data["terrain"]).to_upper()
+			var id = (next_player.player_id + player_id_count) % players.size()
+			get_tree().call_group("card"+str(id),"visible",0)
+			get_tree().call_group("card"+str(id),"visible",1)
+			get_tree().call_group("card"+str(id)+"_UNIVERSAL","use_bool",1)
+			get_tree().call_group("card"+str(id)+"_"+str(current_terrain_str),"use_bool",1)
 			
 			
 			
-
 func _effect_recast():
 	print("执行：重铸！换取1张新牌")
 	get_tree().call_group("deck_manager","draw_card",1)
@@ -303,7 +310,6 @@ func _effect_add_skip(player_id: int, phase: String):
 		print("玩家 ", player_id, " 将跳过 ", phase)
 func _effect_draw_cards(count: int):
 	print("执行：获得 ", count, " 张牌")
-
 	get_tree().call_group("deck","draw_card",count)
 
 func _effect_draw_cardsa(player_id,count):#为不同玩家发牌
@@ -327,11 +333,56 @@ func _effect_draw_cardsa(player_id,count):#为不同玩家发牌
 func change_player_card(player_id):
 	get_tree().call_group("player_hand","player_card_change",player_id)
 
-
+	
 ##回合结束与结果判定
 func _on_unit_move_finished():
-	# 切换到下一个玩家的回合
+	get_tree().call_group("cardmanager","delate_card_animate")
+	await get_tree().create_timer(0.5).timeout
+	discard_turn()#进入弃牌回合
+
+
+func discard_turn():#弃牌判定
+	var player = get_current_player()
+	var id = (player.player_id + player_id_count) % players.size() 
+	var group_name = "player_hand" + str(id)
+	var player_hand = get_tree().get_nodes_in_group(group_name)
+	var card_nume = 0
+	if player_hand.size() >0:
+		card_nume = player_hand[0].get_playerhand_size()  # ✅ 正确：对单个节点调用
+	print(card_nume)
+	if card_nume > 5:
+		discard_start(card_nume - 5,id)
+	else:
+		print("无需弃牌")
+		next_turn() 
+
+func discard_start(discard_nume,player_id):#执行弃牌
+	print("请弃牌"+str(discard_nume)+"张")
+	get_tree().call_group("PASS","pass_bool",0)
+	get_tree().call_group("card"+str(player_id),"use_bool",1)
+	while discard_nume > 0:
+		await get_tree().create_timer(0.6).timeout
+		var least_nume = discard_nume_count(discard_nume)
+		discard_nume = least_nume
+		print("请弃牌"+str(discard_nume)+"张")
+		
+
+	print("弃牌完成")
+	await get_tree().create_timer(0.6).timeout
 	next_turn() 
+
+func discard_nume_count(nume):
+	
+	var card_manager = get_tree().get_nodes_in_group("cardmanager")
+	var least_nume = card_manager[0].discard_card(nume)
+	return least_nume
+
+
+func delate_card_animate():
+	get_tree().call_group("cardmanager","delate_card_animate")
+
+	
+
 func check_victory(unit: Unit):
 	if unit.current_tile == target_tile: 
 		print("🎉 玩家 ", unit.player_id, " 到达终点，获得胜利！") 
@@ -365,7 +416,6 @@ func show_move_range():
 	clear_highlights()
 	var unit = get_current_player()
 	var player_color = [Color.RED, Color.GREEN, Color.BLUE][unit.player_id]
-
 	# 获取距离为 1 的所有格子
 	var range_data = _get_tiles_in_range(unit.current_tile, 1)
 	for tile in range_data:
@@ -437,7 +487,8 @@ func play_card_from_ui(card_data: Array):
 	var unit = get_current_player()
 	var current_tile_data = game_area.game_grid.grid_data[unit.current_tile]
 	var current_terrain_str = game_area.game_grid.get_terrain_string(current_tile_data["terrain"]).to_upper()
-
+	
+	
 	# 【规则 1：起步地形一致性校验】
 	# 如果卡牌不是 UNIVERSAL，且玩家脚下地形与卡牌属性不一致，则禁止出牌
 	if terrain_req != "UNIVERSAL" and terrain_req != current_terrain_str:
@@ -446,7 +497,9 @@ func play_card_from_ui(card_data: Array):
 		return 
 
 	print("✅ 出牌成功：触发卡牌 -> ", card_name)
-
+	
+	waiting = true # 开始显示高亮，进入等待输入状态
+	get_tree().call_group("PASS", "pass_bool", 0) # 禁用跳过按钮 
 	# --- 执行卡牌逻辑 ---
 	if card_type == "GO":
 		var dist = 1
@@ -454,14 +507,14 @@ func play_card_from_ui(card_data: Array):
 		elif "3" in card_name: dist = 3
 		show_move_range_for_card(dist)
 	elif card_type == "TRICK":
-
 		execute_card_effect(card_name, {"terrain_req": terrain_req})
-
+	
+	
+		
 ##受卡牌控制的高亮显示逻辑 
 func show_move_range_for_card(distance: int):
 	clear_highlights()
 	var unit = get_current_player()
-
 	var highlight_color = [Color.RED, Color.GREEN, Color.BLUE][unit.player_id]
 	if distance > 1:
 		highlight_color = Color.PURPLE 
@@ -506,7 +559,6 @@ func _try_remove_obstacle(target: Vector2i):
 			break
 			
 	if not is_valid_target:
-		print("❌ 只能选择高亮显示的障碍物！")
 		return
 		
 	# 2. 执行移除操作：调用 GameGrid 已经写好的接口
@@ -515,8 +567,7 @@ func _try_remove_obstacle(target: Vector2i):
 	# 3. 恢复游戏状态
 	clear_highlights()
 	current_mode = GameMode.MOVE # 别忘了把模式切回默认的移动模式
-
-
+	_reset_after_action()
 ##障碍重重逻辑
 func _show_placeable_tiles():
 	clear_highlights()
@@ -531,7 +582,7 @@ func _try_place_obstacle(target: Vector2i):
 		game_area.game_grid.set_tile_obstacle(target, pending_type)
 		_reset_after_action()
 
-##点染一格逻辑
+##点染一格逻
 func _show_all_tiles_for_paint():
 	clear_highlights()
 	for tile in game_area.game_grid.grid_data:
@@ -567,9 +618,9 @@ func _reset_after_action():
 	clear_highlights()
 	current_mode = GameMode.MOVE
 	pending_type = null
-
-
-
+	waiting=false
+	get_tree().call_group("PASS","pass_bool",1)
+	delate_card_animate()
 # 显示结算面板
 func show_result_panel(winner_id):
 
@@ -591,6 +642,11 @@ func show_result_panel(winner_id):
 
 	$"提示/Panel/step_label".text = "移动步数：%d" % total_steps
 # 返回菜单
-func _on_backmenu_pressed() -> void:
-	get_tree().change_scene_to_file("res://meun.tscn")
+func _on_button_pressed() -> void:
+	get_tree().change_scene_to_file("C:/Users/Kris/Documents/j-uno-mp游戏界面/meun.gd")
 
+
+func highlight_current_unit():
+	clear_highlights()
+	var unit = get_current_player()
+	_spawn_highlight_at(unit.current_tile, Color.BLUE)
