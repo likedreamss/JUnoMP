@@ -22,7 +22,7 @@ func _ready() -> void:
 	card_database_reference_a = preload("res://LSQ/scripts2/CardDatabase.gd")
 	##发牌
 	var card_scene = preload(CARD_SCENE_PATH)
-	for i in range(HAND_COUNT+2):
+	for i in range(HAND_COUNT+1):
 		var card_drawn_start = card_database_reference_a.CARDS.keys()[0]
 		#var card_drawn_start_color = str(card_database_reference_a.CARDS[card_drawn_start][0])
 		#var card_drawn_start_function = str(card_database_reference_a.CARDS[card_drawn_start][1])
@@ -123,3 +123,53 @@ func player_card_change(player_id):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
+# 新增：执行双倍连续转换动画的函数
+func player_card_change_double(final_player_id: int):
+	# 1. 计算出“中转站”的参数（即被跳过的那个玩家的位置参数）
+	# 通过将 final_player_id 倒退 1 位（取模）来获取被跳过玩家的配置
+	var skipped_player_id = (final_player_id - 1 + 3) % 3 
+	
+	# 2. 第一阶段：先把牌从当前位置，以正常的参数移到被跳过玩家的位置
+	var step1_config = _get_hand_config_by_id(skipped_player_id)
+	_apply_hand_config_animation(step1_config, 0.4)
+	
+	# 3. 创建一个定时器或者利用 Tween 链，在第一段播完后（0.4秒），自动无缝启动第二阶段
+	var timer = get_tree().create_timer(0.45)
+	await timer.timeout
+	
+	# 4. 第二阶段：从被跳过的位置，平滑移向最终操作玩家的位置
+	var step2_config = _get_hand_config_by_id(final_player_id)
+	_apply_hand_config_animation(step2_config, 0.4)
+
+
+# 辅助函数：根据 ID 动态打包手牌的位置和间隔配置 [cite: 389-416]
+func _get_hand_config_by_id(p_id: int) -> Dictionary:
+	var config = {"width": 150, "y_pos": 1220, "center_x": get_viewport().size.x / 2}
+	match p_id:
+		0:
+			config["width"] = 150
+			config["y_pos"] = 1220
+			config["center_x"] = get_viewport().size.x / 2
+		1:
+			config["width"] = 50
+			config["y_pos"] = get_viewport().size.y / 10
+			config["center_x"] = get_viewport().size.x * 2 / 10
+		2:
+			config["width"] = 50
+			config["y_pos"] = get_viewport().size.y / 10
+			config["center_x"] = get_viewport().size.x * 8 / 10
+	return config
+
+
+# 辅助函数：将打包好的配置动态渲染成 Tween 位移动画 [cite: 372-375, 394-398]
+func _apply_hand_config_animation(cfg: Dictionary, speed: float):
+	CARD_WIDTH = cfg["width"]
+	HAND_Y_POSITION = cfg["y_pos"]
+	center_screen_x = cfg["center_x"]
+	
+	for i in range(player_hand.size()):
+		var new_position = Vector2(calculate_card_position(i), HAND_Y_POSITION)
+		var card = player_hand[i]
+		card.starting_position = new_position
+		animate_card_to_position(card, new_position, speed)
