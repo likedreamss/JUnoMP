@@ -22,7 +22,7 @@ func _ready() -> void:
 	card_database_reference_a = preload("res://LSQ/scripts2/CardDatabase.gd")
 	##发牌
 	var card_scene = preload(CARD_SCENE_PATH)
-	for i in range(HAND_COUNT+1):
+	for i in range(HAND_COUNT+2):
 		var card_drawn_start = card_database_reference_a.CARDS.keys()[0]
 		#var card_drawn_start_color = str(card_database_reference_a.CARDS[card_drawn_start][0])
 		#var card_drawn_start_function = str(card_database_reference_a.CARDS[card_drawn_start][1])
