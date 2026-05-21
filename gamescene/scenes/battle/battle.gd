@@ -320,7 +320,7 @@ func execute_card_effect(effect_type: String, params: Dictionary = {}):
 		
 				
 		"交换人生":
-			
+			_reset_after_action()
 			get_tree().call_group("PASS","pass_bool",0)
 			
 			var id = (current_player_index + player_id_count+1) % players.size()
@@ -341,7 +341,6 @@ func execute_card_effect(effect_type: String, params: Dictionary = {}):
 
 			await get_tree().create_timer(1).timeout
 			get_tree().call_group("PASS","pass_bool",1)
-			_reset_after_action()
 		
 		"乾坤重置":#重新生成地图
 			game_area.game_grid.force_regenerate_map()
