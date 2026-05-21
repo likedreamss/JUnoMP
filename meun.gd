@@ -1,9 +1,6 @@
 extends Control
 
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+@onready var button_sound = $ButtonSound
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -24,3 +21,18 @@ func _on_options_pressed() -> void:
 
 func _on_exit_pressed() -> void:
 	get_tree().quit()
+	
+
+func connect_buttons(node):
+	for child in node.get_children():
+		if child is Button:
+			child.pressed.connect(play_button_sound)
+		connect_buttons(child)
+	
+
+func play_button_sound():
+	button_sound.play()
+
+func _ready() -> void:
+	connect_buttons(self)
+	

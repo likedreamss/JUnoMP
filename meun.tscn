@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://c27mxbfnox6ue" path="res://meun.gd" id="1_l5vne"]
 [ext_resource type="Texture2D" uid="uid://dnbc77ls8xbp5" path="res://QYK/Assest1/屏幕截图 2026-04-20 203306.png" id="2_muopu"]
 [ext_resource type="FontFile" uid="uid://dvxppyylvh1xc" path="res://QYK/Assest1/Grow Year.ttf" id="3_x0rw0"]
+[ext_resource type="AudioStream" uid="uid://f6thjhmf1iev" path="res://QYK/Assest1/buttonpress.mp3" id="4_x0rw0"]
+[ext_resource type="AudioStream" uid="uid://27cafgixrg03" path="res://QYK/Assest1/bgm1.mp3" id="5_tryud"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tryud"]
 texture = ExtResource("2_muopu")
@@ -141,6 +143,14 @@ theme_override_fonts/font = ExtResource("3_x0rw0")
 theme_override_font_sizes/font_size = 265
 text = "JUnoMP"
 horizontal_alignment = 1
+
+[node name="ButtonSound" type="AudioStreamPlayer2D" parent="." unique_id=1332377348]
+stream = ExtResource("4_x0rw0")
+
+[node name="BGM2" type="AudioStreamPlayer2D" parent="." unique_id=1208103626]
+stream = ExtResource("5_tryud")
+autoplay = true
+parameters/looping = true
 
 [connection signal="pressed" from="VBoxContainer/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="VBoxContainer/Options" to="." method="_on_options_pressed"]

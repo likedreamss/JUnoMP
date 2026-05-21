@@ -6,6 +6,7 @@
 [ext_resource type="FontFile" uid="uid://dvxppyylvh1xc" path="res://QYK/Assest1/Grow Year.ttf" id="3_2yd6x"]
 [ext_resource type="Texture2D" uid="uid://bjaa8sm13hjjh" path="res://QYK/Assest1/屏幕截图 2026-04-21 165636.png" id="3_6cq21"]
 [ext_resource type="Texture2D" uid="uid://bd3j2bsadpmbu" path="res://QYK/Assest1/屏幕截图 2026-04-21 213700.png" id="5_73daq"]
+[ext_resource type="AudioStream" uid="uid://f6thjhmf1iev" path="res://QYK/Assest1/buttonpress.mp3" id="7_73daq"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wu61n"]
 texture = ExtResource("1_8amdc")
@@ -443,6 +444,9 @@ theme_override_fonts/font = ExtResource("3_2yd6x")
 theme_override_font_sizes/font_size = 265
 text = "JUnoMP"
 horizontal_alignment = 1
+
+[node name="ButtonSound" type="AudioStreamPlayer2D" parent="." unique_id=815991539]
+stream = ExtResource("7_73daq")
 
 [connection signal="pressed" from="Login/Main/Background/MainSubmitButton" to="." method="_on_main_submit_button_pressed"]
 [connection signal="pressed" from="Login/Main/Background/MainRegisterButton" to="." method="_on_main_register_button_pressed"]

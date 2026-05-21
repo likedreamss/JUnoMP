@@ -45,7 +45,7 @@ func finish_drag():
 	if card_slot_found and not card_slot_found.card_in_slot:
 		
 		card_is_in_slot = card_being_dragged
-		$"../PASS".pass_bool(0)
+		$"..".pass_bool(0)
 		slot_has_card = card_slot_found
 		if card_being_dragged.card == 1:
 			$"../PH1online".remove_card_from_hand(card_being_dragged)
@@ -56,6 +56,14 @@ func finish_drag():
 		card_being_dragged.position = card_slot_found.position
 		card_being_dragged.get_node("Area2D/CollisionShape2D").disabled = true
 		card_slot_found.card_in_slot = true
+		
+		#添加音效
+		var player = AudioStreamPlayer.new()
+		player.stream = preload("res://QYK/Assest1/出牌(outCard).mp3") # 把路径改成你文件的完整路径
+		add_child(player)
+		player.play()
+		# 播放完自动销毁节点
+		player.finished.connect(player.queue_free)
 		
 	else:
 		match card_being_dragged.card:
@@ -75,7 +83,7 @@ func delate_card():
 	if slot_has_card == null:
 		pass
 	elif slot_has_card.card_in_slot:
-		$"../PASS".pass_bool(1)
+		$"..".pass_bool(1)
 		var card_drawn_name_return = card_is_in_slot.get_node("Code").text
 		var card_drawn_value_return = [card_is_in_slot.get_node("Color").text,
 		card_is_in_slot.get_node("Function").text,

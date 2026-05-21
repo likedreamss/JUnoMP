@@ -43,13 +43,3 @@ func raycast_at_cursor():
 			var card_found = result[0].collider.get_parent()
 			if card_found:
 				card_manager_reference.start_drag(card_found)
-		elif result_collision_mask == COLLISION_MASK_OK:
-			#牌堆点击后
-			$"../cardmanager".delate_card()
-			
-		elif result_collision_mask == COLLISION_MASK_PASS:
-			$"../PASS".animate()
-			get_tree().call_group("battle_manager","discard_turn")
-		elif result_collision_mask == COLLISION_MASK_NO_PASS:
-			
-			pass

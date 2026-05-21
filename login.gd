@@ -27,6 +27,8 @@ var user_data_path: String = OS.get_user_data_dir() + "/junomp_users.json"
 @onready var new_password: LineEdit = $Login/Changepassword/Background2/NewPassword
 @onready var new_password_2: LineEdit = $Login/Changepassword/Background2/NewPassword2
 
+@onready var button_sound = $ButtonSound
+
 
 func _ready() -> void:
 	register.visible = false
@@ -38,6 +40,7 @@ func _ready() -> void:
 	change_password.secret = true
 	new_password.secret = true
 	new_password_2.secret = true
+	connect_buttons(self)
 
 # 通用界面切换
 func switch_screen(screen: String) -> void:
@@ -197,5 +200,19 @@ func _on_change_submit_button_pressed() -> void:
 	save_users(users)
 
 	print("✅ 密码修改成功！")
+	
 	clear_all_inputs()
 	switch_screen("main")
+
+	
+
+func connect_buttons(node):
+	for child in node.get_children():
+		if child is Button:
+			child.pressed.connect(play_button_sound)
+		connect_buttons(child)
+	
+func play_button_sound():
+	button_sound.play()
+
+	

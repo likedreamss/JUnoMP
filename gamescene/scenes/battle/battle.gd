@@ -14,8 +14,9 @@ enum GameMode { MOVE, PLACE_OBSTACLE,REMOVE_OBSTACLE,CHANGE_TERRAIN}
 @onready var winner_label: Label = $提示/Panel/winner_label
 @onready var time_label: Label = $提示/Panel/time_label
 @onready var step_label: Label = $提示/Panel/step_label
+@onready var button: Button = $提示/Panel/Button
 
-#控制鼠标缩放
+
 @export var zoom_speed: float = 0.1       # 缩放步长
 @export var min_zoom: float = 0.4          # 最小缩放（看全景）
 @export var max_zoom: float = 2.0          # 最大缩放（看细节）
@@ -165,6 +166,7 @@ func _input(event):
 func _on_mouse_click():
 	var clicked_tile = game_area.get_hovered_tile() 
 	
+	
 	match current_mode:
 		GameMode.MOVE:
 			try_move_to_tile(get_current_player(),clicked_tile)
@@ -213,7 +215,17 @@ func _execute_move(unit: Unit, target: Vector2i) -> void:
 	unit.move_to_tile(target, game_area)
 	# 检查胜负 
 	check_victory(unit)
-
+	
+	#音效设置
+	var player = AudioStreamPlayer.new()
+	player.stream = preload("res://QYK/Assest1/走棋子_Freesound.wav") # 把路径改成你文件的完整路径
+	add_child(player)
+	player.play()
+	# 播放完自动销毁节点
+	player.finished.connect(player.queue_free)
+	
+	
+   
 ## 核心函数：卡牌效果执行
 func execute_card_effect(effect_type: String, params: Dictionary = {}):
 	var card_color_str = params.get("terrain_req", "UNIVERSAL") 
@@ -253,6 +265,8 @@ func execute_card_effect(effect_type: String, params: Dictionary = {}):
 				var t_map = {"LAND": 0, "GRASS": 1, "PINK": 2, "RIVER": 3}
 				pending_type = t_map.get(card_color_str, 0) 
 			_show_all_tiles_for_paint()
+			
+			
 	
 		"skip_action":#跳过
 			var target_id = params.get("target_id", -1)
@@ -568,6 +582,16 @@ func _try_remove_obstacle(target: Vector2i):
 	clear_highlights()
 	current_mode = GameMode.MOVE # 别忘了把模式切回默认的移动模式
 	_reset_after_action()
+	
+	#添加音效
+	var player = AudioStreamPlayer.new()
+	player.stream = preload("res://QYK/Assest1/化险为夷.wav") # 把路径改成你文件的完整路径
+	add_child(player)
+	player.play()
+	# 播放完自动销毁节点
+	player.finished.connect(player.queue_free)
+
+	
 ##障碍重重逻辑
 func _show_placeable_tiles():
 	clear_highlights()
@@ -576,10 +600,20 @@ func _show_placeable_tiles():
 		# 只有没有障碍物且没有玩家的地块才能放障碍
 		if data["obstacle"] == GameGrid.Obstacle.NULL and data["unit"] == null:
 			_spawn_highlight_at(tile, Color.ORANGE)
+			
+
 
 func _try_place_obstacle(target: Vector2i):
 	if _is_click_on_highlight(target):
 		game_area.game_grid.set_tile_obstacle(target, pending_type)
+		#添加音效
+		var player = AudioStreamPlayer.new()
+		player.stream = preload("res://QYK/Assest1/障碍重重.wav") # 把路径改成你文件的完整路径
+		add_child(player)
+		player.play()
+		# 播放完自动销毁节点
+		player.finished.connect(player.queue_free)
+
 		_reset_after_action()
 
 ##点染一格逻
@@ -598,6 +632,14 @@ func _try_change_terrain(target: Vector2i):
 			print("万能点染：目标随机变为了地形索引 ", final_terrain)
 		game_area.game_grid.set_tile_terrain(target, final_terrain)
 		_reset_after_action()
+		
+	#添加音效
+	var player = AudioStreamPlayer.new()
+	player.stream = preload("res://QYK/Assest1/点燃一格.wav") # 把路径改成你文件的完整路径
+	add_child(player)
+	player.play()
+	# 播放完自动销毁节点
+	player.finished.connect(player.queue_free)
 
 ##乾坤重置后的辅助修复
 func _fix_units_after_regen():
@@ -643,7 +685,7 @@ func show_result_panel(winner_id):
 	$"提示/Panel/step_label".text = "移动步数：%d" % total_steps
 # 返回菜单
 func _on_button_pressed() -> void:
-	get_tree().change_scene_to_file("C:/Users/Kris/Documents/j-uno-mp游戏界面/meun.gd")
+	get_tree().change_scene_to_file("res://meun.tscn")
 
 
 func highlight_current_unit():
