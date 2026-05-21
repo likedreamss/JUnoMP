@@ -1,8 +1,149 @@
 [gd_scene format=3 uid="uid://b2u25n4k714ta"]
 
 [ext_resource type="PackedScene" uid="uid://jgs2pmhxc3wt" path="res://LSQ/scene2/node_2d.tscn" id="1_47681"]
-[ext_resource type="Script" uid="uid://38c3w3yty4av" path="res://GameMain/sub_viewport.gd" id="1_fnd5v"]
+[ext_resource type="Script" uid="uid://bp5cxlqcbfwev" path="res://GameMain/player_1.gd" id="1_xpk56"]
 [ext_resource type="PackedScene" uid="uid://u755m34bg4s0" path="res://gamescene/scenes/battle/battle.tscn" id="2_fnd5v"]
+[ext_resource type="AudioStream" uid="uid://rca8ovrqwtao" path="res://QYK/Assest1/紧张bgm.mp3" id="2_te7pb"]
+[ext_resource type="Texture2D" uid="uid://cwi0pesljh7bq" path="res://QYK/Assest1/SnowBackground.png" id="3_fnd5v"]
+[ext_resource type="Script" uid="uid://bcylhidaer1xx" path="res://GameMain/options.gd" id="4_e064l"]
+[ext_resource type="AudioStream" uid="uid://f6thjhmf1iev" path="res://QYK/Assest1/buttonpress.mp3" id="6_te7pb"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fnd5v"]
+bg_color = Color(0.40832943, 0.4083295, 0.40832937, 1)
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qjak1"]
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_108qd"]
+bg_color = Color(0.19255564, 0.1925557, 0.19255558, 1)
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t1jx1"]
+bg_color = Color(0.39118534, 0.39118537, 0.39118525, 1)
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xpk56"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n8nc1"]
+bg_color = Color(0.2665752, 0.26657522, 0.26657507, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m6eta"]
+bg_color = Color(0.4140658, 0.4140658, 0.4140657, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_te7pb"]
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7r8aj"]
+bg_color = Color(0.20691353, 0.20691356, 0.20691344, 1)
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ll54u"]
+bg_color = Color(0.41598046, 0.41598046, 0.41598028, 1)
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jof27"]
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ojmdv"]
+bg_color = Color(0.16206557, 0.1620656, 0.16206548, 1)
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4m7lb"]
+bg_color = Color(0.3665946, 0.36659464, 0.36659443, 1)
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e064l"]
+corner_radius_top_left = 48
+corner_radius_top_right = 48
+corner_radius_bottom_right = 48
+corner_radius_bottom_left = 48
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pjgj2"]
+bg_color = Color(0.29402778, 0.2940278, 0.29402766, 1)
+corner_radius_top_left = 48
+corner_radius_top_right = 48
+corner_radius_bottom_right = 48
+corner_radius_bottom_left = 48
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8m8bu"]
+bg_color = Color(0.446777, 0.44677705, 0.44677693, 1)
+corner_radius_top_left = 48
+corner_radius_top_right = 48
+corner_radius_bottom_right = 48
+corner_radius_bottom_left = 48
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h076h"]
+bg_color = Color(0.56085885, 0.6526593, 0.7013702, 1)
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hpo2l"]
+corner_radius_top_left = 48
+corner_radius_top_right = 48
+corner_radius_bottom_right = 48
+corner_radius_bottom_left = 48
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8gs83"]
+bg_color = Color(0.27569968, 0.27569968, 0.27569962, 1)
+corner_radius_top_left = 48
+corner_radius_top_right = 48
+corner_radius_bottom_right = 48
+corner_radius_bottom_left = 48
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q2rft"]
+bg_color = Color(0.40832943, 0.4083295, 0.40832937, 1)
+corner_radius_top_left = 48
+corner_radius_top_right = 48
+corner_radius_bottom_right = 48
+corner_radius_bottom_left = 48
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fga63"]
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8m1hc"]
+bg_color = Color(0.30138952, 0.30138955, 0.3013894, 1)
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mk8ta"]
+bg_color = Color(0.20691353, 0.20691356, 0.20691344, 1)
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2pk7u"]
+bg_color = Color(0.43712005, 0.43712008, 0.4371199, 1)
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
 
 [node name="Player1" type="Control" unique_id=1622213388]
 layout_mode = 3
@@ -11,6 +152,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_xpk56")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=430380214]
 
@@ -33,7 +175,6 @@ handle_input_locally = false
 physics_object_picking = true
 size = Vector2i(2573, 1799)
 render_target_update_mode = 4
-script = ExtResource("1_fnd5v")
 
 [node name="Area2D" type="Area2D" parent="CanvasLayer/SubViewportContainer/SubViewport" unique_id=1303978572]
 position = Vector2(-6, -5)
@@ -49,3 +190,231 @@ offset_right = 1436.0
 offset_bottom = 535.0
 
 [node name="Battle" parent="Boardcontainer" unique_id=2081042660 instance=ExtResource("2_fnd5v")]
+
+[node name="Background" type="CanvasLayer" parent="." unique_id=253488025]
+layer = -2
+
+[node name="backpic" type="TextureRect" parent="Background" unique_id=10624450]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -237.0
+offset_right = 3.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_fnd5v")
+
+[node name="Options" type="CanvasLayer" parent="." unique_id=280879119]
+layer = 3
+script = ExtResource("4_e064l")
+
+[node name="Mask" type="ColorRect" parent="Options" unique_id=757634936]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.22745098, 0.22745098, 0.22745098, 0.23137255)
+
+[node name="Options" type="Panel" parent="Options" unique_id=984145587]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -832.0
+offset_top = -540.5
+offset_right = 832.0
+offset_bottom = 540.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fnd5v")
+
+[node name="HelpButton" type="Button" parent="Options/Options" unique_id=170906112]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 250.5
+offset_right = 1661.0
+offset_bottom = 518.5
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 100
+theme_override_styles/normal = SubResource("StyleBoxFlat_qjak1")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_108qd")
+theme_override_styles/hover = SubResource("StyleBoxFlat_t1jx1")
+text = "帮助"
+
+[node name="SettingButton" type="Button" parent="Options/Options" unique_id=676603139]
+layout_mode = 0
+offset_top = 516.5
+offset_right = 1661.0
+offset_bottom = 792.5
+theme_override_font_sizes/font_size = 100
+theme_override_styles/normal = SubResource("StyleBoxFlat_xpk56")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_n8nc1")
+theme_override_styles/hover = SubResource("StyleBoxFlat_m6eta")
+text = "设置"
+
+[node name="leaveButton" type="Button" parent="Options/Options" unique_id=1170188992]
+layout_mode = 0
+offset_top = 791.5
+offset_right = 1661.0
+offset_bottom = 1081.5
+theme_override_font_sizes/font_size = 100
+theme_override_styles/normal = SubResource("StyleBoxFlat_te7pb")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_7r8aj")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ll54u")
+text = "投降"
+
+[node name="back" type="Button" parent="Options/Options" unique_id=1382507352]
+layout_mode = 0
+offset_left = 1474.0
+offset_top = 3.5
+offset_right = 1662.0
+offset_bottom = 180.5
+theme_override_font_sizes/font_size = 120
+theme_override_styles/normal = SubResource("StyleBoxFlat_jof27")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ojmdv")
+theme_override_styles/hover = SubResource("StyleBoxFlat_4m7lb")
+text = "×"
+
+[node name="Optionstitle" type="Label" parent="Options/Options" unique_id=1069220777]
+layout_mode = 0
+offset_left = 707.0
+offset_top = 39.5
+offset_right = 1007.0
+offset_bottom = 244.5
+theme_override_font_sizes/font_size = 150
+text = "选项"
+
+[node name="TO_options" type="Button" parent="Options" unique_id=373045938]
+offset_left = 48.0
+offset_top = 26.0
+offset_right = 248.0
+offset_bottom = 189.0
+theme_override_font_sizes/font_size = 80
+theme_override_styles/normal = SubResource("StyleBoxFlat_e064l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pjgj2")
+theme_override_styles/hover = SubResource("StyleBoxFlat_8m8bu")
+text = "选项"
+
+[node name="Surrender" type="Panel" parent="Options" unique_id=1693024756]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -725.5
+offset_top = -460.0
+offset_right = 725.5
+offset_bottom = 460.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_h076h")
+
+[node name="Surrenderlabel" type="Label" parent="Options/Surrender" unique_id=1814794795]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -347.5
+offset_top = -255.0
+offset_right = 347.5
+offset_bottom = -39.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 100
+
+[node name="Surrenderlabel2" type="Label" parent="Options/Surrender" unique_id=733064699]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -329.0
+offset_top = -29.0
+offset_right = 366.0
+offset_bottom = 187.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 100
+text = "    游戏结束"
+
+[node name="Surback" type="Button" parent="Options/Surrender" unique_id=650881464]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -206.0
+offset_top = -179.0
+offset_right = 206.0
+offset_bottom = -46.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 75
+theme_override_styles/normal = SubResource("StyleBoxFlat_hpo2l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_8gs83")
+theme_override_styles/hover = SubResource("StyleBoxFlat_q2rft")
+text = "返回主菜单"
+
+[node name="Help" type="Label" parent="Options" unique_id=655051648]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -856.5
+offset_top = -629.5
+offset_right = 884.0
+offset_bottom = 584.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 63
+theme_override_styles/normal = SubResource("StyleBoxFlat_fga63")
+text = "前进牌{前进n格}
+精囊牌{（万能颜色）
+无中生有，
+重铸，
+（万能）化险为夷，
+（万能）重新生成地图（乾坤重置）（极少），
+单格改颜色（点染一格），
+障碍重重，
+（全不能万能）跳过回合（原地待命），
+跳过出牌（束手待毙），
+跳过弃牌（对自己）（韬光养晦），
+跳过摸牌（釜底抽薪）}"
+
+[node name="Helpbutton_back" type="Button" parent="Options/Help" unique_id=946316922]
+layout_mode = 0
+offset_left = 1556.5
+offset_top = 2.5
+offset_right = 1739.0
+offset_bottom = 175.5
+theme_override_font_sizes/font_size = 120
+theme_override_styles/normal = SubResource("StyleBoxFlat_8m1hc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_mk8ta")
+theme_override_styles/hover = SubResource("StyleBoxFlat_2pk7u")
+text = "×"
+
+[node name="ButtonSound" type="AudioStreamPlayer2D" parent="." unique_id=1086235826]
+stream = ExtResource("6_te7pb")
+
+[node name="BGM1" type="AudioStreamPlayer2D" parent="." unique_id=382071011]
+stream = ExtResource("2_te7pb")
+autoplay = true
+parameters/looping = true
+
+[connection signal="pressed" from="Options/Options/HelpButton" to="Boardcontainer/Battle" method="_on_help_button_pressed"]
+[connection signal="pressed" from="Options/Options/HelpButton" to="Options" method="_on_help_button_pressed"]
+[connection signal="pressed" from="Options/Options/SettingButton" to="Options" method="_on_setting_button_pressed"]
+[connection signal="pressed" from="Options/Options/leaveButton" to="Options" method="_on_leave_button_pressed"]
+[connection signal="pressed" from="Options/Options/back" to="Options" method="_on_back_pressed"]
+[connection signal="pressed" from="Options/TO_options" to="Options" method="_on_to_options_pressed"]
+[connection signal="pressed" from="Options/Surrender/Surback" to="Options" method="_on_surback_pressed"]
+[connection signal="pressed" from="Options/Help/Helpbutton_back" to="Options" method="_on_helpbutton_back_pressed"]

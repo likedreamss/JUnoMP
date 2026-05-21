@@ -50,6 +50,10 @@ _data = {
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_voib1"]
 bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yhm5p"]
 bg_color = Color(0.9957523, 0.40938175, 0.26244617, 1)
@@ -72,7 +76,6 @@ highlight_scene = ExtResource("3_py4tk")
 [node name="HighlightSelector" parent="." unique_id=547910877 node_paths=PackedStringArray("game_area") instance=ExtResource("2_0yh6x")]
 z_index = 10
 position = Vector2(16, 7)
-width = 2.0
 game_area = NodePath("../GameArea")
 
 [node name="GameArea" type="TileMapLayer" parent="." unique_id=375983126 node_paths=PackedStringArray("game_grid")]

@@ -29,13 +29,13 @@ mouse_target = true
 [node name="SubViewport" type="SubViewport" parent="CanvasLayer/SubViewportContainer" unique_id=351121876]
 transparent_bg = true
 handle_input_locally = false
-size = Vector2i(2573, 1639)
+size = Vector2i(2573, 1799)
 render_target_update_mode = 4
 
-[node name="AArea2D" type="Area2D" parent="CanvasLayer/SubViewportContainer/SubViewport" unique_id=646106644]
+[node name="Area2D" type="Area2D" parent="CanvasLayer/SubViewportContainer/SubViewport" unique_id=646106644]
 position = Vector2(-6, -5)
 
-[node name="CARDMAIN" parent="CanvasLayer/SubViewportContainer/SubViewport/AArea2D" unique_id=1343021425 instance=ExtResource("1_vvaa7")]
+[node name="CARDMAIN" parent="CanvasLayer/SubViewportContainer/SubViewport/Area2D" unique_id=1343021425 instance=ExtResource("1_vvaa7")]
 position = Vector2(6, 355)
 
 [node name="Boardcontainer" type="Control" parent="." unique_id=488341467]

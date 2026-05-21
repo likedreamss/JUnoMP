@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://c5nl4bk05b588"]
+
+[ext_resource type="Script" uid="uid://b0vs7vljkbl5x" path="res://soundmanager.gd" id="1_f4xl6"]
+[ext_resource type="AudioStream" uid="uid://cn0dkcpo3lnk8" path="res://QYK/Assest1/走棋子_Freesound.wav" id="1_om4wx"]
+[ext_resource type="AudioStream" uid="uid://dsjl33w8d5igv" path="res://QYK/Assest1/出牌(outCard).mp3" id="2_f4xl6"]
+
+[node name="Soundmanager" type="Node" unique_id=1403192491]
+script = ExtResource("1_f4xl6")
+
+[node name="SFX" type="Node" parent="." unique_id=626513544]
+
+[node name="Chess" type="AudioStreamPlayer2D" parent="SFX" unique_id=1392434275]
+stream = ExtResource("1_om4wx")
+
+[node name="Outcard" type="AudioStreamPlayer2D" parent="SFX" unique_id=1460708586]
+stream = ExtResource("2_f4xl6")
+
+[node name="BGMplayer" type="AudioStreamPlayer2D" parent="." unique_id=1870616149]

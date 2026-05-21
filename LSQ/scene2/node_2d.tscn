@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://jgs2pmhxc3wt"]
 
+[ext_resource type="Script" uid="uid://mtcy5xtg5u53" path="res://LSQ/scene2/node_2d.gd" id="1_5maap"]
 [ext_resource type="Script" uid="uid://dlt7imfsqbgxm" path="res://LSQ/scripts2/CardManager.gd" id="1_462ap"]
 [ext_resource type="Script" uid="uid://dot726ck425vm" path="res://LSQ/scripts2/CardDatabase.gd" id="1_cp3ip"]
 [ext_resource type="PackedScene" uid="uid://c3mf0xccyyem6" path="res://LSQ/scene2/cardslot.tscn" id="2_5qbti"]
@@ -8,21 +9,55 @@
 [ext_resource type="Script" uid="uid://df2efu40gr8pa" path="res://LSQ/scripts2/deck.gd" id="5_cb6ix"]
 [ext_resource type="Texture2D" uid="uid://bbale8r18rs03" path="res://LSQ/sucai/111.png" id="6_462ap"]
 [ext_resource type="Script" uid="uid://ulijk80kph1a" path="res://LSQ/scripts2/imput_manager.gd" id="7_5qbti"]
-[ext_resource type="Texture2D" uid="uid://bwjskee7sx33a" path="res://QYK/Assest1/icon.svg" id="8_1xbjl"]
-[ext_resource type="Texture2D" uid="uid://cus0o0atteea7" path="res://QYK/Assest1/sky1.png" id="10_888p8"]
-[ext_resource type="Script" uid="uid://ci26i6b7rrp6y" path="res://LSQ/scene2/pass.gd" id="10_qvw3a"]
 [ext_resource type="Script" uid="uid://el3nivnh6j5p" path="res://LSQ/scene2/ph_1.gd" id="11_dlnqm"]
 [ext_resource type="Script" uid="uid://bwbdgfemn7ca7" path="res://LSQ/scene2/ph_2.gd" id="12_grafp"]
 [ext_resource type="Script" uid="uid://btom71i2tndh8" path="res://LSQ/scene2/d_1.gd" id="13_500ub"]
 [ext_resource type="Script" uid="uid://txnb2l6f57s" path="res://LSQ/scene2/d_2.gd" id="14_qvw3a"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_0hol4"]
-size = Vector2(178.75, 184.875)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5maap"]
+bg_color = Color(0.44280836, 0.6242073, 0.78542066, 1)
+corner_radius_top_left = 99
+corner_radius_top_right = 99
+corner_radius_bottom_right = 99
+corner_radius_bottom_left = 99
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_dlnqm"]
-size = Vector2(205, 166)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_500ub"]
+bg_color = Color(0.17290351, 0.29748887, 0.44144738, 1)
+corner_radius_top_left = 99
+corner_radius_top_right = 99
+corner_radius_bottom_right = 99
+corner_radius_bottom_left = 99
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qvw3a"]
+bg_color = Color(0.31991592, 0.5040189, 0.6849521, 1)
+corner_radius_top_left = 99
+corner_radius_top_right = 99
+corner_radius_bottom_right = 99
+corner_radius_bottom_left = 99
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cg8dq"]
+bg_color = Color(0.37225908, 0.57968915, 0.75369835, 1)
+corner_radius_top_left = 99
+corner_radius_top_right = 99
+corner_radius_bottom_right = 99
+corner_radius_bottom_left = 99
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kn1vg"]
+bg_color = Color(0.21488348, 0.37278065, 0.5204209, 1)
+corner_radius_top_left = 99
+corner_radius_top_right = 99
+corner_radius_bottom_right = 99
+corner_radius_bottom_left = 99
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_44qyy"]
+bg_color = Color(0.2904073, 0.45515507, 0.6482688, 1)
+corner_radius_top_left = 99
+corner_radius_top_right = 99
+corner_radius_bottom_right = 99
+corner_radius_bottom_left = 99
 
 [node name="CARDMAIN" type="Node2D" unique_id=1343021425]
+script = ExtResource("1_5maap")
 
 [node name="carddatabase" type="Node2D" parent="." unique_id=1831588509]
 script = ExtResource("1_cp3ip")
@@ -57,37 +92,6 @@ metadata/_edit_use_anchors_ = true
 [node name="ImputManager" type="Node2D" parent="." unique_id=1278391345]
 script = ExtResource("7_5qbti")
 
-[node name="OK" type="Node2D" parent="." unique_id=1735629034]
-
-[node name="Sprite2D" type="Sprite2D" parent="OK" unique_id=1127706684]
-position = Vector2(214.99997, 934)
-scale = Vector2(1.453125, 1.5)
-texture = ExtResource("8_1xbjl")
-
-[node name="Area2D" type="Area2D" parent="OK" unique_id=210459619]
-collision_layer = 4
-collision_mask = 4
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="OK/Area2D" unique_id=27875560]
-position = Vector2(214, 937)
-shape = SubResource("RectangleShape2D_0hol4")
-
-[node name="PASS" type="Node2D" parent="." unique_id=601078322]
-script = ExtResource("10_qvw3a")
-
-[node name="Sprite2D" type="Sprite2D" parent="PASS" unique_id=1518589657]
-position = Vector2(218, 743.5)
-scale = Vector2(0.38202247, 0.54333335)
-texture = ExtResource("10_888p8")
-
-[node name="Area2D" type="Area2D" parent="PASS" unique_id=1830283041]
-collision_layer = 8
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PASS/Area2D" unique_id=759781212]
-position = Vector2(218.5, 743.5)
-shape = SubResource("RectangleShape2D_dlnqm")
-
 [node name="PH2online" type="Node2D" parent="." unique_id=562440023]
 script = ExtResource("12_grafp")
 
@@ -99,3 +103,29 @@ script = ExtResource("13_500ub")
 
 [node name="D2" type="Node2D" parent="." unique_id=372926639]
 script = ExtResource("14_qvw3a")
+
+[node name="PASS" type="Button" parent="." unique_id=1282077999]
+offset_left = 105.0
+offset_top = 796.0
+offset_right = 340.0
+offset_bottom = 1029.0
+theme_override_font_sizes/font_size = 80
+theme_override_styles/normal = SubResource("StyleBoxFlat_5maap")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_500ub")
+theme_override_styles/hover = SubResource("StyleBoxFlat_qvw3a")
+text = "跳过"
+
+[node name="OK" type="Button" parent="." unique_id=1060625833]
+offset_left = 2107.0
+offset_top = 1113.0
+offset_right = 2351.0
+offset_bottom = 1369.0
+theme_override_font_sizes/font_size = 80
+theme_override_styles/normal = SubResource("StyleBoxFlat_cg8dq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_kn1vg")
+theme_override_styles/hover = SubResource("StyleBoxFlat_44qyy")
+text = "确定"
+
+[connection signal="pressed" from="PASS" to="." method="_on_pass_pressed"]
+[connection signal="pressed" from="OK" to="." method="_on_ok_2_pressed"]
+[connection signal="pressed" from="OK" to="." method="_on_ok_pressed"]

@@ -15,6 +15,10 @@ run/main_scene="res://meun.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://QYK/Assest1/icon.svg"
 
+[autoload]
+
+Soundmanager="*uid://c5nl4bk05b588"
+
 [display]
 
 window/size/viewport_width=2560
