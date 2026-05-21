@@ -105,10 +105,10 @@ func _ready():
 	$"提示/Panel".visible = false
 #回合循环/发牌/跳过
 	highlight_current_unit()
+
 ##下一个玩家/发牌/跳过
 func next_turn(loop_count: int = 0):
-	# 增加 loop_count 参数，默认值为 0，用于防止无限死循环
-	# 核心防错：如果连续跳过次数超过了玩家总数，强制中断死循环
+	# 如果连续跳过次数超过了玩家总数，强制中断死循环
 	if loop_count >= players.size():
 		print("⚠️ 警告：所有玩家都被跳过，回合强制推进以防死循环！")
 		skip_flags["turn"].clear() 
@@ -118,44 +118,67 @@ func next_turn(loop_count: int = 0):
 	current_player_index = (current_player_index + 1) % players.size()
 	next_player = get_current_player()
 	has_moved_this_turn = false 
-	# 检查是否跳过整个回合
+	
+	var id = (current_player_index + player_id_count) % players.size()
+	_player_id = id - 1
+	if _player_id < 0:
+		_player_id = 2
+		
+	change_player_card(id)
+	get_tree().call_group("card", "card_rotation")
+	
+	# 检查是否跳过整个回合(原地待命)
 	if next_player.player_id in skip_flags["turn"]:
 		skip_flags["turn"].erase(next_player.player_id)
 		print("玩家 ", next_player.player_id, " 的回合被跳过")
-		next_turn(loop_count + 1) # 递归调用，并让计数器 +1
+		highlight_current_unit()
+		get_tree().call_group("card" + str(id), "visible", 1)
+		get_tree().call_group("card" + str(_player_id), "visible", 0)
+
+		await get_tree().create_timer(0.6).timeout
+		
+		
+		next_turn(loop_count + 1) 
 		return
 		
-	# 检查各阶段跳过逻辑 (此处仅为示例)
+	get_tree().call_group("PASS", "pass_bool", 0)
+	
+	# 检查各阶段跳过逻辑 (釜底抽薪)
 	if next_player.player_id in skip_flags["draw"]:
 		skip_flags["draw"].erase(next_player.player_id)
-		print("跳过摸牌阶段")
+		print("❌ 受到【釜底抽薪】影响，玩家 ", next_player.player_id, " 本回合跳过摸牌阶段！")
 	else:
-		get_tree().call_group("PASS","pass_bool",0)
-		var id = (current_player_index + player_id_count) % players.size()
-		_player_id = id - 1
-		if _player_id < 0:
-			_player_id = 2
-		change_player_card(id)#玩家位置转换动画函数
-		get_tree().call_group("card","card_rotation")#同上
-		_effect_draw_cardsa(id,2) # 正常回合摸牌
-		get_tree().call_group("card"+str(id),"visible",1)
-		get_tree().call_group("card"+str(_player_id),"visible",0)#卡牌可操控变为不可操控
-		
-		var unit = get_current_player()
-		var current_tile_data = game_area.game_grid.grid_data[unit.current_tile]
-		var current_terrain_str = game_area.game_grid.get_terrain_string(current_tile_data["terrain"]).to_upper()
-		get_tree().call_group("card"+str(id)+"_UNIVERSAL","use_bool",1)
-		get_tree().call_group("card"+str(id)+"_"+str(current_terrain_str),"use_bool",1)
-		
-		highlight_current_unit()
-		#防止连续按跳过按钮
-		await get_tree().create_timer(1).timeout
-		get_tree().call_group("PASS","pass_bool",1)
+		_effect_draw_cardsa(id, 2) # 正常回合摸牌
+
+	get_tree().call_group("card" + str(id), "visible", 1)
+	get_tree().call_group("card" + str(_player_id), "visible", 0)
+
+	# 【检查出牌阶段跳过】 (束手待毙)
+	var unit = get_current_player()
+	var current_tile_data = game_area.game_grid.grid_data[unit.current_tile]
+	var current_terrain_str = game_area.game_grid.get_terrain_string(current_tile_data["terrain"]).to_upper()
+	
+	if next_player.player_id in skip_flags["play"]:
+		skip_flags["play"].erase(next_player.player_id)
+		print("❌ 受到【束手待毙】影响，玩家 ", next_player.player_id, " 本回合无法出牌！")
+	else:
+		# 正常出牌：解锁万能卡和当前地形对应的卡牌
+		get_tree().call_group("card" + str(id) + "_UNIVERSAL", "use_bool", 1)
+		get_tree().call_group("card" + str(id) + "_" + str(current_terrain_str), "use_bool", 1)
+		show_move_range()
+
+	highlight_current_unit()
+	await get_tree().create_timer(1).timeout
+	get_tree().call_group("PASS", "pass_bool", 1)
+	
+	
+	
+	
 	
 func get_current_player():
 	return players[current_player_index] 
 
-##出牌阶段input（卡牌待修改）
+##出牌阶段input
 func _input(event):
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT: 
@@ -177,14 +200,20 @@ func _on_mouse_click():
 			
 func try_move_to_tile(unit: Unit, target: Vector2i) -> void:
 	if unit == null: return 
-	# 1. 核心修复：检查字典中是否存在该坐标
-	# 如果 grid_data 里没有 target，说明这是地图外的“黑洞”
+	
+	# === ✨【核心修复：移动锁拦截】✨ ===
+	# 如果本回合已经下达过移动指令，或者棋子正在平滑移动中，直接拦截一切点击
+	if has_moved_this_turn:
+		print("⏳ 棋子正在移动中，请稍后...")
+		return
+		
+	# 检查字典中是否存在该坐标，防止黑洞报错 [cite: 650-652]
 	if not game_area.game_grid.grid_data.has(target): 
 		return
 
 	var is_valid_move = false
 	for hl in active_highlights:
-		# 通过高亮物体的全局坐标还原其对应的 Tile 坐标进行比对
+		# 通过高亮物体的全局坐标还原其对应的 Tile 坐标进行比对 [cite: 656-657]
 		if game_area.get_tile_from_global(hl.position) == target:
 			is_valid_move = true
 			break
@@ -192,7 +221,8 @@ func try_move_to_tile(unit: Unit, target: Vector2i) -> void:
 	if not is_valid_move:
 		print("❌ 只能移动到高亮锁定的范围内")
 		return
-	# 3. 获取数据并检查障碍物 
+		
+	# 获取数据并检查障碍物 [cite: 663-664]
 	var cell_data = game_area.game_grid.get_cell_data(target) 
 	
 	if cell_data["obstacle"] != GameGrid.Obstacle.NULL: 
@@ -203,9 +233,13 @@ func try_move_to_tile(unit: Unit, target: Vector2i) -> void:
 		print("❌ 位置已被占用")
 		return
 
-	# 执行移动
+	# 确认可以移动后，在执行前瞬间清空棋盘所有选择高亮，防止高亮残留引发鼠标二次误触
+	clear_highlights()
+	# 执行物理和逻辑移动
 	_execute_move(unit, target)
+	
 func _execute_move(unit: Unit, target: Vector2i) -> void: 
+	has_moved_this_turn = true
 	# 更新后端数据 
 	game_area.game_grid.grid_data[unit.current_tile]["unit"] = null 
 	game_area.game_grid.grid_data[target]["unit"] = unit 
@@ -243,7 +277,7 @@ func execute_card_effect(effect_type: String, params: Dictionary = {}):
 			current_mode = GameMode.PLACE_OBSTACLE
 			pending_type = [GameGrid.Obstacle.MOUNTAIN, GameGrid.Obstacle.TREE, GameGrid.Obstacle.HOUSE].pick_random()
 			_show_placeable_tiles()
-	
+			
 		"点染一格":#单格改颜色
 			current_mode = GameMode.CHANGE_TERRAIN
 			if card_color_str == "UNIVERSAL":
@@ -260,9 +294,33 @@ func execute_card_effect(effect_type: String, params: Dictionary = {}):
 			if target_id != -1 and phase != "":
 				_effect_add_skip(target_id, phase)
 				
+		"原地待命": # 跳过下一个玩家的整个回合（包含摸牌、出牌、移动、弃牌）
+			var next_p_id = (current_player_index +1) % players.size()
+			_effect_add_skip(next_p_id, "turn")
+			print("触发【原地待命】：玩家 ", next_p_id, " 的整个回合将被跳过！")
+			_reset_after_action() 
+
+		"束手待毙": # 下一个玩家无法出牌 已完成
+			var next_p_id = (current_player_index + 1) % players.size()
+			_effect_add_skip(next_p_id, "play")
+			print("触发【束手待毙】：玩家 ", next_p_id, " 下回合将无法出牌！")
+			_reset_after_action()
+
+		"韬光养晦": # 自己本回合结束时，跳过弃牌阶段 已完成
+			var my_id = next_player.player_id
+			_effect_add_skip(my_id, "discard")
+			print("触发【韬光养晦】：玩家 ", my_id, " 本回合结束时无需弃牌！")
+			_reset_after_action()
+
+		"釜底抽薪": # 下一个玩家在下个回合开始时无法摸牌 已完成
+			var next_p_id = (current_player_index + 1) % players.size()
+			_effect_add_skip(next_p_id, "draw")
+			print("触发【釜底抽薪】：玩家 ", next_p_id, " 下回合将无法摸牌！")
+			_reset_after_action()
+		
 				
 		"交换人生":
-			_reset_after_action()
+			
 			get_tree().call_group("PASS","pass_bool",0)
 			
 			var id = (current_player_index + player_id_count+1) % players.size()
@@ -283,7 +341,7 @@ func execute_card_effect(effect_type: String, params: Dictionary = {}):
 
 			await get_tree().create_timer(1).timeout
 			get_tree().call_group("PASS","pass_bool",1)
-		
+			_reset_after_action()
 		
 		"乾坤重置":#重新生成地图
 			game_area.game_grid.force_regenerate_map()
@@ -343,10 +401,18 @@ func _on_unit_move_finished():
 
 func discard_turn():#弃牌判定
 	var player = get_current_player()
+	
+	if player.player_id in skip_flags["discard"]:
+		skip_flags["discard"].erase(player.player_id)
+		print("受到【韬光养晦】保护，玩家 ", player.player_id, " 略过弃牌环节，直接进入下一回合！")
+		next_turn()
+		return
+	
 	var id = (player.player_id + player_id_count) % players.size() 
 	var group_name = "player_hand" + str(id)
 	var player_hand = get_tree().get_nodes_in_group(group_name)
 	var card_nume = 0
+	clear_highlights()
 	if player_hand.size() >0:
 		card_nume = player_hand[0].get_playerhand_size()  # ✅ 正确：对单个节点调用
 	print(card_nume)
@@ -357,6 +423,7 @@ func discard_turn():#弃牌判定
 		next_turn() 
 
 func discard_start(discard_nume,player_id):#执行弃牌
+	highlight_current_unit()
 	print("请弃牌"+str(discard_nume)+"张")
 	get_tree().call_group("PASS","pass_bool",0)
 	get_tree().call_group("card"+str(player_id),"use_bool",1)
@@ -366,9 +433,10 @@ func discard_start(discard_nume,player_id):#执行弃牌
 		discard_nume = least_nume
 		print("请弃牌"+str(discard_nume)+"张")
 		
-
 	print("弃牌完成")
 	await get_tree().create_timer(0.6).timeout
+	
+	
 	next_turn() 
 
 func discard_nume_count(nume):
@@ -621,6 +689,7 @@ func _reset_after_action():
 	waiting=false
 	get_tree().call_group("PASS","pass_bool",1)
 	delate_card_animate()
+	highlight_current_unit()
 # 显示结算面板
 func show_result_panel(winner_id):
 
@@ -647,6 +716,23 @@ func _on_button_pressed() -> void:
 
 
 func highlight_current_unit():
+	# 1. 核心修复：强制清除上一轮遗留的所有高亮，防止多玩家高亮重叠残留
 	clear_highlights()
+	
+	# 2. 安全检查：防止在游戏初始化或重置的极端空隙中发生空指针崩溃
 	var unit = get_current_player()
-	_spawn_highlight_at(unit.current_tile, Color.BLUE)
+	if unit == null:
+		return
+		
+	# 3. 动态色彩机制：根据玩家当前的实际状态，让脚底的阵营高亮圈产生智能变化
+	var highlight_color = [Color.RED, Color.GREEN, Color.BLUE][unit.player_id] # 默认阵营基础色
+	
+	# 如果该玩家的整个回合都在跳过队列中（被“原地待命”锁定）
+	if unit.player_id in skip_flags["turn"]:
+		highlight_color = Color.GRAY # 灰色：代表该棋子本轮直接瘫痪/跳过
+	# 如果该玩家下回合被禁出牌（受到“束手待毙”惩罚）
+	elif unit.player_id in skip_flags["play"]:
+		highlight_color = Color.ORANGE # 橙色/警告色：提示玩家该棋子只能移动、无法出牌
+		
+	# 4. 精准在当前操作玩家的后端物理瓦片坐标上，渲染对应的视觉高亮特效
+	_spawn_highlight_at(unit.current_tile, highlight_color)
