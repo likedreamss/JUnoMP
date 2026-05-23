@@ -59,7 +59,8 @@ func finish_drag():
 		
 		#添加音效
 		var player = AudioStreamPlayer.new()
-		player.stream = preload("res://QYK/Assest1/出牌(outCard).mp3") # 把路径改成你文件的完整路径
+		player.stream = preload("res://QYK/Assest1/出牌(outCard).mp3")
+		player.bus = "SFX"
 		add_child(player)
 		player.play()
 		# 播放完自动销毁节点

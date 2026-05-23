@@ -68,7 +68,7 @@ func load_users() -> Dictionary:
 	
 	var file = FileAccess.open(user_data_path, FileAccess.READ)
 	if not file:
-		print("❌ 无法读取用户数据文件！")
+		Toast.show("❌ 无法读取用户数据文件！")
 		return {}
 	
 	var json_str = file.get_as_text()
@@ -80,11 +80,11 @@ func load_users() -> Dictionary:
 func save_users(users: Dictionary) -> void:
 	var file = FileAccess.open(user_data_path, FileAccess.WRITE)
 	if not file:
-		print("❌ 无法创建用户数据文件！路径：", user_data_path)
+		Toast.show("❌ 无法创建用户数据文件！路径：", user_data_path)
 		return
 	file.store_string(JSON.stringify(users))
 	file.close()
-	print("✅ 用户数据已保存到：", user_data_path)
+	Toast.show("✅ 用户数据已保存到：", user_data_path)
 
 
 # ===================== 登录按钮 =====================
@@ -93,20 +93,20 @@ func _on_main_submit_button_pressed() -> void:
 	var password = main_password.text.strip_edges()
 
 	if account == "" or password == "":
-		print("❌ 账号或密码不能为空")
+		Toast.show("❌ 账号或密码不能为空")
 		return
 
 	var users = load_users()
 
 	if not users.has(account):
-		print("❌ 账号不存在，请先注册")
+		Toast.show("❌ 账号不存在，请先注册")
 		return
 
 	if users[account] != password:
-		print("❌ 密码错误")
+		Toast.show("❌ 密码错误")
 		return
 
-	print("✅ 登录成功！")
+	Toast.show("✅ 登录成功！")
 	clear_all_inputs()
 	# 【关键】把这里改成你的游戏场景路径！
 	get_tree().change_scene_to_file("res://meun.tscn")
@@ -144,26 +144,26 @@ func _on_register_submit_button_pressed() -> void:
 
 	# 基础校验
 	if account == "" or password == "" or password2 == "":
-		print("❌ 注册信息不完整")
+		Toast.show("❌ 注册信息不完整")
 		return
 	if password != password2:
-		print("❌ 两次输入的密码不一致")
+		Toast.show("❌ 两次输入的密码不一致")
 		return
 	if password.length() < 4:  # 简单密码长度限制
-		print("❌ 密码长度至少4位")
+		Toast.show("❌ 密码长度至少4位")
 		return
 
 	var users = load_users()
 
 	if users.has(account):
-		print("❌ 该账号已被注册")
+		Toast.show("❌ 该账号已被注册")
 		return
 
 	# 保存账号密码
 	users[account] = password
 	save_users(users)
 
-	print("✅ 注册成功！")
+	Toast.show("✅ 注册成功！")
 	clear_all_inputs()
 	switch_screen("main")
 
@@ -177,29 +177,29 @@ func _on_change_submit_button_pressed() -> void:
 
 	# 基础校验
 	if account == "" or old_pwd == "" or new_pwd == "" or new_pwd2 == "":
-		print("❌ 修改密码信息不完整")
+		Toast.show("❌ 修改密码信息不完整")
 		return
 	if new_pwd != new_pwd2:
-		print("❌ 两次输入的新密码不一致")
+		Toast.show("❌ 两次输入的新密码不一致")
 		return
 	if new_pwd.length() < 4:
-		print("❌ 新密码长度至少4位")
+		Toast.show("❌ 新密码长度至少4位")
 		return
 
 	var users = load_users()
 
 	if not users.has(account):
-		print("❌ 账号不存在")
+		Toast.show("❌ 账号不存在")
 		return
 	if users[account] != old_pwd:
-		print("❌ 原密码错误")
+		Toast.show("❌ 原密码错误")
 		return
 
 	# 更新密码
 	users[account] = new_pwd
 	save_users(users)
 
-	print("✅ 密码修改成功！")
+	Toast.show("✅ 密码修改成功！")
 	
 	clear_all_inputs()
 	switch_screen("main")

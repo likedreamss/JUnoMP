@@ -13,14 +13,14 @@ extends CanvasLayer
 @onready var surback: Button = $Surrender/Surback
 @onready var mask: ColorRect = $Mask
 
-
 func _ready():
 	# 一开始隐藏选项界面
 	$Options.visible = false
 	$Help.visible = false
 	$Surrender.visible = false
 	mask.visible = false
-	
+	$Setting.visible = false
+
 #进入选项
 func _on_to_options_pressed() -> void:
 	$Options.visible = true
@@ -43,9 +43,14 @@ func _on_helpbutton_back_pressed() -> void:
 
 #跳转到设置界面
 func _on_setting_button_pressed() -> void:
-	pass # Replace with function body.
-	
+	$Setting.visible = true
+	$Options.visible = false
+	$Help.visible = false
 
+func _on_setback_pressed() -> void:
+	$Setting.visible = false
+	$Options.visible = true
+	
 func _on_surback_pressed() -> void:
 	get_tree().change_scene_to_file("res://meun.tscn")
 
