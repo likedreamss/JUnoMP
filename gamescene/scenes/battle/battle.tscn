@@ -75,7 +75,6 @@ highlight_scene = ExtResource("3_py4tk")
 
 [node name="HighlightSelector" parent="." unique_id=547910877 node_paths=PackedStringArray("game_area") instance=ExtResource("2_0yh6x")]
 z_index = 10
-position = Vector2(16, 7)
 game_area = NodePath("../GameArea")
 
 [node name="GameArea" type="TileMapLayer" parent="." unique_id=375983126 node_paths=PackedStringArray("game_grid")]
@@ -86,13 +85,14 @@ game_grid = NodePath("GameGrid")
 
 [node name="MainTileMap" type="TileMapLayer" parent="GameArea" unique_id=886960213]
 y_sort_enabled = true
+position = Vector2(3, 4.5)
 tile_map_data = PackedByteArray("AAD///7/AAAAAAYAAAAAAP7/AAAAAAYAAAABAP7/AAAAAAYAAAAAAP3/AAAAAAYAAAABAP3/AAAAAAYAAAACAP3/AAAAAAYAAAACAP7/AAAAAAYAAAADAP3/AAAAAAYAAAADAP7/AAAAAAYAAAAEAP3/AAAAAAYAAAAEAP7/AAAAAAYAAAD///z/AAAAAAgAAAAAAPz/AAAAAAgAAAABAPz/AAAAAAgAAAACAPz/AAAAAAgAAAD///3/AAAAAAoAAAD+//3/AAAAAAoAAAD+//7/AAAAAAoAAAAAAPv/AAAAAAgAAAABAPv/AAAAAAgAAAACAPv/AAAAAAgAAAD+//v/AAAAAAgAAAD+//z/AAAAAAgAAAD///v/AAAAAAgAAAABAP//AAAAAAQAAAACAP//AAAAAAQAAAADAP//AAAAAAQAAAAEAP//AAAAAAQAAAAAAP//AAAAAAQAAAD/////AAAAAAQAAAD+////AAAAAAQAAAAEAAAAAAAAAAQAAAAFAP//AAAAAAQAAAAFAP7/AAAAAAQAAAADAAAAAAAAAAQAAAACAAAAAAAAAAQAAAAFAP3/AAAAAAAAAAAFAPz/AAAAAAAAAAAEAPz/AAAAAAAAAAADAPz/AAAAAAAAAAAEAPv/AAAAAAAAAAAFAPv/AAAAAAAAAAAGAPz/AAAAAAAAAAD+/wEAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAD//wEAAAAAAAAAAAD//wAAAAAAAAAAAAD+/wAAAAAAAAAAAAD9/wAAAAAAAAAAAAD9/wEAAAAAAAAAAAD9////AAAAAAAAAAD8/wAAAAAAAAAAAAD8/wEAAAAAAAAAAAD//wIAAAAAAAwAAAAAAAIAAAAAAAwAAAABAAEAAAAAAAwAAAACAAEAAAAAAAwAAAABAAIAAAAAAAwAAAACAAIAAAAAAAwAAAADAAEAAAAAAAwAAAADAAIAAAAAAAwAAAAEAAEAAAAAAAwAAAAFAAEAAAAAAAwAAAAFAAAAAAAAAAwAAAAEAAIAAAAAAAwAAAA=")
 tile_set = ExtResource("7_oiw7q")
 
 [node name="ObstacleTileMap" type="TileMapLayer" parent="GameArea" unique_id=536566271]
 z_index = 2
 y_sort_enabled = true
-position = Vector2(0, -6)
+position = Vector2(3, -1.5)
 tile_map_data = PackedByteArray("AAABAAEAAgAAAAIAAAADAAEAAQAAAAIAAAAFAAEAAQAAAAIAAAADAP7/AQAAAAIAAAAEAP3/AQAAAAIAAAAFAP3/AQAAAAIAAAAEAAIAAQAAAAIAAAAEAAAAAQAAAAIAAAAAAP7/AQAAAAIAAAA=")
 tile_set = ExtResource("7_oiw7q")
 
@@ -105,6 +105,7 @@ obstacle_tile_map = NodePath("../ObstacleTileMap")
 tile_set = SubResource("TileSet_pll4o")
 
 [node name="TargetEffect" type="Sprite2D" parent="." unique_id=1336809574]
+visible = false
 modulate = Color(1, 1, 0.09411765, 0.9372549)
 z_index = 1
 y_sort_enabled = true
@@ -116,6 +117,7 @@ libraries/ = SubResource("AnimationLibrary_oiw7q")
 autoplay = &"idle"
 
 [node name="提示" type="Node2D" parent="." unique_id=563884699]
+visible = false
 
 [node name="Panel" type="Panel" parent="提示" unique_id=1299093464]
 z_index = 5

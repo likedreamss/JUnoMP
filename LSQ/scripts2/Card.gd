@@ -99,3 +99,25 @@ func _on_area_2d_mouse_entered() -> void:
 func _on_area_2d_mouse_exited() -> void:
 	if hower_bool:
 		emit_signal("hovered_off",self)
+
+# 新增：连续旋转两次（240度）的触发接口
+func card_rotation_double():
+	rotation_bool = 1
+	start_rot = $Area2D/CollisionShape2D.rotation
+	# 修改临时目标，使其跨越两倍的 TARGET_ROT 弧度 [cite: 9, 34]
+	# 这样在 _process 帧更新中， move_toward 会一口气直接滑向 240° 的目标点 [cite: 36-39]
+	var double_target = start_rot + (TARGET_ROT * 2)
+	
+	# 覆盖执行，使其直接向双倍目标靠拢
+	_override_rotation_target(double_target)
+
+# 辅助重写接口，配合双倍旋转
+func _override_rotation_target(custom_target: float):
+	var tween = create_tween().set_parallel(true)
+	tween.tween_property($Area2D/CollisionShape2D, "rotation", custom_target, 0.85).set_trans(Tween.TRANS_SINE)
+	tween.tween_property($CardImage, "rotation", custom_target, 0.85).set_trans(Tween.TRANS_SINE)
+	tween.tween_property($Name, "rotation", custom_target, 0.85).set_trans(Tween.TRANS_SINE)
+	
+	# 动画播完后关闭 rotation_bool 开关 [cite: 42]
+	await tween.finished
+	rotation_bool = false

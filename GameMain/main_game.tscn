@@ -4,38 +4,45 @@
 [ext_resource type="PackedScene" uid="uid://b2u25n4k714ta" path="res://GameMain/player_1.tscn" id="2_d0m6r"]
 [ext_resource type="PackedScene" uid="uid://o4bax4uxefxj" path="res://GameMain/player_2.tscn" id="3_d0m6r"]
 
-[node name="Main game" type="Control" unique_id=1099870566]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -6.0
-offset_top = -5.0
-offset_right = -6.0
-offset_bottom = -5.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Main game" type="Node2D" unique_id=691110759]
 script = ExtResource("1_jehfp")
 player1_filed_scene = ExtResource("2_d0m6r")
 player2_filed_scene = ExtResource("3_d0m6r")
 
-[node name="HostButton" type="Button" parent="." unique_id=108192009]
-layout_mode = 0
-offset_left = 431.0
-offset_top = 578.0
-offset_right = 980.0
-offset_bottom = 858.0
+[node name="offline" type="Button" parent="." unique_id=2114334578]
+offset_left = 507.0
+offset_top = 595.0
+offset_right = 1056.0
+offset_bottom = 870.0
 theme_override_font_sizes/font_size = 100
-text = "Host"
+text = "OffLine
+"
+
+[node name="online" type="Button" parent="." unique_id=1107859120]
+offset_left = 1561.0
+offset_top = 594.0
+offset_right = 2084.0
+offset_bottom = 869.0
+theme_override_font_sizes/font_size = 100
+text = "OnLine"
 
 [node name="JoinButton" type="Button" parent="." unique_id=337212487]
-layout_mode = 0
-offset_left = 1553.0
-offset_top = 578.0
-offset_right = 2077.0
-offset_bottom = 858.0
+offset_left = 1560.0
+offset_top = 590.0
+offset_right = 2084.0
+offset_bottom = 870.0
 theme_override_font_sizes/font_size = 100
 text = "Join"
 
-[connection signal="pressed" from="HostButton" to="." method="_on_host_button_pressed"]
+[node name="HostButton" type="Button" parent="." unique_id=108192009]
+offset_left = 511.0
+offset_top = 595.0
+offset_right = 1060.0
+offset_bottom = 875.0
+theme_override_font_sizes/font_size = 100
+text = "Host"
+
+[connection signal="pressed" from="offline" to="." method="_on_offline_pressed"]
+[connection signal="pressed" from="online" to="." method="_on_online_pressed"]
 [connection signal="pressed" from="JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="pressed" from="HostButton" to="." method="_on_host_button_pressed"]

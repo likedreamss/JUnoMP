@@ -29,7 +29,11 @@ func _initialize_grid() -> void:
 
 	var size = 12 
 	noise.frequency = 0.5 
-
+	# 获取 battle_manager 以拿到终点坐标 
+	var battle_manager = get_tree().get_first_node_in_group("battle_manager")
+	var target_tile_pos = Vector2i(0, 0) 
+	if battle_manager:
+		target_tile_pos = battle_manager.target_tile # 动态读取配置的终点
 	# --- 核心修复：六边形网格双层循环 ---
 	# q 轴 (横向)
 	for q in range(-size, size + 1):
@@ -61,9 +65,11 @@ func _initialize_grid() -> void:
 					land_cells.append(pos) 
 
 				# --- 障碍物分配 ---
-				if t_type != Terrain.RIVER and randf() < obscale_num: 
-					var obs_list = [Obstacle.MOUNTAIN, Obstacle.TREE, Obstacle.HOUSE] 
-					o_type = obs_list.pick_random() 
+				if pos == target_tile_pos:
+					o_type = Obstacle.NULL
+				elif t_type != Terrain.RIVER and randf() < obscale_num:
+					var obs_list = [Obstacle.MOUNTAIN, Obstacle.TREE, Obstacle.HOUSE]
+					o_type = obs_list.pick_random()
 
 				# 存入数据
 				grid_data[pos] = {"unit": null, "terrain": t_type, "obstacle": o_type} 
