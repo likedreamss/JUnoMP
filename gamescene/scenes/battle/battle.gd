@@ -225,18 +225,18 @@ func try_move_to_tile(unit: Unit, target: Vector2i) -> void:
 			break
 	
 	if not is_valid_move:
-		Toast.show("❌ 只能移动到高亮锁定的范围内")
+		#Toast.show("❌ 只能移动到高亮锁定的范围内")
 		return
 		
 	# 获取数据并检查障碍物 [cite: 663-664]
 	var cell_data = game_area.game_grid.get_cell_data(target) 
 	
 	if cell_data["obstacle"] != GameGrid.Obstacle.NULL: 
-		Toast.show("❌ 被障碍物阻挡")
+		Toast.show("被障碍物阻挡!")
 		return
 		
 	if cell_data["unit"] != null: 
-		Toast.show("❌ 位置已被占用")
+		Toast.show(" 位置已被占用!")
 		return
 
 	# 确认可以移动后，在执行前瞬间清空棋盘所有选择高亮，防止高亮残留引发鼠标二次误触
@@ -276,13 +276,13 @@ func execute_card_effect(effect_type: String, params: Dictionary = {}):
 		"无中生有":#抽两张牌
 			var id = (current_player_index + player_id_count) % players.size()
 			_effect_draw_cardsa(id,2)
-			Toast.show(id)
+			Toast.show("玩家",current_player_index,"使用了无中生有")
 			_reset_after_action()
 			
 		"重铸":
 			var id = (current_player_index + player_id_count) % players.size()
 			_effect_draw_cardsa(id,1)
-			Toast.show(next_player.player_id)
+			Toast.show("玩家",current_player_index,"使用了重铸")
 			_reset_after_action()
 			
 		"化险为夷":#移除障碍物
@@ -376,7 +376,6 @@ func execute_card_effect(effect_type: String, params: Dictionary = {}):
 			
 			
 func _effect_recast():
-	Toast.show("执行：重铸！换取1张新牌")
 	get_tree().call_group("deck_manager","draw_card",1)
 func _effect_add_skip(player_id: int, phase: String):
 	# phase 可选: "turn", "draw", "play", "discard"
@@ -384,19 +383,19 @@ func _effect_add_skip(player_id: int, phase: String):
 		skip_flags[phase].append(player_id)
 		Toast.show("玩家 ", player_id, " 将跳过 ", phase)
 func _effect_draw_cards(count: int):
-	Toast.show("执行：获得 ", count, " 张牌")
+	#Toast.show("执行：获得 ", count, " 张牌")
 	get_tree().call_group("deck","draw_card",count)
 
 func _effect_draw_cardsa(player_id,count):#为不同玩家发牌
 	match player_id:
 		0:
-			Toast.show("执行：玩家0获得 ", count, " 张牌")
+			#Toast.show("执行：玩家0获得 ", count, " 张牌")
 			get_tree().call_group("deck"+str(player_id),"draw_card",count)
 		1:
-			Toast.show("执行：玩家1获得 ", count, " 张牌")
+			#Toast.show("执行：玩家1获得 ", count, " 张牌")
 			get_tree().call_group("deck"+str(player_id),"draw_card",count)
 		2:
-			Toast.show("执行：玩家2获得 ", count, " 张牌")
+			#Toast.show("执行：玩家2获得 ", count, " 张牌")
 			get_tree().call_group("deck"+str(player_id),"draw_card",count)
 	var unit = get_current_player()
 	var current_tile_data = game_area.game_grid.grid_data[unit.current_tile]
@@ -432,7 +431,7 @@ func discard_turn():#弃牌判定
 	clear_highlights()
 	if player_hand.size() >0:
 		card_nume = player_hand[0].get_playerhand_size()  # ✅ 正确：对单个节点调用
-	Toast.show(card_nume)
+	#Toast.show(card_nume)
 	if card_nume > 5:
 		discard_start(card_nume - 5,id)
 	else:
@@ -475,7 +474,7 @@ func delate_card_animate():
 
 func check_victory(unit: Unit):
 	if unit.current_tile == target_tile: 
-		Toast.show("🎉 玩家 ", unit.player_id, " 到达终点，获得胜利！") 
+		Toast.show("玩家 ", unit.player_id, " 到达终点，获得胜利！") 
 		set_process_input(false) 
 		game_finished = true
 		set_process_input(false)
@@ -586,7 +585,7 @@ func play_card_from_ui(card_data: Array):
 		# 注意：目前你的 UI 会直接把牌删掉。后续可以在这里给 UI 返回 false 让卡牌弹回手牌
 		return 
 
-	Toast.show("✅ 出牌成功：触发卡牌 -> ", card_name)
+	#Toast.show("✅ 出牌成功：触发卡牌 -> ", card_name)
 	
 	waiting = true # 开始显示高亮，进入等待输入状态
 	get_tree().call_group("PASS", "pass_bool", 0) # 禁用跳过按钮 
@@ -653,7 +652,7 @@ func _try_remove_obstacle(target: Vector2i):
 		
 	# 2. 执行移除操作：调用 GameGrid 已经写好的接口
 	game_area.game_grid.set_tile_obstacle(target, GameGrid.Obstacle.NULL)
-	Toast.show("✅ 障碍物已成功移除！")
+	Toast.show("障碍物已成功移除！")
 	# 3. 恢复游戏状态
 	clear_highlights()
 	current_mode = GameMode.MOVE # 别忘了把模式切回默认的移动模式

@@ -148,6 +148,27 @@ corner_radius_top_right = 64
 corner_radius_bottom_right = 64
 corner_radius_bottom_left = 64
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r3hth"]
+bg_color = Color(0.34407574, 0.34407577, 0.3440756, 1)
+corner_radius_top_left = 48
+corner_radius_top_right = 48
+corner_radius_bottom_right = 48
+corner_radius_bottom_left = 48
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e15d4"]
+bg_color = Color(0.116740875, 0.116740905, 0.116740815, 1)
+corner_radius_top_left = 48
+corner_radius_top_right = 48
+corner_radius_bottom_right = 48
+corner_radius_bottom_left = 48
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u64pa"]
+bg_color = Color(0.2123048, 0.21230489, 0.21230471, 1)
+corner_radius_top_left = 48
+corner_radius_top_right = 48
+corner_radius_bottom_right = 48
+corner_radius_bottom_left = 48
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jd7pi"]
 bg_color = Color(0.38359722, 0.38359728, 0.38359714, 1)
 corner_radius_top_left = 64
@@ -255,7 +276,6 @@ texture = ExtResource("3_fnd5v")
 
 [node name="Options" type="CanvasLayer" parent="." unique_id=280879119]
 layer = 3
-visible = false
 script = ExtResource("4_e064l")
 
 [node name="Mask" type="ColorRect" parent="Options" unique_id=757634936]
@@ -267,6 +287,7 @@ grow_vertical = 2
 color = Color(0.22745098, 0.22745098, 0.22745098, 0.23137255)
 
 [node name="Options" type="Panel" parent="Options" unique_id=984145587]
+visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -413,7 +434,6 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_q2rft")
 text = "返回主菜单"
 
 [node name="Help" type="Label" parent="Options" unique_id=655051648]
-visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -425,20 +445,12 @@ offset_right = 884.0
 offset_bottom = 584.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 63
+theme_override_font_sizes/font_size = 75
 theme_override_styles/normal = SubResource("StyleBoxFlat_fga63")
-text = "前进牌{前进n格}
-精囊牌{（万能颜色）
-无中生有，
-重铸，
-（万能）化险为夷，
-（万能）重新生成地图（乾坤重置）（极少），
-单格改颜色（点染一格），
-障碍重重，
-（全不能万能）跳过回合（原地待命），
-跳过出牌（束手待毙），
-跳过弃牌（对自己）（韬光养晦），
-跳过摸牌（釜底抽薪）}"
+text = "游戏介绍：
+
+ JUnoMP是一款结合了UNO和走棋的新型棋牌类休闲竞技游戏。创新把UNO出牌规则与棋盘地图结合，保留UNO原有上手简单，随机性强，互动对抗趣味足的特点又添加新功能牌更添特色，与棋类走格子完美融合在一起丰富对局体验。"
+autowrap_mode = 2
 
 [node name="Helpbutton_back" type="Button" parent="Options/Help" unique_id=946316922]
 layout_mode = 0
@@ -452,7 +464,20 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_mk8ta")
 theme_override_styles/hover = SubResource("StyleBoxFlat_2pk7u")
 text = "×"
 
+[node name="Nextpage1" type="Button" parent="Options/Help" unique_id=1457460854]
+layout_mode = 0
+offset_left = 615.5
+offset_top = 1095.5
+offset_right = 1035.0
+offset_bottom = 1207.5
+theme_override_font_sizes/font_size = 45
+theme_override_styles/normal = SubResource("StyleBoxFlat_r3hth")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_e15d4")
+theme_override_styles/hover = SubResource("StyleBoxFlat_u64pa")
+text = "下一页"
+
 [node name="Setting" type="Panel" parent="Options" unique_id=1722171240]
+visible = false
 offset_left = 494.0
 offset_top = 341.0
 offset_right = 2071.0
@@ -558,6 +583,116 @@ offset_bottom = 584.0
 theme_override_font_sizes/font_size = 64
 text = "游戏难度"
 
+[node name="Help2" type="Label" parent="Options" unique_id=1530953386]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -856.5
+offset_top = -629.5
+offset_right = 884.0
+offset_bottom = 584.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 63
+theme_override_styles/normal = SubResource("StyleBoxFlat_fga63")
+text = "游戏基本规则：
+
+玩家采取回合制游玩，每回合只能打出对应棋子所在格子颜色（LAND，GREEN，PINK，RIVER）的手牌进行地图改变，或者棋子移动。任一玩家的棋子移动到地图终点视为游戏结束。手牌分为前进牌（GO）和功能牌（TRICK），每回合功能牌无限制使用，前进牌一旦生效即进入弃牌阶段结束回合。部分卡牌拥有UNIVERSAL（万能）特性，不受格子颜色限制。玩家初始手牌为5张（可更改），每回合摸牌2张，出牌结束手牌数大于五触发弃牌至手牌等于5张。"
+autowrap_mode = 2
+
+[node name="Helpbutton_back" type="Button" parent="Options/Help2" unique_id=1146742701]
+layout_mode = 0
+offset_left = 1556.5
+offset_top = 2.5
+offset_right = 1739.0
+offset_bottom = 175.5
+theme_override_font_sizes/font_size = 120
+theme_override_styles/normal = SubResource("StyleBoxFlat_8m1hc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_mk8ta")
+theme_override_styles/hover = SubResource("StyleBoxFlat_2pk7u")
+text = "×"
+
+[node name="Nextpage2" type="Button" parent="Options/Help2" unique_id=424225755]
+layout_mode = 0
+offset_left = 1328.5
+offset_top = 1111.5
+offset_right = 1707.0
+offset_bottom = 1211.5
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxFlat_r3hth")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_e15d4")
+theme_override_styles/hover = SubResource("StyleBoxFlat_u64pa")
+text = "下一页"
+
+[node name="Lastpage" type="Button" parent="Options/Help2" unique_id=1876637036]
+layout_mode = 0
+offset_left = 39.5
+offset_top = 1115.5
+offset_right = 418.0
+offset_bottom = 1215.5
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxFlat_r3hth")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_e15d4")
+theme_override_styles/hover = SubResource("StyleBoxFlat_u64pa")
+text = "上一页"
+
+[node name="Help3" type="Label" parent="Options" unique_id=1060831912]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -856.5
+offset_top = -629.5
+offset_right = 884.0
+offset_bottom = 584.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxFlat_fga63")
+text = "卡牌介绍：
+前进牌（GO）：
+前进x格：移动到距离棋子x格的位置（障碍物除外）
+功能牌（TRICK）：
+（只有UNIVERSAL）无中生有：摸两张牌
+重铸：使用后此牌消失并摸一张牌
+（UNIVERSAL）化险为夷：消除指定位置的障碍物
+（UNIVERSAL）乾坤重置：重新生成地图
+点染一格：将指定格子颜色改为同此牌颜色（不要对着自己脚下格子使用哦）
+障碍重重：指定格子生成障碍物
+原地待命：跳过下位玩家的所有阶段
+束手待毙：跳过下位的出牌阶段
+韬光养晦：跳过自己的弃牌阶段
+釜底抽薪：跳过下位的摸牌阶段
+交换人生：顺时针交换玩家手牌"
+
+[node name="Helpbutton_back" type="Button" parent="Options/Help3" unique_id=1254543484]
+layout_mode = 0
+offset_left = 1556.5
+offset_top = 2.5
+offset_right = 1739.0
+offset_bottom = 175.5
+theme_override_font_sizes/font_size = 120
+theme_override_styles/normal = SubResource("StyleBoxFlat_8m1hc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_mk8ta")
+theme_override_styles/hover = SubResource("StyleBoxFlat_2pk7u")
+text = "×"
+
+[node name="Lastpage1" type="Button" parent="Options/Help3" unique_id=1829740673]
+layout_mode = 0
+offset_left = 688.5
+offset_top = 1111.5
+offset_right = 1067.0
+offset_bottom = 1211.5
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxFlat_r3hth")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_e15d4")
+theme_override_styles/hover = SubResource("StyleBoxFlat_u64pa")
+text = "上一页"
+
 [node name="ButtonSound" type="AudioStreamPlayer2D" parent="." unique_id=1086235826]
 stream = ExtResource("6_te7pb")
 bus = &"SFX"
@@ -604,8 +739,14 @@ one_shot = true
 [connection signal="pressed" from="Options/TO_options" to="Options" method="_on_to_options_pressed"]
 [connection signal="pressed" from="Options/Surrender/Surback" to="Options" method="_on_surback_pressed"]
 [connection signal="pressed" from="Options/Help/Helpbutton_back" to="Options" method="_on_helpbutton_back_pressed"]
+[connection signal="pressed" from="Options/Help/Nextpage1" to="Options" method="_on_nextpage_1_pressed"]
 [connection signal="pressed" from="Options/Setting/Setback" to="Options" method="_on_setback_pressed"]
 [connection signal="value_changed" from="Options/Setting/Music" to="Options/Setting/Music" method="_on_value_changed"]
 [connection signal="value_changed" from="Options/Setting/SFX" to="Options" method="_on_sfx_value_changed"]
 [connection signal="item_selected" from="Options/Setting/Changehard" to="Options/Setting/Changehard" method="_on_item_selected"]
+[connection signal="pressed" from="Options/Help2/Helpbutton_back" to="Options" method="_on_helpbutton_back_pressed"]
+[connection signal="pressed" from="Options/Help2/Nextpage2" to="Options" method="_on_nextpage_2_pressed"]
+[connection signal="pressed" from="Options/Help2/Lastpage" to="Options" method="_on_lastpage_pressed"]
+[connection signal="pressed" from="Options/Help3/Helpbutton_back" to="Options" method="_on_helpbutton_back_pressed"]
+[connection signal="pressed" from="Options/Help3/Lastpage1" to="Options" method="_on_lastpage_1_pressed"]
 [connection signal="timeout" from="Tips/Timer" to="Tips" method="_on_timer_timeout"]

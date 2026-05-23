@@ -12,4 +12,5 @@ func _on_item_selected(index: int) -> void:
 	if GameGrid.instance:
 		GameGrid.instance.force_regenerate_map()
 	else:
-		Toast.show("❌ GameGrid 实例未初始化，请检查 _ready() 函数")
+		#Toast.show("❌ GameGrid 实例未初始化，请检查 _ready() 函数")
+		pass
