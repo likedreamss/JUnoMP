@@ -22,7 +22,7 @@ func _ready() -> void:
 	card_database_reference_a = preload("res://LSQ/scripts2/CardDatabase.gd")
 	##发牌
 	var card_scene = preload(CARD_SCENE_PATH)
-	for i in range(HAND_COUNT + 3):
+	for i in range(HAND_COUNT + 2):
 		var card_drawn_start = card_database_reference_a.CARDS.keys()[0]
 		#var card_drawn_start_color = str(card_database_reference_a.CARDS[card_drawn_start][0])
 		#var card_drawn_start_function = str(card_database_reference_a.CARDS[card_drawn_start][1])
@@ -45,11 +45,11 @@ func _ready() -> void:
 		
 		
 		
-	#var card_drawn_start1 = "交换人生_U"
-	##var card_drawn_start_color = str(card_database_reference_a.CARDS[card_drawn_start][0])
-	##var card_drawn_start_function = str(card_database_reference_a.CARDS[card_drawn_start][1])
+	#var card_drawn_start1 = "原地待命_U"
+	##var card_drawn_start_color1 = str(card_database_reference_a.CARDS[card_drawn_start1][0])
+	##var card_drawn_start_function1 = str(card_database_reference_a.CARDS[card_drawn_start1][1])
 	#var new_card = card_scene.instantiate()
-	##var card_image_path = str("res://LSQ/sucai/"+ card_drawn_start_color + "_"+card_drawn_start_function+"_CARD.png")
+	##var card_image_path = str("res://LSQ/sucai/"+ card_drawn_start_color1 + "_"+card_drawn_start_function1+"_CARD.png")
 	#
 	#new_card.get_node("Color").text = str(card_database_reference_a.CARDS[card_drawn_start1][0])
 	#new_card.get_node("Function").text =str(card_database_reference_a.CARDS[card_drawn_start1][1])
@@ -69,6 +69,13 @@ func add_card_to_hand(card):
 	if card not in player_hand:
 		player_hand.insert(0,card)
 		update_hand_positions(0.7)
+	else:
+		animate_card_to_position(card, card.starting_position,0.2)
+
+func add_card_to_hand1(card):
+	if card not in player_hand:
+		player_hand.insert(0,card)
+		update_hand_positions(0.2)
 	else:
 		animate_card_to_position(card, card.starting_position,0.2)
 	

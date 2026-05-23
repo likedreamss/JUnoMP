@@ -12,12 +12,12 @@ enum Obstacle {MOUNTAIN, TREE, HOUSE, NULL}
 var noise = FastNoiseLite.new()
 var grid_data: Dictionary = {}
 
-
-var obscale_num = 0.2 #影响障碍物数量
-
+static var instance: GameGrid
+static var obscale_num = 0.2 #影响障碍物数量
+var obscale_num1
 ## 生成地形
 func _initialize_grid() -> void:
-	
+	obscale_num1 = obscale_num
 	grid_data.clear()
 	main_tile_map.clear()
 	if obstacle_tile_map: obstacle_tile_map.clear()
@@ -67,7 +67,7 @@ func _initialize_grid() -> void:
 				# --- 障碍物分配 ---
 				if pos == target_tile_pos:
 					o_type = Obstacle.NULL
-				elif t_type != Terrain.RIVER and randf() < obscale_num:
+				elif t_type != Terrain.RIVER and randf() < obscale_num1:
 					var obs_list = [Obstacle.MOUNTAIN, Obstacle.TREE, Obstacle.HOUSE]
 					o_type = obs_list.pick_random()
 
@@ -101,6 +101,7 @@ func force_regenerate_map():
 	_initialize_grid()
 
 func _ready() -> void:
+
 	if not main_tile_map:
 		return
 	
@@ -109,6 +110,8 @@ func _ready() -> void:
 	noise.frequency = 2 # 决定地形斑块的大小
 	noise.fractal_octaves = 5
 	_initialize_grid()
+	
+	GameGrid.instance = self
 
 
 
@@ -139,7 +142,7 @@ func set_tile_obstacle(pos: Vector2i, ob_type: Obstacle) -> bool:
 		
 	# 核心防错：如果是要【放置】障碍物（非 NULL），必须检查该地块是否已有玩家
 	if ob_type != Obstacle.NULL and grid_data[pos]["unit"] != null:
-		print("❌ 放置失败：该位置已被玩家 ", grid_data[pos]["unit"].player_id, " 占用！")
+		Toast.show(" 放置失败：该位置已被玩家 ", grid_data[pos]["unit"].player_id+1, " 占用！")
 		return false
 		
 	grid_data[pos]["obstacle"] = ob_type

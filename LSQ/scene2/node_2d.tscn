@@ -66,7 +66,7 @@ script = ExtResource("1_cp3ip")
 script = ExtResource("1_462ap")
 
 [node name="Cardslot" parent="." unique_id=1033478225 instance=ExtResource("2_5qbti")]
-position = Vector2(2233, 884)
+position = Vector2(2172, 884)
 script = ExtResource("3_gvr3l")
 
 [node name="PlayerHand" type="Node2D" parent="." unique_id=1554823933]
@@ -116,16 +116,28 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_qvw3a")
 text = "跳过"
 
 [node name="OK" type="Button" parent="." unique_id=1060625833]
-offset_left = 2107.0
-offset_top = 1113.0
-offset_right = 2351.0
-offset_bottom = 1369.0
+offset_left = 2296.0
+offset_top = 715.0
+offset_right = 2458.0
+offset_bottom = 880.0
 theme_override_font_sizes/font_size = 80
 theme_override_styles/normal = SubResource("StyleBoxFlat_cg8dq")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_kn1vg")
 theme_override_styles/hover = SubResource("StyleBoxFlat_44qyy")
 text = "确定"
 
+[node name="CANCEL" type="Button" parent="." unique_id=1600536560]
+offset_left = 2295.0
+offset_top = 897.0
+offset_right = 2463.0
+offset_bottom = 1062.0
+theme_override_font_sizes/font_size = 80
+theme_override_styles/normal = SubResource("StyleBoxFlat_cg8dq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_kn1vg")
+theme_override_styles/hover = SubResource("StyleBoxFlat_44qyy")
+text = "取消"
+
 [connection signal="pressed" from="PASS" to="." method="_on_pass_pressed"]
 [connection signal="pressed" from="OK" to="." method="_on_ok_2_pressed"]
 [connection signal="pressed" from="OK" to="." method="_on_ok_pressed"]
+[connection signal="pressed" from="CANCEL" to="." method="_on_cancel_pressed"]

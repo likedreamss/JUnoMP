@@ -3,6 +3,9 @@ extends Node2D
 const COLLISION_MASK_CARD = 1
 const COLLISION_MASK_CARD_SLOT = 2
 
+
+
+var card_slot_found
 var card_being_dragged
 var screen_size
 var is_hovering_on_card
@@ -41,11 +44,12 @@ func start_drag(card):
 
 func finish_drag():
 	card_being_dragged.scale = Vector2(1.1,1.1)
-	var card_slot_found = raycast_check_for_card_slot()
+	card_slot_found = raycast_check_for_card_slot()
 	if card_slot_found and not card_slot_found.card_in_slot:
 		
 		card_is_in_slot = card_being_dragged
 		$"..".pass_bool(0)
+		$"..".CANCEL_bool(1)
 		slot_has_card = card_slot_found
 		if card_being_dragged.card == 1:
 			$"../PH1online".remove_card_from_hand(card_being_dragged)
@@ -59,7 +63,8 @@ func finish_drag():
 		
 		#添加音效
 		var player = AudioStreamPlayer.new()
-		player.stream = preload("res://QYK/Assest1/出牌(outCard).mp3") # 把路径改成你文件的完整路径
+		player.stream = preload("res://QYK/Assest1/出牌(outCard).mp3")
+		player.bus = "SFX"
 		add_child(player)
 		player.play()
 		# 播放完自动销毁节点
@@ -73,10 +78,25 @@ func finish_drag():
 				$"../PH1online".add_card_to_hand(card_being_dragged)
 			2:
 				$"../PH2online".add_card_to_hand(card_being_dragged)
+		
 
 		
 	card_being_dragged = null
 
+func cancel_card():
+	if slot_has_card:
+		var card = card_is_in_slot 
+		match card.card:
+			0:
+				player_hand_reference.add_card_to_hand1(card)
+			1:
+				$"../PH1online".add_card_to_hand1(card)
+			2:
+				$"../PH2online".add_card_to_hand1(card)
+		card.get_node("Area2D/CollisionShape2D").disabled = false
+		card_slot_found.card_in_slot = false
+
+	
 
 #删除卡牌代码
 func delate_card():

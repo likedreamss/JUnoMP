@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dnbc77ls8xbp5" path="res://QYK/Assest1/屏幕截图 2026-04-20 203306.png" id="2_muopu"]
 [ext_resource type="FontFile" uid="uid://dvxppyylvh1xc" path="res://QYK/Assest1/Grow Year.ttf" id="3_x0rw0"]
 [ext_resource type="AudioStream" uid="uid://f6thjhmf1iev" path="res://QYK/Assest1/buttonpress.mp3" id="4_x0rw0"]
-[ext_resource type="AudioStream" uid="uid://27cafgixrg03" path="res://QYK/Assest1/bgm1.mp3" id="5_tryud"]
+[ext_resource type="AudioStream" uid="uid://rca8ovrqwtao" path="res://QYK/Assest1/紧张bgm.mp3" id="5_tryud"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tryud"]
 texture = ExtResource("2_muopu")

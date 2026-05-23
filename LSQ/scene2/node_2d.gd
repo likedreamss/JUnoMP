@@ -6,7 +6,7 @@ func _ready() -> void:
 	# all cards must be a child of cardmannagere or error!!!!!!!!!!!!!!!!!!!!!!!!!
 	add_to_group("PASS")
 	add_to_group("OK")
-
+	CANCEL_bool(0)
 
 
 func pass_bool(bool):
@@ -37,4 +37,16 @@ func OK_bool(bool):
 		await get_tree().create_timer(0.5).timeout
 		$OK.disabled = false
 		$OK.visible = true
-	
+
+func CANCEL_bool(bool):
+	if !bool:
+		$CANCEL.disabled = true
+		$CANCEL.visible = false
+	else:
+		$CANCEL.disabled = false
+		$CANCEL.visible = true
+
+
+func _on_cancel_pressed() -> void:
+	$cardmanager.cancel_card()
+	pass # Replace with function body.

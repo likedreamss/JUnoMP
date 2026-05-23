@@ -13,14 +13,17 @@ extends CanvasLayer
 @onready var surback: Button = $Surrender/Surback
 @onready var mask: ColorRect = $Mask
 
-
 func _ready():
 	# 一开始隐藏选项界面
 	$Options.visible = false
 	$Help.visible = false
 	$Surrender.visible = false
 	mask.visible = false
+	$Setting.visible = false
+	$Help2.visible = false
+	$Help3.visible = false
 	
+
 #进入选项
 func _on_to_options_pressed() -> void:
 	$Options.visible = true
@@ -35,17 +38,26 @@ func _on_back_pressed() -> void:
 func _on_help_button_pressed() -> void:
 	$Options.visible = false
 	$Help.visible = true
-	
+
 #退出帮助场景
 func _on_helpbutton_back_pressed() -> void:
 	$Options.visible = true
 	$Help.visible = false
+	$Help2.visible = false
+	$Help3.visible = false
+
 
 #跳转到设置界面
 func _on_setting_button_pressed() -> void:
-	pass # Replace with function body.
-	
+	$Setting.visible = true
+	$Setting/Changehard.selected = $Setting/Changehard.selected1
+	$Options.visible = false
+	$Help.visible = false
 
+func _on_setback_pressed() -> void:
+	$Setting.visible = false
+	$Options.visible = true
+	
 func _on_surback_pressed() -> void:
 	get_tree().change_scene_to_file("res://meun.tscn")
 
@@ -57,7 +69,7 @@ func _on_leave_button_pressed() -> void:
 	
 	var current_player = battle.get_current_player()
 	# 设置投降文字：显示当前玩家投降
-	surrenderlabel.text = "玩家 " + str(current_player.player_id) + " 已投降！🏳"
+	surrenderlabel.text = "玩家 " + str(current_player.player_id+1) + " 已投降！🏳"
 	
 	# 显示投降面板
 	$Surrender.visible = true
@@ -68,3 +80,25 @@ func _on_leave_button_pressed() -> void:
 	battle.set_process_input(false)
 	# 调用胜利面板，显示其他玩家胜利（剩下第一个存活玩家胜利）
 	battle.show_result_panel((current_player.player_id + 1) % 3)
+
+
+func _on_nextpage_1_pressed() -> void:
+	$Help.visible = false
+	$Help2.visible = true
+	$Help3.visible = false
+
+
+func _on_nextpage_2_pressed() -> void:
+	$Help.visible = false
+	$Help2.visible = false
+	$Help3.visible = true
+
+func _on_lastpage_pressed() -> void:
+	$Help.visible = true
+	$Help2.visible = false
+	$Help3.visible = false
+
+func _on_lastpage_1_pressed() -> void:
+	$Help.visible = false
+	$Help2.visible = true
+	$Help3.visible = false

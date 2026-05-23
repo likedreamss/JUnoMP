@@ -50,7 +50,7 @@ func spawn_players():
 	
 	# 安全检查：防止地图未生成导致报错 
 	if all_valid_tiles.size() == 0:
-		print("❌ 错误：地图数据为空，无法生成玩家")
+		Toast.show("错误：地图数据为空，无法生成玩家")
 		return
 
 	# 预设的边缘大致方向 [cite: 20]
@@ -111,7 +111,7 @@ func _ready():
 func next_turn(loop_count: int = 0):
 	# 如果连续跳过次数超过了玩家总数，强制中断死循环
 	if loop_count >= players.size():
-		print("⚠️ 警告：所有玩家都被跳过，回合强制推进以防死循环！")
+		Toast.show("警告：所有玩家都被跳过，回合强制推进以防死循环！")
 		skip_flags["turn"].clear() 
 		loop_count = 0 
 		
@@ -131,7 +131,9 @@ func next_turn(loop_count: int = 0):
 	# 检查是否跳过整个回合(原地待命)
 	if next_player.player_id in skip_flags["turn"]:
 		skip_flags["turn"].erase(next_player.player_id)
-		print("玩家 ", next_player.player_id, " 的回合被跳过")
+
+		Toast.show("玩家 ", next_player.player_id+1, " 的回合被跳过")
+
 		highlight_current_unit()
 		get_tree().call_group("card" + str(id), "visible", 1)
 		get_tree().call_group("card" + str(_player_id), "visible", 0)
@@ -140,6 +142,7 @@ func next_turn(loop_count: int = 0):
 		
 		
 		next_turn(loop_count + 1) 
+
 		return
 		
 	get_tree().call_group("PASS", "pass_bool", 0)
@@ -147,10 +150,11 @@ func next_turn(loop_count: int = 0):
 	# 检查各阶段跳过逻辑 (釜底抽薪)
 	if next_player.player_id in skip_flags["draw"]:
 		skip_flags["draw"].erase(next_player.player_id)
-		print("❌ 受到【釜底抽薪】影响，玩家 ", next_player.player_id, " 本回合跳过摸牌阶段！")
-	else:
-		_effect_draw_cardsa(id, 3) # 正常回合摸牌
+		Toast.show("跳过摸牌阶段")
 
+	else:
+		_effect_draw_cardsa(id, 2) # 正常回合摸牌
+	Toast.show("轮到玩家",current_player_index+1,"行动")
 	get_tree().call_group("card" + str(id), "visible", 1)
 	get_tree().call_group("card" + str(_player_id), "visible", 0)
 
@@ -161,7 +165,7 @@ func next_turn(loop_count: int = 0):
 	
 	if next_player.player_id in skip_flags["play"]:
 		skip_flags["play"].erase(next_player.player_id)
-		print("❌ 受到【束手待毙】影响，玩家 ", next_player.player_id, " 本回合无法出牌！")
+		Toast.show("受到【束手待毙】影响，玩家 ", next_player.player_id+1, " 本回合无法出牌！")
 	else:
 		# 正常出牌：解锁万能卡和当前地形对应的卡牌
 		get_tree().call_group("card" + str(id) + "_UNIVERSAL", "use_bool", 1)
@@ -221,18 +225,18 @@ func try_move_to_tile(unit: Unit, target: Vector2i) -> void:
 			break
 	
 	if not is_valid_move:
-		print("❌ 只能移动到高亮锁定的范围内")
+		#Toast.show("❌ 只能移动到高亮锁定的范围内")
 		return
 		
 	# 获取数据并检查障碍物 [cite: 663-664]
 	var cell_data = game_area.game_grid.get_cell_data(target) 
 	
 	if cell_data["obstacle"] != GameGrid.Obstacle.NULL: 
-		print("❌ 被障碍物阻挡")
+		Toast.show("被障碍物阻挡!")
 		return
 		
 	if cell_data["unit"] != null: 
-		print("❌ 位置已被占用")
+		Toast.show(" 位置已被占用!")
 		return
 
 	# 确认可以移动后，在执行前瞬间清空棋盘所有选择高亮，防止高亮残留引发鼠标二次误触
@@ -252,7 +256,8 @@ func _execute_move(unit: Unit, target: Vector2i) -> void:
 	
 	#音效设置
 	var player = AudioStreamPlayer.new()
-	player.stream = preload("res://QYK/Assest1/走棋子_Freesound.wav") # 把路径改成你文件的完整路径
+	player.stream = preload("res://QYK/Assest1/走棋子_Freesound.wav") 
+	player.bus = "SFX"
 	add_child(player)
 	player.play()
 	# 播放完自动销毁节点
@@ -265,32 +270,36 @@ func execute_card_effect(effect_type: String, params: Dictionary = {}):
 	var card_color_str = params.get("terrain_req", "UNIVERSAL") 
 	match effect_type:
 		"jump_two": # 功能1：只高亮距离为2的一圈
+			Toast.show("玩家",current_player_index,"使用了前进2格")
 			show_custom_range(2, 2)
 		"long_teleport": # 功能2：
+			Toast.show("玩家",current_player_index,"使用了前进3格")
 			show_custom_range(3, 3)
 		"无中生有":#抽两张牌
 			var id = (current_player_index + player_id_count) % players.size()
 			_effect_draw_cardsa(id,2)
-			print(id)
+			Toast.show("玩家",current_player_index+1,"使用了无中生有")
 			_reset_after_action()
 			
 		"重铸":
 			var id = (current_player_index + player_id_count) % players.size()
 			_effect_draw_cardsa(id,1)
-			print(next_player.player_id)
+			Toast.show("玩家",current_player_index+1,"使用了重铸")
 			_reset_after_action()
 			
 		"化险为夷":#移除障碍物
-			print("选择要移除障碍物的格子")
+			Toast.show("选择要移除障碍物的格子")
 			current_mode=GameMode.REMOVE_OBSTACLE
 			_show_removable_obstacles()
 		
 		"障碍重重":#设置障碍物
+			Toast.show("请放置障碍物")
 			current_mode = GameMode.PLACE_OBSTACLE
 			pending_type = [GameGrid.Obstacle.MOUNTAIN, GameGrid.Obstacle.TREE, GameGrid.Obstacle.HOUSE].pick_random()
 			_show_placeable_tiles()
 			
 		"点染一格":#单格改颜色
+			Toast.show("请选择要更改颜色的格子")
 			current_mode = GameMode.CHANGE_TERRAIN
 			if card_color_str == "UNIVERSAL":
 				pending_type = -1 # 使用 -1 作为随机地形的标记
@@ -299,7 +308,6 @@ func execute_card_effect(effect_type: String, params: Dictionary = {}):
 				var t_map = {"LAND": 0, "GRASS": 1, "PINK": 2, "RIVER": 3}
 				pending_type = t_map.get(card_color_str, 0) 
 			_show_all_tiles_for_paint()
-			
 			
 	
 		"skip_action":#跳过
@@ -311,32 +319,32 @@ func execute_card_effect(effect_type: String, params: Dictionary = {}):
 		"原地待命": # 跳过下一个玩家的整个回合（包含摸牌、出牌、移动、弃牌）
 			var next_p_id = (current_player_index +1) % players.size()
 			_effect_add_skip(next_p_id, "turn")
-			print("触发【原地待命】：玩家 ", next_p_id, " 的整个回合将被跳过！")
+			Toast.show("玩家 ", next_p_id+1, " 的整个回合将被跳过 ")
 			_reset_after_action() 
 
 		"束手待毙": # 下一个玩家无法出牌 已完成
 			var next_p_id = (current_player_index + 1) % players.size()
 			_effect_add_skip(next_p_id, "play")
-			print("触发【束手待毙】：玩家 ", next_p_id, " 下回合将无法出牌！")
+			Toast.show("玩家 ", next_p_id+1, " 下回合将无法出牌！")
 			_reset_after_action()
 
 		"韬光养晦": # 自己本回合结束时，跳过弃牌阶段 已完成
 			var my_id = next_player.player_id
 			_effect_add_skip(my_id, "discard")
-			print("触发【韬光养晦】：玩家 ", my_id, " 本回合结束时无需弃牌！")
+			Toast.show("玩家 ", my_id+1, " 本回合结束时无需弃牌！")
 			_reset_after_action()
 
 		"釜底抽薪": # 下一个玩家在下个回合开始时无法摸牌 已完成
 			var next_p_id = (current_player_index + 1) % players.size()
 			_effect_add_skip(next_p_id, "draw")
-			print("触发【釜底抽薪】：玩家 ", next_p_id, " 下回合将无法摸牌！")
+			Toast.show("玩家 ", next_p_id+1, " 下回合将无法摸牌！")
 			_reset_after_action()
 		
 				
 		"交换人生":
 			_reset_after_action()
 			get_tree().call_group("PASS","pass_bool",0)
-			
+			Toast.show("玩家",current_player_index+1,"使用了交换人生\n 拿来把你！")
 			var id = (current_player_index + player_id_count+1) % players.size()
 			_player_id = id - 1
 			if _player_id < 0:
@@ -357,6 +365,7 @@ func execute_card_effect(effect_type: String, params: Dictionary = {}):
 			get_tree().call_group("PASS","pass_bool",1)
 
 		"乾坤重置":#重新生成地图
+			Toast.show("玩家",current_player_index+1,"使用了乾坤重置")
 			game_area.game_grid.force_regenerate_map()
 			_fix_units_after_regen()
 			_reset_after_action()
@@ -372,27 +381,26 @@ func execute_card_effect(effect_type: String, params: Dictionary = {}):
 			
 			
 func _effect_recast():
-	print("执行：重铸！换取1张新牌")
 	get_tree().call_group("deck_manager","draw_card",1)
 func _effect_add_skip(player_id: int, phase: String):
 	# phase 可选: "turn", "draw", "play", "discard"
 	if skip_flags.has(phase):
 		skip_flags[phase].append(player_id)
-		print("玩家 ", player_id, " 将跳过 ", phase)
+
 func _effect_draw_cards(count: int):
-	print("执行：获得 ", count, " 张牌")
+	#Toast.show("执行：获得 ", count, " 张牌")
 	get_tree().call_group("deck","draw_card",count)
 
 func _effect_draw_cardsa(player_id,count):#为不同玩家发牌
 	match player_id:
 		0:
-			print("执行：玩家0获得 ", count, " 张牌")
+			#Toast.show("执行：玩家0获得 ", count, " 张牌")
 			get_tree().call_group("deck"+str(player_id),"draw_card",count)
 		1:
-			print("执行：玩家1获得 ", count, " 张牌")
+			#Toast.show("执行：玩家1获得 ", count, " 张牌")
 			get_tree().call_group("deck"+str(player_id),"draw_card",count)
 		2:
-			print("执行：玩家2获得 ", count, " 张牌")
+			#Toast.show("执行：玩家2获得 ", count, " 张牌")
 			get_tree().call_group("deck"+str(player_id),"draw_card",count)
 	var unit = get_current_player()
 	var current_tile_data = game_area.game_grid.grid_data[unit.current_tile]
@@ -429,27 +437,37 @@ func discard_turn():#弃牌判定
 	clear_highlights()
 	if player_hand.size() >0:
 		card_nume = player_hand[0].get_playerhand_size()  # ✅ 正确：对单个节点调用
-	print(card_nume)
+	#Toast.show(card_nume)
 	if card_nume > 5:
 		discard_start(card_nume - 5,id)
 	else:
+
 		get_tree().call_group("OK","OK_bool",1)
-		print("无需弃牌")
+
+		Toast.show("无需弃牌")
+
 		next_turn() 
 
 func discard_start(discard_nume,player_id):#执行弃牌
+
+	Toast.show("请弃牌"+str(discard_nume)+"张")
+
 	highlight_current_unit()
-	print("请弃牌"+str(discard_nume)+"张")
+
 	get_tree().call_group("PASS","pass_bool",0)
 	get_tree().call_group("card"+str(player_id),"use_bool",1)
 	while discard_nume > 0:
 		await get_tree().create_timer(0.4).timeout
 		var least_nume = discard_nume_count(discard_nume)
 		discard_nume = least_nume
-		print("请弃牌"+str(discard_nume)+"张")
+		Toast.show("请弃牌"+str(discard_nume)+"张")
 		
-	print("弃牌完成")
-	await get_tree().create_timer(0.4).timeout
+
+	Toast.show("弃牌完成")
+
+	await get_tree().create_timer(0.6).timeout
+	
+
 	
 	get_tree().call_group("OK","OK_bool",1)
 	next_turn() 
@@ -468,7 +486,7 @@ func delate_card_animate():
 
 func check_victory(unit: Unit):
 	if unit.current_tile == target_tile: 
-		print("🎉 玩家 ", unit.player_id, " 到达终点，获得胜利！") 
+		Toast.show("玩家 ", unit.player_id+1, " 到达终点，获得胜利！") 
 		set_process_input(false) 
 		game_finished = true
 		set_process_input(false)
@@ -575,11 +593,11 @@ func play_card_from_ui(card_data: Array):
 	# 【规则 1：起步地形一致性校验】
 	# 如果卡牌不是 UNIVERSAL，且玩家脚下地形与卡牌属性不一致，则禁止出牌
 	if terrain_req != "UNIVERSAL" and terrain_req != current_terrain_str:
-		print("❌ 出牌失败：你站在 [", current_terrain_str, "]，无法打出 [", terrain_req, "] 属性的卡牌！")
+		Toast.show("❌ 出牌失败：你站在 [", current_terrain_str, "]，无法打出 [", terrain_req, "] 属性的卡牌！")
 		# 注意：目前你的 UI 会直接把牌删掉。后续可以在这里给 UI 返回 false 让卡牌弹回手牌
 		return 
 
-	print("✅ 出牌成功：触发卡牌 -> ", card_name)
+	#Toast.show("✅ 出牌成功：触发卡牌 -> ", card_name)
 	
 	waiting = true # 开始显示高亮，进入等待输入状态
 	get_tree().call_group("PASS", "pass_bool", 0) # 禁用跳过按钮 
@@ -596,6 +614,7 @@ func play_card_from_ui(card_data: Array):
 		
 ##受卡牌控制的高亮显示逻辑 
 func show_move_range_for_card(distance: int):
+	Toast.show("请前进",distance,"格")
 	clear_highlights()
 	var unit = get_current_player()
 	var highlight_color = [Color.RED, Color.GREEN, Color.BLUE][unit.player_id]
@@ -646,7 +665,7 @@ func _try_remove_obstacle(target: Vector2i):
 		
 	# 2. 执行移除操作：调用 GameGrid 已经写好的接口
 	game_area.game_grid.set_tile_obstacle(target, GameGrid.Obstacle.NULL)
-	print("✅ 障碍物已成功移除！")
+	Toast.show("障碍物已成功移除！")
 	# 3. 恢复游戏状态
 	clear_highlights()
 	current_mode = GameMode.MOVE # 别忘了把模式切回默认的移动模式
@@ -654,7 +673,8 @@ func _try_remove_obstacle(target: Vector2i):
 	
 	#添加音效
 	var player = AudioStreamPlayer.new()
-	player.stream = preload("res://QYK/Assest1/化险为夷.wav") # 把路径改成你文件的完整路径
+	player.stream = preload("res://QYK/Assest1/化险为夷.wav") 
+	player.bus = "SFX"
 	add_child(player)
 	player.play()
 	# 播放完自动销毁节点
@@ -678,6 +698,7 @@ func _try_place_obstacle(target: Vector2i):
 		#添加音效
 		var player = AudioStreamPlayer.new()
 		player.stream = preload("res://QYK/Assest1/障碍重重.wav") # 把路径改成你文件的完整路径
+		player.bus = "SFX"
 		add_child(player)
 		player.play()
 		# 播放完自动销毁节点
@@ -698,13 +719,14 @@ func _try_change_terrain(target: Vector2i):
 		# 如果是万能牌效果，随机生成一个 0-3 的地形索引 
 		if final_terrain == -1:
 			final_terrain = randi() % 4 
-			print("万能点染：目标随机变为了地形索引 ", final_terrain)
+			Toast.show("万能点染：目标随机变为了地形索引 ", final_terrain)
 		game_area.game_grid.set_tile_terrain(target, final_terrain)
 		_reset_after_action()
 		
 	#添加音效
 	var player = AudioStreamPlayer.new()
-	player.stream = preload("res://QYK/Assest1/点燃一格.wav") # 把路径改成你文件的完整路径
+	player.stream = preload("res://QYK/Assest1/点燃一格.wav")
+	player.bus = "SFX"
 	add_child(player)
 	player.play()
 	# 播放完自动销毁节点
