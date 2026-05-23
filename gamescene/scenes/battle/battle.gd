@@ -149,7 +149,7 @@ func next_turn(loop_count: int = 0):
 		skip_flags["draw"].erase(next_player.player_id)
 		print("❌ 受到【釜底抽薪】影响，玩家 ", next_player.player_id, " 本回合跳过摸牌阶段！")
 	else:
-		_effect_draw_cardsa(id, 2) # 正常回合摸牌
+		_effect_draw_cardsa(id, 3) # 正常回合摸牌
 
 	get_tree().call_group("card" + str(id), "visible", 1)
 	get_tree().call_group("card" + str(_player_id), "visible", 0)
@@ -355,7 +355,7 @@ func execute_card_effect(effect_type: String, params: Dictionary = {}):
 
 			await get_tree().create_timer(1).timeout
 			get_tree().call_group("PASS","pass_bool",1)
-		
+
 		"乾坤重置":#重新生成地图
 			game_area.game_grid.force_regenerate_map()
 			_fix_units_after_regen()
@@ -413,6 +413,7 @@ func _on_unit_move_finished():
 
 
 func discard_turn():#弃牌判定
+	get_tree().call_group("OK","OK_bool",0)
 	var player = get_current_player()
 	
 	if player.player_id in skip_flags["discard"]:
@@ -432,6 +433,7 @@ func discard_turn():#弃牌判定
 	if card_nume > 5:
 		discard_start(card_nume - 5,id)
 	else:
+		get_tree().call_group("OK","OK_bool",1)
 		print("无需弃牌")
 		next_turn() 
 
@@ -441,15 +443,15 @@ func discard_start(discard_nume,player_id):#执行弃牌
 	get_tree().call_group("PASS","pass_bool",0)
 	get_tree().call_group("card"+str(player_id),"use_bool",1)
 	while discard_nume > 0:
-		await get_tree().create_timer(0.6).timeout
+		await get_tree().create_timer(0.4).timeout
 		var least_nume = discard_nume_count(discard_nume)
 		discard_nume = least_nume
 		print("请弃牌"+str(discard_nume)+"张")
 		
 	print("弃牌完成")
-	await get_tree().create_timer(0.6).timeout
+	await get_tree().create_timer(0.4).timeout
 	
-	
+	get_tree().call_group("OK","OK_bool",1)
 	next_turn() 
 
 func discard_nume_count(nume):

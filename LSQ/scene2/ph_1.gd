@@ -49,16 +49,16 @@ func _ready() -> void:
 func add_card_to_hand(card):
 	if card not in player_hand:
 		player_hand.insert(0,card)
-		update_hand_positions()
+		update_hand_positions(0.7)
 	else:
 		animate_card_to_position(card, card.starting_position,0.2)
 	
-func update_hand_positions():
+func update_hand_positions(speed):
 	for i in range(player_hand.size()):
 		var new_position = Vector2(calculate_card_position(i),HAND_Y_POSITION)
 		var card = player_hand[i]
 		card.starting_position = new_position
-		animate_card_to_position(card,new_position,1)
+		animate_card_to_position(card,new_position,speed)
 
 
 func calculate_card_position(index):
@@ -128,7 +128,7 @@ func player_card_change(player_id):
 func remove_card_from_hand(card):
 	if card in player_hand:
 		player_hand.erase(card)
-		update_hand_positions()
+		update_hand_positions(0.2)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

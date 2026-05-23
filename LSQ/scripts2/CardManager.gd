@@ -100,8 +100,8 @@ func delate_card():
 func delate_card_animate():
 	if slot_has_card.card_in_slot:
 		var new_position = Vector2(210,1220)
-		player_hand_reference.animate_card_to_position(card_is_in_slot,new_position,0.5)
-		await get_tree().create_timer(0.5).timeout
+		player_hand_reference.animate_card_to_position(card_is_in_slot,new_position,0.3)
+		await get_tree().create_timer(0.3).timeout
 		card_is_in_slot.queue_free()
 		slot_has_card.card_in_slot = false
 

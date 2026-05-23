@@ -52,16 +52,16 @@ func _ready() -> void:
 func add_card_to_hand(card):
 	if card not in player_hand:
 		player_hand.insert(0,card)
-		update_hand_positions()
+		update_hand_positions(0.7)
 	else:
 		animate_card_to_position(card, card.starting_position,0.2)
 	
-func update_hand_positions():
+func update_hand_positions(speed):
 	for i in range(player_hand.size()):
 		var new_position = Vector2(calculate_card_position(i),HAND_Y_POSITION)
 		var card = player_hand[i]
 		card.starting_position = new_position
-		animate_card_to_position(card,new_position,1)
+		animate_card_to_position(card,new_position,speed)
 
 
 func calculate_card_position(index):
@@ -86,7 +86,7 @@ func animate_card_to_position(card,new_position,speed):
 func remove_card_from_hand(card):
 	if card in player_hand:
 		player_hand.erase(card)
-		update_hand_positions()
+		update_hand_positions(0.2)
 
 func player_card_change(player_id):
 	match player_id:
@@ -95,30 +95,18 @@ func player_card_change(player_id):
 
 			HAND_Y_POSITION = get_viewport().size.y / 10
 			center_screen_x = get_viewport().size.x * 2 / 10 
-			for i in range(player_hand.size()):
-				var new_position = Vector2(calculate_card_position(i),HAND_Y_POSITION)
-				var card = player_hand[i]
-				card.starting_position = new_position
-				animate_card_to_position(card,new_position,0.5)
+			update_hand_positions(0.5)
 		1:
 			CARD_WIDTH = 50
 
 			center_screen_x = get_viewport().size.x * 8 / 10
-			for i in range(player_hand.size()):
-				var new_position = Vector2(calculate_card_position(i),HAND_Y_POSITION)
-				var card = player_hand[i]
-				card.starting_position = new_position
-				animate_card_to_position(card,new_position,0.5)
+			update_hand_positions(0.5)
 		2:
 			CARD_WIDTH = 150
 
 			HAND_Y_POSITION = 1220
 			center_screen_x = get_viewport().size.x /2
-			for i in range(player_hand.size()):
-				var new_position = Vector2(calculate_card_position(i),HAND_Y_POSITION)
-				var card = player_hand[i]
-				card.starting_position = new_position
-				animate_card_to_position(card,new_position,0.5)
+			update_hand_positions(0.5)
 
 
 
