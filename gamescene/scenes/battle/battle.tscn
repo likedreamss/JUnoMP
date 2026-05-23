@@ -105,7 +105,6 @@ obstacle_tile_map = NodePath("../ObstacleTileMap")
 tile_set = SubResource("TileSet_pll4o")
 
 [node name="TargetEffect" type="Sprite2D" parent="." unique_id=1336809574]
-visible = false
 modulate = Color(1, 1, 0.09411765, 0.9372549)
 z_index = 1
 y_sort_enabled = true
@@ -117,7 +116,6 @@ libraries/ = SubResource("AnimationLibrary_oiw7q")
 autoplay = &"idle"
 
 [node name="提示" type="Node2D" parent="." unique_id=563884699]
-visible = false
 
 [node name="Panel" type="Panel" parent="提示" unique_id=1299093464]
 z_index = 5

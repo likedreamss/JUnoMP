@@ -3,12 +3,12 @@
 [ext_resource type="PackedScene" uid="uid://jgs2pmhxc3wt" path="res://LSQ/scene2/node_2d.tscn" id="1_47681"]
 [ext_resource type="Script" uid="uid://bp5cxlqcbfwev" path="res://GameMain/player_1.gd" id="1_xpk56"]
 [ext_resource type="PackedScene" uid="uid://u755m34bg4s0" path="res://gamescene/scenes/battle/battle.tscn" id="2_fnd5v"]
-[ext_resource type="AudioStream" uid="uid://rca8ovrqwtao" path="res://QYK/Assest1/紧张bgm.mp3" id="2_te7pb"]
-[ext_resource type="Texture2D" uid="uid://cwi0pesljh7bq" path="res://QYK/Assest1/SnowBackground.png" id="3_fnd5v"]
+[ext_resource type="Texture2D" uid="uid://bscvaigbo3dib" path="res://QYK/Assest1/死亡搁浅.png" id="4_8m1hc"]
 [ext_resource type="Script" uid="uid://bcylhidaer1xx" path="res://GameMain/options.gd" id="4_e064l"]
 [ext_resource type="Script" uid="uid://b5mfdtfal6q3k" path="res://GameMain/music_control.gd" id="6_jof27"]
 [ext_resource type="AudioStream" uid="uid://f6thjhmf1iev" path="res://QYK/Assest1/buttonpress.mp3" id="6_te7pb"]
 [ext_resource type="Script" uid="uid://bvepy6iuufp35" path="res://GameMain/changehard.gd" id="7_fga63"]
+[ext_resource type="AudioStream" uid="uid://ybbxwb0hdfq0" path="res://QYK/Assest1/死亡搁浅.mp3" id="9_8m1hc"]
 [ext_resource type="Script" uid="uid://bhx1v6ivak7fu" path="res://GameMain/tips.gd" id="10_8m1hc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fnd5v"]
@@ -272,7 +272,10 @@ offset_right = 3.0
 offset_bottom = -24.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_fnd5v")
+
+[node name="死亡搁浅" type="Sprite2D" parent="Background" unique_id=1102145913]
+position = Vector2(1308, 860)
+texture = ExtResource("4_8m1hc")
 
 [node name="Options" type="CanvasLayer" parent="." unique_id=280879119]
 layer = 3
@@ -534,7 +537,7 @@ theme_override_styles/grabber_area = SubResource("StyleBoxLine_dbyhw")
 theme_override_styles/grabber_area_highlight = SubResource("StyleBoxLine_dbyhw")
 max_value = 1.0
 step = 0.01
-value = 1.0
+value = 0.5
 
 [node name="Musiclabel" type="Label" parent="Options/Setting" unique_id=1288392856]
 layout_mode = 0
@@ -698,7 +701,7 @@ stream = ExtResource("6_te7pb")
 bus = &"SFX"
 
 [node name="BGM1" type="AudioStreamPlayer2D" parent="." unique_id=382071011]
-stream = ExtResource("2_te7pb")
+stream = ExtResource("9_8m1hc")
 autoplay = true
 bus = &"Music"
 parameters/looping = true
