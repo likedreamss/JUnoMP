@@ -27,7 +27,9 @@ func _on_host_button_pressed() -> void:
 	
 	var player1_scene = player1_filed_scene.instantiate()
 	add_child(player1_scene)
+	
 
+	
 # 客户端
 func _on_join_button_pressed() -> void:
 	disable_buttons()
@@ -41,7 +43,7 @@ func _on_join_button_pressed() -> void:
 	var player1_scene = player1_filed_scene.instantiate()
 	add_child(player1_scene)
 	
-	
+	player1_scene.client_set_up()
 	
 	
 	
@@ -50,6 +52,8 @@ func _on_peer_connected(peer_id):
 		print("客户端连接成功！peer_id: ", peer_id)
 		var player2_scene = player2_filed_scene.instantiate()
 		add_child(player2_scene)
+		get_node("Player1").host_set_up()
+	
 
 func disable_buttons():
 	$HostButton.disabled = true

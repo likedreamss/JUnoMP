@@ -23,3 +23,11 @@ func connect_buttons(node):
 func play_button_sound():
 
 	button_sound.play()
+
+
+func host_set_up():
+	pass
+	
+	
+func client_set_up():
+	pass
