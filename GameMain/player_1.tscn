@@ -11,69 +11,6 @@
 [ext_resource type="AudioStream" uid="uid://ybbxwb0hdfq0" path="res://QYK/Assest1/死亡搁浅.mp3" id="9_8m1hc"]
 [ext_resource type="Script" uid="uid://bhx1v6ivak7fu" path="res://GameMain/tips.gd" id="10_8m1hc"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fnd5v"]
-bg_color = Color(0.40832943, 0.4083295, 0.40832937, 1)
-corner_radius_top_left = 64
-corner_radius_top_right = 64
-corner_radius_bottom_right = 64
-corner_radius_bottom_left = 64
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qjak1"]
-corner_radius_top_left = 64
-corner_radius_top_right = 64
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_108qd"]
-bg_color = Color(0.19255564, 0.1925557, 0.19255558, 1)
-corner_radius_top_left = 64
-corner_radius_top_right = 64
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t1jx1"]
-bg_color = Color(0.39118534, 0.39118537, 0.39118525, 1)
-corner_radius_top_left = 64
-corner_radius_top_right = 64
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xpk56"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n8nc1"]
-bg_color = Color(0.2665752, 0.26657522, 0.26657507, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m6eta"]
-bg_color = Color(0.4140658, 0.4140658, 0.4140657, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_te7pb"]
-corner_radius_bottom_right = 64
-corner_radius_bottom_left = 64
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7r8aj"]
-bg_color = Color(0.20691353, 0.20691356, 0.20691344, 1)
-corner_radius_bottom_right = 64
-corner_radius_bottom_left = 64
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ll54u"]
-bg_color = Color(0.41598046, 0.41598046, 0.41598028, 1)
-corner_radius_bottom_right = 64
-corner_radius_bottom_left = 64
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jof27"]
-corner_radius_top_left = 64
-corner_radius_top_right = 64
-corner_radius_bottom_right = 64
-corner_radius_bottom_left = 64
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ojmdv"]
-bg_color = Color(0.16206557, 0.1620656, 0.16206548, 1)
-corner_radius_top_left = 64
-corner_radius_top_right = 64
-corner_radius_bottom_right = 64
-corner_radius_bottom_left = 64
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4m7lb"]
-bg_color = Color(0.3665946, 0.36659464, 0.36659443, 1)
-corner_radius_top_left = 64
-corner_radius_top_right = 64
-corner_radius_bottom_right = 64
-corner_radius_bottom_left = 64
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e064l"]
 corner_radius_top_left = 48
 corner_radius_top_right = 48
@@ -206,6 +143,97 @@ thickness = 15
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fga63"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ova1s"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t385v"]
+bg_color = Color(0.94118744, 0.5699885, 0.36392364, 1)
+corner_radius_top_left = 32
+corner_radius_top_right = 32
+corner_radius_bottom_right = 32
+corner_radius_bottom_left = 32
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8vdcj"]
+bg_color = Color(0.43967435, 0.2250889, 0.07647782, 1)
+corner_radius_top_left = 32
+corner_radius_top_right = 32
+corner_radius_bottom_right = 32
+corner_radius_bottom_left = 32
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pp406"]
+bg_color = Color(0.76816463, 0.41256222, 0.09973637, 1)
+corner_radius_top_left = 32
+corner_radius_top_right = 32
+corner_radius_bottom_right = 32
+corner_radius_bottom_left = 32
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fnd5v"]
+bg_color = Color(0.40832943, 0.4083295, 0.40832937, 1)
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qjak1"]
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_108qd"]
+bg_color = Color(0.19255564, 0.1925557, 0.19255558, 1)
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t1jx1"]
+bg_color = Color(0.39118534, 0.39118537, 0.39118525, 1)
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xpk56"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n8nc1"]
+bg_color = Color(0.2665752, 0.26657522, 0.26657507, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m6eta"]
+bg_color = Color(0.4140658, 0.4140658, 0.4140657, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_te7pb"]
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7r8aj"]
+bg_color = Color(0.20691353, 0.20691356, 0.20691344, 1)
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ll54u"]
+bg_color = Color(0.41598046, 0.41598046, 0.41598028, 1)
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jof27"]
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ojmdv"]
+bg_color = Color(0.16206557, 0.1620656, 0.16206548, 1)
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4m7lb"]
+bg_color = Color(0.3665946, 0.36659464, 0.36659443, 1)
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jwmuk"]
 bg_color = Color(0.22745098, 0.27058825, 0.3764706, 0.25882354)
 corner_radius_top_left = 32
@@ -289,78 +317,8 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.22745098, 0.22745098, 0.22745098, 0.23137255)
 
-[node name="Options" type="Panel" parent="Options" unique_id=984145587]
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -832.0
-offset_top = -540.5
-offset_right = 832.0
-offset_bottom = 540.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_fnd5v")
-
-[node name="HelpButton" type="Button" parent="Options/Options" unique_id=170906112]
-layout_mode = 0
-offset_left = 2.0
-offset_top = 250.5
-offset_right = 1661.0
-offset_bottom = 518.5
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 100
-theme_override_styles/normal = SubResource("StyleBoxFlat_qjak1")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_108qd")
-theme_override_styles/hover = SubResource("StyleBoxFlat_t1jx1")
-text = "帮助"
-
-[node name="SettingButton" type="Button" parent="Options/Options" unique_id=676603139]
-layout_mode = 0
-offset_top = 516.5
-offset_right = 1661.0
-offset_bottom = 792.5
-theme_override_font_sizes/font_size = 100
-theme_override_styles/normal = SubResource("StyleBoxFlat_xpk56")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_n8nc1")
-theme_override_styles/hover = SubResource("StyleBoxFlat_m6eta")
-text = "设置"
-
-[node name="leaveButton" type="Button" parent="Options/Options" unique_id=1170188992]
-layout_mode = 0
-offset_top = 791.5
-offset_right = 1661.0
-offset_bottom = 1081.5
-theme_override_font_sizes/font_size = 100
-theme_override_styles/normal = SubResource("StyleBoxFlat_te7pb")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_7r8aj")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ll54u")
-text = "投降"
-
-[node name="back" type="Button" parent="Options/Options" unique_id=1382507352]
-layout_mode = 0
-offset_left = 1474.0
-offset_top = 3.5
-offset_right = 1662.0
-offset_bottom = 180.5
-theme_override_font_sizes/font_size = 120
-theme_override_styles/normal = SubResource("StyleBoxFlat_jof27")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_ojmdv")
-theme_override_styles/hover = SubResource("StyleBoxFlat_4m7lb")
-text = "×"
-
-[node name="Optionstitle" type="Label" parent="Options/Options" unique_id=1069220777]
-layout_mode = 0
-offset_left = 707.0
-offset_top = 39.5
-offset_right = 1007.0
-offset_bottom = 244.5
-theme_override_font_sizes/font_size = 150
-text = "选项"
-
 [node name="TO_options" type="Button" parent="Options" unique_id=373045938]
+z_index = -1
 offset_left = 48.0
 offset_top = 26.0
 offset_right = 248.0
@@ -372,7 +330,6 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_8m8bu")
 text = "选项"
 
 [node name="Surrender" type="Panel" parent="Options" unique_id=1693024756]
-visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -644,7 +601,6 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_u64pa")
 text = "上一页"
 
 [node name="Help3" type="Label" parent="Options" unique_id=1060831912]
-visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -698,6 +654,158 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_e15d4")
 theme_override_styles/hover = SubResource("StyleBoxFlat_u64pa")
 text = "上一页"
 
+[node name="Panel" type="Panel" parent="Options" unique_id=1608637574]
+z_index = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -570.0
+offset_top = -341.0
+offset_right = 588.0
+offset_bottom = 428.75
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ova1s")
+
+[node name="Label" type="Label" parent="Options/Panel" unique_id=1239311938]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 39.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 75
+text = "游戏结束 "
+horizontal_alignment = 1
+
+[node name="winner_label" type="Label" parent="Options/Panel" unique_id=580933941]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 121.0
+offset_top = 224.0
+offset_right = -116.0
+offset_bottom = 327.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.7572726, 0.3391436, 0.0763802, 1)
+theme_override_font_sizes/font_size = 75
+text = "🏆 玩家1获得胜利 !🎉"
+horizontal_alignment = 1
+
+[node name="time_label" type="Label" parent="Options/Panel" unique_id=1758421405]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -292.5
+offset_top = 42.0
+offset_right = 292.5
+offset_bottom = 145.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 75
+text = "游戏耗时  10：23"
+horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="Options/Panel" unique_id=7442354]
+z_index = 6
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -152.0
+offset_top = -123.75
+offset_right = 157.0
+offset_bottom = -36.75
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxFlat_t385v")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_8vdcj")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pp406")
+text = "返回主菜单"
+
+[node name="Options" type="Panel" parent="Options" unique_id=984145587]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -832.0
+offset_top = -540.5
+offset_right = 832.0
+offset_bottom = 540.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fnd5v")
+
+[node name="HelpButton" type="Button" parent="Options/Options" unique_id=170906112]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 250.5
+offset_right = 1661.0
+offset_bottom = 518.5
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 100
+theme_override_styles/normal = SubResource("StyleBoxFlat_qjak1")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_108qd")
+theme_override_styles/hover = SubResource("StyleBoxFlat_t1jx1")
+text = "帮助"
+
+[node name="SettingButton" type="Button" parent="Options/Options" unique_id=676603139]
+layout_mode = 0
+offset_top = 516.5
+offset_right = 1661.0
+offset_bottom = 792.5
+theme_override_font_sizes/font_size = 100
+theme_override_styles/normal = SubResource("StyleBoxFlat_xpk56")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_n8nc1")
+theme_override_styles/hover = SubResource("StyleBoxFlat_m6eta")
+text = "设置"
+
+[node name="leaveButton" type="Button" parent="Options/Options" unique_id=1170188992]
+layout_mode = 0
+offset_top = 791.5
+offset_right = 1661.0
+offset_bottom = 1081.5
+theme_override_font_sizes/font_size = 100
+theme_override_styles/normal = SubResource("StyleBoxFlat_te7pb")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_7r8aj")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ll54u")
+text = "投降"
+
+[node name="back" type="Button" parent="Options/Options" unique_id=1382507352]
+layout_mode = 0
+offset_left = 1474.0
+offset_top = 3.5
+offset_right = 1662.0
+offset_bottom = 180.5
+theme_override_font_sizes/font_size = 120
+theme_override_styles/normal = SubResource("StyleBoxFlat_jof27")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ojmdv")
+theme_override_styles/hover = SubResource("StyleBoxFlat_4m7lb")
+text = "×"
+
+[node name="Optionstitle" type="Label" parent="Options/Options" unique_id=1069220777]
+layout_mode = 0
+offset_left = 707.0
+offset_top = 39.5
+offset_right = 1007.0
+offset_bottom = 244.5
+theme_override_font_sizes/font_size = 150
+text = "选项"
+
 [node name="ButtonSound" type="AudioStreamPlayer2D" parent="." unique_id=1086235826]
 stream = ExtResource("6_te7pb")
 bus = &"SFX"
@@ -736,11 +844,6 @@ horizontal_alignment = 1
 wait_time = 2.0
 one_shot = true
 
-[connection signal="pressed" from="Options/Options/HelpButton" to="Boardcontainer/Battle" method="_on_help_button_pressed"]
-[connection signal="pressed" from="Options/Options/HelpButton" to="Options" method="_on_help_button_pressed"]
-[connection signal="pressed" from="Options/Options/SettingButton" to="Options" method="_on_setting_button_pressed"]
-[connection signal="pressed" from="Options/Options/leaveButton" to="Options" method="_on_leave_button_pressed"]
-[connection signal="pressed" from="Options/Options/back" to="Options" method="_on_back_pressed"]
 [connection signal="pressed" from="Options/TO_options" to="Options" method="_on_to_options_pressed"]
 [connection signal="pressed" from="Options/Surrender/Surback" to="Options" method="_on_surback_pressed"]
 [connection signal="pressed" from="Options/Help/Helpbutton_back" to="Options" method="_on_helpbutton_back_pressed"]
@@ -754,4 +857,10 @@ one_shot = true
 [connection signal="pressed" from="Options/Help2/Lastpage" to="Options" method="_on_lastpage_pressed"]
 [connection signal="pressed" from="Options/Help3/Helpbutton_back" to="Options" method="_on_helpbutton_back_pressed"]
 [connection signal="pressed" from="Options/Help3/Lastpage1" to="Options" method="_on_lastpage_1_pressed"]
+[connection signal="pressed" from="Options/Panel/Button" to="Options" method="_on_button_pressed"]
+[connection signal="pressed" from="Options/Options/HelpButton" to="Boardcontainer/Battle" method="_on_help_button_pressed"]
+[connection signal="pressed" from="Options/Options/HelpButton" to="Options" method="_on_help_button_pressed"]
+[connection signal="pressed" from="Options/Options/SettingButton" to="Options" method="_on_setting_button_pressed"]
+[connection signal="pressed" from="Options/Options/leaveButton" to="Options" method="_on_leave_button_pressed"]
+[connection signal="pressed" from="Options/Options/back" to="Options" method="_on_back_pressed"]
 [connection signal="timeout" from="Tips/Timer" to="Tips" method="_on_timer_timeout"]

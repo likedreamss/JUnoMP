@@ -20,6 +20,7 @@ func pass_bool(bool):
 
 func _on_pass_pressed() -> void:
 	get_tree().call_group("battle_manager","discard_turn")
+	
 
 
 func _on_ok_pressed() -> void:

@@ -30,9 +30,7 @@ var next_player
 var _player_id = 0
 var player_id_count = 0
 var pending_type = null# 用于临时存储卡牌带入的地形或障碍物类型
-# --- 结算页面变量 ---
-var game_start_time: float = 0
-var total_steps: int = 0
+
 var game_finished: bool = false
 var waiting: bool = false #用来禁止跳过
 var has_moved_this_turn: bool = false # 记录本回合是否已执行过移动
@@ -104,8 +102,7 @@ func _ready():
 		var effect_pos = game_area.get_global_from_tile(target_tile) 
 		$TargetEffect.position = effect_pos
 	
-	game_start_time = Time.get_ticks_msec() / 1000.0
-	$"提示/Panel".visible = false
+	
 #回合循环/发牌/跳过
 	highlight_current_unit()
 
@@ -489,12 +486,11 @@ func delate_card_animate():
 
 func check_victory(unit: Unit):
 	if unit.current_tile == target_tile: 
-		Toast.show("玩家 ", unit.player_id+1, " 到达终点，获得胜利！") 
+
 		set_process_input(false) 
 		game_finished = true
 		set_process_input(false)
-		show_result_panel(unit.player_id)
-
+		get_tree().call_group("option","show_result_panel",current_player_index+1)
 
 
 
@@ -758,29 +754,8 @@ func _reset_after_action():
 	get_tree().call_group("PASS","pass_bool",1)
 	delate_card_animate()
 	highlight_current_unit()
-# 显示结算面板
-func show_result_panel(winner_id):
 
-	var panel = $"提示/Panel"
 
-	panel.visible = true
-
-	$"提示/Panel/winner_label".text = "玩家 %d 胜利！" % winner_id
-
-	var total_time = Time.get_ticks_msec() / 1000.0 - game_start_time
-
-	var total_seconds = int(total_time)
-
-	var minutes = int(total_seconds / 60)
-
-	var seconds = total_seconds % 60
-
-	$"提示/Panel/time_label".text = "游戏耗时：%02d:%02d" % [minutes, seconds]
-
-	$"提示/Panel/step_label".text = "移动步数：%d" % total_steps
-# 返回菜单
-func _on_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://meun.tscn")
 
 
 func highlight_current_unit():

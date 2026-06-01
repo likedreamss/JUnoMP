@@ -8,7 +8,7 @@ extends Control
 func _ready():
 
 	connect_buttons(self)
-	
+
 
 func connect_buttons(node):
 
