@@ -36,6 +36,8 @@ var total_steps: int = 0
 var game_finished: bool = false
 var waiting: bool = false #用来禁止跳过
 var has_moved_this_turn: bool = false # 记录本回合是否已执行过移动
+# ✅ 新增：弃牌阶段标记（AI专用）
+var is_in_discard_phase: bool = false
 var skip_flags = {
 	"turn": [],     # 存储需要跳过回合的 player_id
 	"draw": [],     # 跳过摸牌阶段
@@ -434,13 +436,15 @@ func discard_turn():#弃牌判定
 	var group_name = "player_hand" + str(id)
 	var player_hand = get_tree().get_nodes_in_group(group_name)
 	var card_nume = 0
-	clear_highlights()
 	if player_hand.size() >0:
 		card_nume = player_hand[0].get_playerhand_size()  # ✅ 正确：对单个节点调用
-	#Toast.show(card_nume)
+
+	clear_highlights()
 	if card_nume > 5:
+		is_in_discard_phase = true #修改
 		discard_start(card_nume - 5,id)
 	else:
+
 
 		get_tree().call_group("OK","OK_bool",1)
 
@@ -464,11 +468,10 @@ func discard_start(discard_nume,player_id):#执行弃牌
 		
 
 	Toast.show("弃牌完成")
-
 	await get_tree().create_timer(0.6).timeout
 	
+	is_in_discard_phase = false
 
-	
 	get_tree().call_group("OK","OK_bool",1)
 	next_turn() 
 
