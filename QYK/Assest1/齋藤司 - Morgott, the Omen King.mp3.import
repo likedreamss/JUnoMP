@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cmjmsqa83pdi3"
+path="res://.godot/imported/齋藤司 - Morgott, the Omen King.mp3-50109af197e5065b08a6bdc477e8cd75.mp3str"
+
+[deps]
+
+source_file="res://QYK/Assest1/齋藤司 - Morgott, the Omen King.mp3"
+dest_files=["res://.godot/imported/齋藤司 - Morgott, the Omen King.mp3-50109af197e5065b08a6bdc477e8cd75.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

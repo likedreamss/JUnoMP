@@ -32,6 +32,15 @@ func _ready():
 	$Panel.visible = false
 	game_start_time = Time.get_ticks_msec() / 1000.0
 	add_to_group("option")
+	
+	var popup = $Setting/Changehard.get_popup()
+	popup.add_theme_font_size_override("font_size", 48)
+	var popup1 = $Setting/Handcardnumber.get_popup()
+	popup1.add_theme_font_size_override("font_size", 48)
+	var popup2 = $Setting/Background.get_popup()
+	popup2.add_theme_font_size_override("font_size", 48)
+
+	
 
 
 #进入选项

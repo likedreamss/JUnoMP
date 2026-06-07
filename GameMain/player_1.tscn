@@ -300,9 +300,6 @@ offset_right = 3.0
 offset_bottom = -24.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="死亡搁浅" type="Sprite2D" parent="Background" unique_id=1102145913]
-position = Vector2(1308, 860)
 texture = ExtResource("4_8m1hc")
 
 [node name="Options" type="CanvasLayer" parent="." unique_id=280879119]
@@ -394,7 +391,6 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_q2rft")
 text = "返回主菜单"
 
 [node name="Help" type="Label" parent="Options" unique_id=655051648]
-visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -544,6 +540,68 @@ offset_bottom = 584.0
 theme_override_font_sizes/font_size = 64
 text = "游戏难度"
 
+[node name="Handcardnumber" type="OptionButton" parent="Options/Setting" unique_id=998550644]
+layout_mode = 0
+offset_left = 333.0
+offset_top = 609.0
+offset_right = 927.0
+offset_bottom = 697.0
+theme_override_font_sizes/font_size = 64
+theme_override_styles/normal = SubResource("StyleBoxTexture_fga63")
+selected = 0
+allow_reselect = true
+item_count = 5
+popup/item_0/text = "5张"
+popup/item_0/id = 0
+popup/item_1/text = "3张"
+popup/item_1/id = 1
+popup/item_2/text = "4张"
+popup/item_2/id = 2
+popup/item_3/text = "6张"
+popup/item_3/id = 3
+popup/item_4/text = "7张"
+popup/item_4/id = 4
+script = ExtResource("7_fga63")
+
+[node name="Hard2" type="Label" parent="Options/Setting" unique_id=1115227206]
+layout_mode = 0
+offset_left = 53.0
+offset_top = 608.0
+offset_right = 309.0
+offset_bottom = 719.0
+theme_override_font_sizes/font_size = 64
+text = "手牌数量"
+
+[node name="Background" type="OptionButton" parent="Options/Setting" unique_id=1801799674]
+layout_mode = 0
+offset_left = 331.0
+offset_top = 759.0
+offset_right = 925.0
+offset_bottom = 847.0
+theme_override_font_sizes/font_size = 64
+theme_override_styles/normal = SubResource("StyleBoxTexture_fga63")
+selected = 0
+allow_reselect = true
+item_count = 4
+popup/item_0/text = "DEATH STRANDING"
+popup/item_0/id = 0
+popup/item_1/text = "OCTOPATH TRVELER"
+popup/item_1/id = 1
+popup/item_2/text = "ELDEN"
+popup/item_2/id = 2
+popup/item_3/text = "YMCA"
+popup/item_3/id = 3
+script = ExtResource("7_fga63")
+
+[node name="BCAKGROUND" type="Label" parent="Options/Setting" unique_id=1893758728]
+layout_mode = 0
+offset_left = 77.0
+offset_top = 756.0
+offset_right = 333.0
+offset_bottom = 867.0
+theme_override_font_sizes/font_size = 64
+text = "背景图"
+
 [node name="Help2" type="Label" parent="Options" unique_id=1530953386]
 visible = false
 anchors_preset = 8
@@ -601,6 +659,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_u64pa")
 text = "上一页"
 
 [node name="Help3" type="Label" parent="Options" unique_id=1060831912]
+visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -655,6 +714,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_u64pa")
 text = "上一页"
 
 [node name="Panel" type="Panel" parent="Options" unique_id=1608637574]
+visible = false
 z_index = 3
 anchors_preset = 8
 anchor_left = 0.5
@@ -737,6 +797,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_pp406")
 text = "返回主菜单"
 
 [node name="Options" type="Panel" parent="Options" unique_id=984145587]
+visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -852,6 +913,8 @@ one_shot = true
 [connection signal="value_changed" from="Options/Setting/Music" to="Options/Setting/Music" method="_on_value_changed"]
 [connection signal="value_changed" from="Options/Setting/SFX" to="Options" method="_on_sfx_value_changed"]
 [connection signal="item_selected" from="Options/Setting/Changehard" to="Options/Setting/Changehard" method="_on_item_selected"]
+[connection signal="item_selected" from="Options/Setting/Handcardnumber" to="Options/Setting/Handcardnumber" method="_on_item_selected"]
+[connection signal="item_selected" from="Options/Setting/Background" to="Options/Setting/Changehard" method="_on_background_item_selected"]
 [connection signal="pressed" from="Options/Help2/Helpbutton_back" to="Options" method="_on_helpbutton_back_pressed"]
 [connection signal="pressed" from="Options/Help2/Nextpage2" to="Options" method="_on_nextpage_2_pressed"]
 [connection signal="pressed" from="Options/Help2/Lastpage" to="Options" method="_on_lastpage_pressed"]

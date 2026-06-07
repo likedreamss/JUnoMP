@@ -90,7 +90,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_db5v8")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_muopu")
 theme_override_styles/hover = SubResource("StyleBoxFlat_x0rw0")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_muopu")
-text = "Play"
+text = "开始游戏"
 
 [node name="Options" type="Button" parent="VBoxContainer" unique_id=475777556]
 layout_mode = 2
@@ -105,7 +105,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_db5v8")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_muopu")
 theme_override_styles/hover = SubResource("StyleBoxFlat_x0rw0")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_muopu")
-text = "Options"
+text = "选项"
 
 [node name="Exit" type="Button" parent="VBoxContainer" unique_id=1460377950]
 layout_mode = 2
@@ -120,7 +120,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_db5v8")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_muopu")
 theme_override_styles/hover = SubResource("StyleBoxFlat_x0rw0")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_muopu")
-text = "Exit
+text = "退出
 "
 
 [node name="Label" type="Label" parent="." unique_id=1798074428]
