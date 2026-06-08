@@ -28,6 +28,7 @@ func _on_ok_pressed() -> void:
 	$cardmanager.delate_card()
 	await get_tree().create_timer(0.5).timeout
 	OK_bool(1)
+	CANCEL_bool(0)
 	
 	
 func OK_bool(bool):

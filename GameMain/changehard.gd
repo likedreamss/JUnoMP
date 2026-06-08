@@ -36,7 +36,7 @@ func _on_background_item_selected(index: int) -> void:
 	match index:
 		0:
 			$"../../../Background/backpic".texture = preload("res://QYK/Assest1/死亡搁浅.png")
-			$"../../../BGM1".stream = preload("res://QYK/Assest1/死亡搁浅.mp3")
+			$"../../../BGM1".stream = preload("res://QYK/Assest1/李神无敌乐.mp3")
 			$"../../../BGM1".play()
 			selected_bg = 0
 

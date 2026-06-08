@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="JUnoMP游戏界面"
-run/main_scene="res://meun.tscn"
+run/main_scene="uid://cvnatpe28vhud"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://QYK/Assest1/icon.svg"
 

@@ -310,7 +310,6 @@ theme_override_font_sizes/font_size = 28
 placeholder_text = "再一次输入密码"
 
 [node name="Changepassword" type="Control" parent="Login" unique_id=1063508548]
-visible = false
 anchors_preset = 0
 offset_left = -29.0
 offset_top = 101.0
@@ -453,4 +452,5 @@ stream = ExtResource("7_73daq")
 [connection signal="pressed" from="Login/Main/Background/MainChangeButton" to="." method="_on_main_change_button_pressed"]
 [connection signal="pressed" from="Login/Register/Background2/RegisterSubmitButton" to="." method="_on_register_submit_button_pressed"]
 [connection signal="pressed" from="Login/Register/Background2/RegisterCancelButton" to="." method="_on_register_cancel_button_pressed"]
+[connection signal="pressed" from="Login/Changepassword/Background2/ChangeSubmitButton" to="." method="_on_change_submit_button_pressed"]
 [connection signal="pressed" from="Login/Changepassword/Background2/ChangeCancelButton" to="." method="_on_change_cancel_button_pressed"]

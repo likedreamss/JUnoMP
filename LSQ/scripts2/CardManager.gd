@@ -100,7 +100,7 @@ func finish_drag():
 	card_being_dragged = null
 
 func cancel_card():
-	if slot_has_card:
+	if card_slot_found.card_in_slot:
 		var card = card_is_in_slot 
 		match card.card:
 			0:
@@ -281,7 +281,7 @@ func get_ai_suggestion() -> void:
 	var is_discard_phase: bool = battle_manager.is_in_discard_phase
 
 	# 打印明文核心侦测日志（修复%b报错）
-	print("[AI 精准状态侦测] 活跃玩家: 玩家 %d | 当前手牌数: %d | 判定为: 【%s】" % [
+	Toast.show("[AI 精准状态侦测] 活跃玩家: 玩家 %d | 当前手牌数: %d | 判定为: 【%s】" % [
 		player_idx + 1,
 		current_hand_cards.size(),
 		"🗑️ 弃牌阶段 (DISCARD)" if is_discard_phase else "⚔️ 出牌/移动阶段 (PLAY)"
@@ -432,7 +432,7 @@ func _on_deepseek_response(result: int, response_code: int, headers: PackedStrin
 		var reason = result_dict.get("reason", "")
 		
 		print("\n============= 🤖 DeepSeek 大局观军师 =============\n")
-		print(reason)
+		Toast.show(reason)
 		
 		if rec_index >= 0 and rec_index < hand_cards.size():
 			var target_card = hand_cards[rec_index]

@@ -102,13 +102,20 @@ func _on_main_submit_button_pressed() -> void:
 		Toast.show("❌ 账号不存在，请先注册")
 		return
 
-	if users[account] != password:
+	var stored_pwd = ""
+
+	# 兼容两种存储格式
+	if users[account] is Dictionary:
+		stored_pwd = users[account].get("password", "")
+	else:
+		stored_pwd = str(users[account])
+
+	if stored_pwd != password:
 		Toast.show("❌ 密码错误")
 		return
 
 	Toast.show("✅ 登录成功！")
 	clear_all_inputs()
-	# 【关键】把这里改成你的游戏场景路径！
 	get_tree().change_scene_to_file("res://meun.tscn")
 
 
@@ -155,6 +162,7 @@ func _on_register_submit_button_pressed() -> void:
 
 	var users = load_users()
 
+
 	if users.has(account):
 		Toast.show("❌ 该账号已被注册")
 		return
@@ -175,13 +183,14 @@ func _on_change_submit_button_pressed() -> void:
 	var new_pwd = new_password.text.strip_edges()
 	var new_pwd2 = new_password_2.text.strip_edges()
 
-	# 基础校验
 	if account == "" or old_pwd == "" or new_pwd == "" or new_pwd2 == "":
 		Toast.show("❌ 修改密码信息不完整")
 		return
+
 	if new_pwd != new_pwd2:
 		Toast.show("❌ 两次输入的新密码不一致")
 		return
+
 	if new_pwd.length() < 4:
 		Toast.show("❌ 新密码长度至少4位")
 		return
@@ -191,16 +200,23 @@ func _on_change_submit_button_pressed() -> void:
 	if not users.has(account):
 		Toast.show("❌ 账号不存在")
 		return
-	if users[account] != old_pwd:
+
+	var stored_pwd = ""
+
+	if users[account] is Dictionary:
+		stored_pwd = users[account].get("password", "")
+	else:
+		stored_pwd = str(users[account])
+
+	if stored_pwd != old_pwd:
 		Toast.show("❌ 原密码错误")
 		return
 
-	# 更新密码
 	users[account] = new_pwd
 	save_users(users)
 
 	Toast.show("✅ 密码修改成功！")
-	
+
 	clear_all_inputs()
 	switch_screen("main")
 
